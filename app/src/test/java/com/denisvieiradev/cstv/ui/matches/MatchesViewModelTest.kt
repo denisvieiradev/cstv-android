@@ -5,9 +5,11 @@ import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.fakeMatch
+import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -68,6 +70,92 @@ class MatchesViewModelTest {
             assertThat(errorState.error).isEqualTo(exception)
             cancelAndConsumeRemainingEvents()
         }
+    }
+
+    @Test
+    fun `loadMatches success emits isAuthError false`() = runTest {
+        // Arrange
+        val matches = listOf(fakeMatch())
+        coEvery { mockUseCase() } returns matches
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act / Assert
+        viewModel.uiState.test {
+            awaitItem() // initial state
+            awaitItem() // loading state
+            val successState = awaitItem()
+            assertThat(successState.isLoading).isFalse()
+            assertThat(successState.matches).isEqualTo(matches)
+            assertThat(successState.isAuthError).isFalse()
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `loadMatches with AuthorizationException sets isAuthError true and error null`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } throws AuthorizationException(401)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act / Assert
+        viewModel.uiState.test {
+            awaitItem() // initial state
+            awaitItem() // loading state
+            val errorState = awaitItem()
+            assertThat(errorState.isLoading).isFalse()
+            assertThat(errorState.isAuthError).isTrue()
+            assertThat(errorState.error).isNull()
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `loadMatches with generic exception sets error and isAuthError false`() = runTest {
+        // Arrange
+        val exception = RuntimeException("Network error")
+        coEvery { mockUseCase() } throws exception
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act / Assert
+        viewModel.uiState.test {
+            awaitItem() // initial state
+            awaitItem() // loading state
+            val errorState = awaitItem()
+            assertThat(errorState.isLoading).isFalse()
+            assertThat(errorState.error).isEqualTo(exception)
+            assertThat(errorState.isAuthError).isFalse()
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `confirm logout clears session and emits navigation event`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act / Assert
+        viewModel.navigationEvents.test {
+            viewModel.onAction(MatchesScreenAction.ConfirmLogout)
+            assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
+            cancelAndConsumeRemainingEvents()
+        }
+        verify { mockSessionRepository.clearSession() }
+    }
+
+    @Test
+    fun `configure token clears session and emits navigation event`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act / Assert
+        viewModel.navigationEvents.test {
+            viewModel.onAction(MatchesScreenAction.ConfigureToken)
+            assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
+            cancelAndConsumeRemainingEvents()
+        }
+        verify { mockSessionRepository.clearSession() }
     }
 
     @Test
