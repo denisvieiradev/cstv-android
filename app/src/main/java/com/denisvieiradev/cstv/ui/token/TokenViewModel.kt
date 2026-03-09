@@ -24,7 +24,11 @@ class TokenViewModel(
     private fun saveToken() {
         val token = _uiState.value.token
         if (token.isBlank()) return
-        sessionRepository.saveToken(token)
-        _uiState.update { it.copy(navigateToMatches = true) }
+        try {
+            sessionRepository.saveToken(token)
+            _uiState.update { it.copy(navigateToMatches = true) }
+        } catch (e: Exception) {
+            _uiState.update { it.copy(error = e) }
+        }
     }
 }
