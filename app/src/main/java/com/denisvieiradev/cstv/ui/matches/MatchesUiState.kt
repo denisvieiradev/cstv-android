@@ -7,7 +7,8 @@ data class MatchesUiState(
     val matches: List<Match> = emptyList(),
     val error: Throwable? = null,
     val isAuthError: Boolean = false,
-    val showLogoutDialog: Boolean = false
+    val showLogoutDialog: Boolean = false,
+    val isDarkTheme: Boolean = true
 ) {
     val hasError: Boolean get() = error != null || isAuthError
     val isEmpty: Boolean get() = !isLoading && matches.isEmpty() && !hasError

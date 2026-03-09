@@ -4,4 +4,6 @@ interface SessionRepository {
     fun getToken(): String?
     fun saveToken(token: String)
     fun clearSession()
+    fun isDarkTheme(): Boolean
+    fun saveDarkTheme(isDark: Boolean)
 }

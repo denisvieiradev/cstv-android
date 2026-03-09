@@ -8,6 +8,7 @@ import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -156,6 +157,34 @@ class MatchesViewModelTest {
             cancelAndConsumeRemainingEvents()
         }
         verify { mockSessionRepository.clearSession() }
+    }
+
+    @Test
+    fun `init reads saved theme preference and initializes isDarkTheme in state`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        every { mockSessionRepository.isDarkTheme() } returns false
+
+        // Act
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Assert
+        assertThat(viewModel.uiState.value.isDarkTheme).isFalse()
+    }
+
+    @Test
+    fun `ToggleTheme action flips isDarkTheme and persists the new value`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        every { mockSessionRepository.isDarkTheme() } returns false
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act
+        viewModel.onAction(MatchesScreenAction.ToggleTheme)
+
+        // Assert
+        assertThat(viewModel.uiState.value.isDarkTheme).isTrue()
+        verify { mockSessionRepository.saveDarkTheme(true) }
     }
 
     @Test

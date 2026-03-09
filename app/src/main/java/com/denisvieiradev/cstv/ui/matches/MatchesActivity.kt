@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.denisvieiradev.cstv.ui.matches.components.MatchesScreenRoot
 import com.denisvieiradev.cstv.ui.token.TokenActivity
 import com.denisvieiradev.design_system.ui.theme.CstvTheme
@@ -23,7 +25,8 @@ class MatchesActivity : ComponentActivity() {
         enableEdgeToEdge()
         collectNavigationEvents()
         setContent {
-            CstvTheme {
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            CstvTheme(darkTheme = uiState.isDarkTheme) {
                 MatchesScreenRoot(viewModel = viewModel)
             }
         }

@@ -33,7 +33,11 @@ fun MatchesScreen(
 ) {
     Scaffold(
         topBar = {
-            MatchesTopBar(onLogoutClick = { onAction(MatchesScreenAction.Logout) })
+            MatchesTopBar(
+                isDarkTheme = uiState.isDarkTheme,
+                onThemeToggleClick = { onAction(MatchesScreenAction.ToggleTheme) },
+                onLogoutClick = { onAction(MatchesScreenAction.Logout) }
+            )
         }
     ) { innerPadding ->
         Box(

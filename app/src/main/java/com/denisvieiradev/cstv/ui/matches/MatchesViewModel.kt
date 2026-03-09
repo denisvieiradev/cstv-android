@@ -19,7 +19,9 @@ class MatchesViewModel(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(MatchesUiState())
+    private val _uiState = MutableStateFlow(
+        MatchesUiState(isDarkTheme = sessionRepository.isDarkTheme())
+    )
     val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
 
     private val _navigationEvents = MutableSharedFlow<MatchesNavigationEvent>()
@@ -37,6 +39,11 @@ class MatchesViewModel(
             is MatchesScreenAction.ConfirmLogout -> clearSessionAndNavigate()
             is MatchesScreenAction.DismissLogout -> _uiState.update { it.copy(showLogoutDialog = false) }
             is MatchesScreenAction.ConfigureToken -> clearSessionAndNavigate()
+            is MatchesScreenAction.ToggleTheme -> {
+                val newValue = !_uiState.value.isDarkTheme
+                sessionRepository.saveDarkTheme(newValue)
+                _uiState.update { it.copy(isDarkTheme = newValue) }
+            }
         }
     }
 
