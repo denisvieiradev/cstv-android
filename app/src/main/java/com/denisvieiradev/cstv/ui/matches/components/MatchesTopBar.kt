@@ -12,7 +12,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.denisvieiradev.cstv.R
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
+import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.design_system.ui.components.maintopbar.MainTopBar
 
 @Composable
@@ -28,7 +28,7 @@ fun MatchesTopBar(
         actions = {
             TextButton(onClick = onLanguageToggleClick) {
                 Text(
-                    text = if (currentLanguage == SessionRepositoryImpl.LANG_EN) "PT" else "EN",
+                    text = if (currentLanguage == Language.EN) "PT" else "EN",
                     style = MaterialTheme.typography.labelMedium
                 )
             }

@@ -15,7 +15,5 @@ class SessionRepositoryImpl(private val secureStorage: SecureStorage) : SessionR
         private const val KEY_TOKEN = "pandascore_token"
         private const val KEY_DARK_THEME = "is_dark_theme"
         private const val KEY_LANGUAGE = "app_language"
-        const val LANG_EN = "en"
-        const val LANG_PT = "pt"
     }
 }

@@ -1,6 +1,5 @@
 package com.denisvieiradev.network.data.remote.utils
 
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -11,8 +10,7 @@ class AuthInterceptor(private val tokenProvider: TokenProvider) : Interceptor {
             .apply { if (token != null) header("Authorization", "Bearer $token") }
             .build()
         val response = chain.proceed(request)
-        if (response.code in listOf(401, 403)) {
-            Log.d("AuthInterceptor", "Auth error detected: HTTP ${response.code}")
+        if (response.code == 401) {
             throw AuthorizationException(response.code)
         }
         return response

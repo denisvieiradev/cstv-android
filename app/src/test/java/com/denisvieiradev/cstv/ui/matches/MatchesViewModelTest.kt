@@ -2,7 +2,7 @@ package com.denisvieiradev.cstv.ui.matches
 
 import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
+import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.fakeMatch
@@ -75,7 +75,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `loadMatches success emits isAuthError false`() = runTest {
+    fun `should emit isAuthError false when use case succeeds`() = runTest {
         // Arrange
         val matches = listOf(fakeMatch())
         coEvery { mockUseCase() } returns matches
@@ -131,7 +131,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `confirm logout clears session and emits navigation event`() = runTest {
+    fun `should clear session and emit NavigateToTokenScreen when ConfirmLogout action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
@@ -146,7 +146,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `configure token clears session and emits navigation event`() = runTest {
+    fun `should clear session and emit NavigateToTokenScreen when ConfigureToken action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
@@ -161,7 +161,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `init reads saved theme preference and initializes isDarkTheme in state`() = runTest {
+    fun `should initialise isDarkTheme from saved preference on creation`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockSessionRepository.isDarkTheme() } returns false
@@ -174,7 +174,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `ToggleTheme action flips isDarkTheme and persists the new value`() = runTest {
+    fun `should flip isDarkTheme and persist new value when ToggleTheme action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockSessionRepository.isDarkTheme() } returns false
@@ -189,46 +189,74 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `init reads saved language preference and initializes currentLanguage in state`() = runTest {
+    fun `should initialise currentLanguage from saved preference on creation`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        every { mockSessionRepository.getLanguage() } returns SessionRepositoryImpl.LANG_PT
+        every { mockSessionRepository.getLanguage() } returns Language.PT
 
         // Act
         val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
 
         // Assert
-        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(SessionRepositoryImpl.LANG_PT)
+        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.PT)
     }
 
     @Test
-    fun `ToggleLanguage action switches from EN to PT and persists the new value`() = runTest {
+    fun `should switch language from EN to PT and persist when ToggleLanguage action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        every { mockSessionRepository.getLanguage() } returns SessionRepositoryImpl.LANG_EN
+        every { mockSessionRepository.getLanguage() } returns Language.EN
         val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
 
         // Assert
-        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(SessionRepositoryImpl.LANG_PT)
-        verify { mockSessionRepository.saveLanguage(SessionRepositoryImpl.LANG_PT) }
+        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.PT)
+        verify { mockSessionRepository.saveLanguage(Language.PT) }
     }
 
     @Test
-    fun `ToggleLanguage action switches from PT to EN and persists the new value`() = runTest {
+    fun `should switch language from PT to EN and persist when ToggleLanguage action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        every { mockSessionRepository.getLanguage() } returns SessionRepositoryImpl.LANG_PT
+        every { mockSessionRepository.getLanguage() } returns Language.PT
         val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
 
         // Assert
-        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(SessionRepositoryImpl.LANG_EN)
-        verify { mockSessionRepository.saveLanguage(SessionRepositoryImpl.LANG_EN) }
+        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.EN)
+        verify { mockSessionRepository.saveLanguage(Language.EN) }
+    }
+
+    @Test
+    fun `should set showLogoutDialog to true when Logout action is dispatched`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act
+        viewModel.onAction(MatchesScreenAction.Logout)
+
+        // Assert
+        assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
+    }
+
+    @Test
+    fun `should set showLogoutDialog to false when DismissLogout action is dispatched`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+        viewModel.onAction(MatchesScreenAction.Logout)
+        assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
+
+        // Act
+        viewModel.onAction(MatchesScreenAction.DismissLogout)
+
+        // Assert
+        assertThat(viewModel.uiState.value.showLogoutDialog).isFalse()
     }
 
     @Test

@@ -1,15 +1,15 @@
 package com.denisvieiradev.cstv.ui.matches
 
 import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
+import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
+import timber.log.Timber
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +26,7 @@ class MatchesViewModel(
     private val _uiState = MutableStateFlow(
         MatchesUiState(
             isDarkTheme = sessionRepository.isDarkTheme(),
-            currentLanguage = sessionRepository.getLanguage() ?: SessionRepositoryImpl.LANG_EN
+            currentLanguage = sessionRepository.getLanguage() ?: Language.EN
         )
     )
     val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
@@ -52,8 +52,8 @@ class MatchesViewModel(
                 _uiState.update { it.copy(isDarkTheme = newValue) }
             }
             is MatchesScreenAction.ToggleLanguage -> {
-                val next = if (_uiState.value.currentLanguage == SessionRepositoryImpl.LANG_EN)
-                    SessionRepositoryImpl.LANG_PT else SessionRepositoryImpl.LANG_EN
+                val next = if (_uiState.value.currentLanguage == Language.EN)
+                    Language.PT else Language.EN
                 sessionRepository.saveLanguage(next)
                 _uiState.update { it.copy(currentLanguage = next) }
                 AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
@@ -83,13 +83,10 @@ class MatchesViewModel(
     private fun clearSessionAndNavigate() {
         viewModelScope.launch {
             sessionRepository.clearSession()
-            Log.d(TAG, "Session cleared, navigating to TokenActivity")
+            Timber.d("Session cleared, navigating to TokenActivity")
             _uiState.update { it.copy(showLogoutDialog = false) }
             _navigationEvents.emit(MatchesNavigationEvent.NavigateToTokenScreen)
         }
     }
 
-    companion object {
-        private const val TAG = "MatchesViewModel"
-    }
 }

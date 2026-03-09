@@ -84,4 +84,51 @@ class MatchDateFormatterTest {
         val result = MatchDateFormatter.format(scheduledAt, today, ptBr, utcZone)
         assertEquals("Hoje, 09:05", result)
     }
+
+    // Locale-aware label tests
+
+    @Test
+    fun `should return Today label when match is today with EN locale`() {
+        val scheduledAt = utcString(today, 15, 0)
+        val result = MatchDateFormatter.format(scheduledAt, today, Locale.ENGLISH, utcZone)
+        assertEquals("Today, 15:00", result)
+    }
+
+    @Test
+    fun `should return Tomorrow label when match is tomorrow with EN locale`() {
+        val tomorrow = today.plusDays(1)
+        val scheduledAt = utcString(tomorrow, 15, 0)
+        val result = MatchDateFormatter.format(scheduledAt, today, Locale.ENGLISH, utcZone)
+        assertEquals("Tomorrow, 15:00", result)
+    }
+
+    @Test
+    fun `should return Hoje label when match is today with PT-BR locale`() {
+        val scheduledAt = utcString(today, 15, 0)
+        val result = MatchDateFormatter.format(scheduledAt, today, ptBr, utcZone)
+        assertEquals("Hoje, 15:00", result)
+    }
+
+    @Test
+    fun `should return Amanha label when match is tomorrow with PT-BR locale`() {
+        val tomorrow = today.plusDays(1)
+        val scheduledAt = utcString(tomorrow, 15, 0)
+        val result = MatchDateFormatter.format(scheduledAt, today, ptBr, utcZone)
+        assertEquals("Amanhã, 15:00", result)
+    }
+
+    @Test
+    fun `should not return Portuguese labels when default locale is English`() {
+        val defaultBefore = Locale.getDefault()
+        try {
+            Locale.setDefault(Locale.ENGLISH)
+            val scheduledAt = utcString(today, 15, 0)
+            val result = MatchDateFormatter.format(scheduledAt, today, zoneId = utcZone)
+            assert(!result.contains("Hoje") && !result.contains("Amanhã")) {
+                "Expected English labels but got: $result"
+            }
+        } finally {
+            Locale.setDefault(defaultBefore)
+        }
+    }
 }

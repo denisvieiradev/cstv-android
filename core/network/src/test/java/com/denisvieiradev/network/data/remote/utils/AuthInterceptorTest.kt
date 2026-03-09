@@ -17,7 +17,7 @@ class AuthInterceptorTest {
     private val interceptor = AuthInterceptor(mockTokenProvider)
 
     @Test
-    fun `intercept throws AuthorizationException when response code is 401`() {
+    fun `should throw AuthorizationException when response code is 401`() {
         // Arrange
         every { mockTokenProvider.getToken() } returns "test-token"
         val request = Request.Builder().url("https://example.com/api").build()
@@ -33,7 +33,7 @@ class AuthInterceptorTest {
     }
 
     @Test
-    fun `intercept throws AuthorizationException when response code is 403`() {
+    fun `should return response normally when response code is 403`() {
         // Arrange
         every { mockTokenProvider.getToken() } returns "test-token"
         val request = Request.Builder().url("https://example.com/api").build()
@@ -42,14 +42,49 @@ class AuthInterceptorTest {
         every { chain.request() } returns request
         every { chain.proceed(any()) } returns response
 
-        // Act / Assert
-        assertThrows(AuthorizationException::class.java) {
-            interceptor.intercept(chain)
-        }
+        // Act
+        val result = interceptor.intercept(chain)
+
+        // Assert
+        assertEquals(403, result.code)
     }
 
     @Test
-    fun `intercept returns response normally when response code is 200`() {
+    fun `should return response normally when response code is 404`() {
+        // Arrange
+        every { mockTokenProvider.getToken() } returns "test-token"
+        val request = Request.Builder().url("https://example.com/api").build()
+        val response = buildResponse(request, 404, "Not Found")
+        val chain = mockk<Interceptor.Chain>()
+        every { chain.request() } returns request
+        every { chain.proceed(any()) } returns response
+
+        // Act
+        val result = interceptor.intercept(chain)
+
+        // Assert
+        assertEquals(404, result.code)
+    }
+
+    @Test
+    fun `should return response normally when response code is 500`() {
+        // Arrange
+        every { mockTokenProvider.getToken() } returns "test-token"
+        val request = Request.Builder().url("https://example.com/api").build()
+        val response = buildResponse(request, 500, "Internal Server Error")
+        val chain = mockk<Interceptor.Chain>()
+        every { chain.request() } returns request
+        every { chain.proceed(any()) } returns response
+
+        // Act
+        val result = interceptor.intercept(chain)
+
+        // Assert
+        assertEquals(500, result.code)
+    }
+
+    @Test
+    fun `should return response normally when response code is 200`() {
         // Arrange
         every { mockTokenProvider.getToken() } returns "test-token"
         val request = Request.Builder().url("https://example.com/api").build()

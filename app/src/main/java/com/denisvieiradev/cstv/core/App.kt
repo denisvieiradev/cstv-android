@@ -6,15 +6,16 @@ import androidx.core.os.LocaleListCompat
 import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.core.di.getModules
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
+import com.denisvieiradev.cstv.domain.Language
 import com.orhanobut.hawk.Hawk
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.GlobalContext
+import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
 import timber.log.Timber
 import java.util.Locale
 
-class App : Application() {
+class App : Application(), KoinComponent {
 
     override fun onCreate() {
         super.onCreate()
@@ -32,13 +33,13 @@ class App : Application() {
     }
 
     private fun applyInitialLocale() {
-        val sessionRepository: SessionRepository = GlobalContext.get().get()
+        val sessionRepository: SessionRepository by inject()
         val saved = sessionRepository.getLanguage()
         val tag = if (saved != null) {
             saved
         } else {
             val systemLang = Locale.getDefault().language
-            val resolved = if (systemLang == "pt") SessionRepositoryImpl.LANG_PT else SessionRepositoryImpl.LANG_EN
+            val resolved = if (systemLang == "pt") Language.PT else Language.EN
             sessionRepository.saveLanguage(resolved)
             resolved
         }

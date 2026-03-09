@@ -12,8 +12,10 @@ object MatchDateFormatter {
     fun format(
         scheduledAt: String?,
         now: LocalDate,
-        locale: Locale = Locale("pt", "BR"),
-        zoneId: ZoneId = ZoneId.systemDefault()
+        locale: Locale = Locale.getDefault(),
+        zoneId: ZoneId = ZoneId.systemDefault(),
+        todayLabel: String = if (locale.language == "pt") "Hoje" else "Today",
+        tomorrowLabel: String = if (locale.language == "pt") "Amanhã" else "Tomorrow"
     ): String {
         scheduledAt ?: return ""
         val zonedDateTime = parseToLocalZone(scheduledAt, zoneId) ?: return ""
@@ -21,8 +23,8 @@ object MatchDateFormatter {
         val days = ChronoUnit.DAYS.between(now, matchDate)
         val time = formatTime(zonedDateTime)
         return when {
-            days == 0L -> "Hoje, $time"
-            days == 1L -> "Amanhã, $time"
+            days == 0L -> "$todayLabel, $time"
+            days == 1L -> "$tomorrowLabel, $time"
             days in 2L..6L -> "${formatDayAbbrev(zonedDateTime, locale)}, $time"
             else -> "${formatDayMonth(zonedDateTime)} $time"
         }

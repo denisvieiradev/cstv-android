@@ -31,41 +31,43 @@ fun MatchesScreen(
     uiState: MatchesUiState,
     onAction: (MatchesScreenAction) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            MatchesTopBar(
-                isDarkTheme = uiState.isDarkTheme,
-                currentLanguage = uiState.currentLanguage,
-                onThemeToggleClick = { onAction(MatchesScreenAction.ToggleTheme) },
-                onLanguageToggleClick = { onAction(MatchesScreenAction.ToggleLanguage) },
-                onLogoutClick = { onAction(MatchesScreenAction.Logout) }
-            )
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            when {
-                uiState.isLoading -> LoadingContent()
-                uiState.isAuthError -> AuthErrorContent(
-                    onConfigureTokenClick = { onAction(MatchesScreenAction.ConfigureToken) }
+    Box {
+        Scaffold(
+            topBar = {
+                MatchesTopBar(
+                    isDarkTheme = uiState.isDarkTheme,
+                    currentLanguage = uiState.currentLanguage,
+                    onThemeToggleClick = { onAction(MatchesScreenAction.ToggleTheme) },
+                    onLanguageToggleClick = { onAction(MatchesScreenAction.ToggleLanguage) },
+                    onLogoutClick = { onAction(MatchesScreenAction.Logout) }
                 )
-                uiState.hasError -> ErrorContent(
-                    onRetry = { onAction(MatchesScreenAction.Retry) }
-                )
-                uiState.isEmpty -> EmptyContent()
-                else -> MatchesList(matches = uiState.matches)
+            }
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                when {
+                    uiState.isLoading -> LoadingContent()
+                    uiState.isAuthError -> AuthErrorContent(
+                        onConfigureTokenClick = { onAction(MatchesScreenAction.ConfigureToken) }
+                    )
+                    uiState.hasError -> ErrorContent(
+                        onRetry = { onAction(MatchesScreenAction.Retry) }
+                    )
+                    uiState.isEmpty -> EmptyContent()
+                    else -> MatchesList(matches = uiState.matches)
+                }
             }
         }
-    }
 
-    if (uiState.showLogoutDialog) {
-        LogoutConfirmationDialog(
-            onConfirm = { onAction(MatchesScreenAction.ConfirmLogout) },
-            onDismiss = { onAction(MatchesScreenAction.DismissLogout) }
-        )
+        if (uiState.showLogoutDialog) {
+            LogoutConfirmationDialog(
+                onConfirm = { onAction(MatchesScreenAction.ConfirmLogout) },
+                onDismiss = { onAction(MatchesScreenAction.DismissLogout) }
+            )
+        }
     }
 }
 
