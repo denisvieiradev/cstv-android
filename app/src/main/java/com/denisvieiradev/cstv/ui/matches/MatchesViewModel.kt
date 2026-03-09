@@ -1,9 +1,13 @@
 package com.denisvieiradev.cstv.ui.matches
 
+import android.os.Build
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +24,10 @@ class MatchesViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        MatchesUiState(isDarkTheme = sessionRepository.isDarkTheme())
+        MatchesUiState(
+            isDarkTheme = sessionRepository.isDarkTheme(),
+            currentLanguage = sessionRepository.getLanguage() ?: SessionRepositoryImpl.LANG_EN
+        )
     )
     val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
 
@@ -43,6 +50,18 @@ class MatchesViewModel(
                 val newValue = !_uiState.value.isDarkTheme
                 sessionRepository.saveDarkTheme(newValue)
                 _uiState.update { it.copy(isDarkTheme = newValue) }
+            }
+            is MatchesScreenAction.ToggleLanguage -> {
+                val next = if (_uiState.value.currentLanguage == SessionRepositoryImpl.LANG_EN)
+                    SessionRepositoryImpl.LANG_PT else SessionRepositoryImpl.LANG_EN
+                sessionRepository.saveLanguage(next)
+                _uiState.update { it.copy(currentLanguage = next) }
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    viewModelScope.launch {
+                        _navigationEvents.emit(MatchesNavigationEvent.RecreateActivity)
+                    }
+                }
             }
         }
     }

@@ -8,4 +8,5 @@ sealed interface MatchesScreenAction {
     data object DismissLogout : MatchesScreenAction
     data object ConfigureToken : MatchesScreenAction
     data object ToggleTheme : MatchesScreenAction
+    data object ToggleLanguage : MatchesScreenAction
 }

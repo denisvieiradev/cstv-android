@@ -2,6 +2,7 @@ package com.denisvieiradev.cstv.ui.matches
 
 import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.fakeMatch
@@ -185,6 +186,49 @@ class MatchesViewModelTest {
         // Assert
         assertThat(viewModel.uiState.value.isDarkTheme).isTrue()
         verify { mockSessionRepository.saveDarkTheme(true) }
+    }
+
+    @Test
+    fun `init reads saved language preference and initializes currentLanguage in state`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        every { mockSessionRepository.getLanguage() } returns SessionRepositoryImpl.LANG_PT
+
+        // Act
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Assert
+        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(SessionRepositoryImpl.LANG_PT)
+    }
+
+    @Test
+    fun `ToggleLanguage action switches from EN to PT and persists the new value`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        every { mockSessionRepository.getLanguage() } returns SessionRepositoryImpl.LANG_EN
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act
+        viewModel.onAction(MatchesScreenAction.ToggleLanguage)
+
+        // Assert
+        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(SessionRepositoryImpl.LANG_PT)
+        verify { mockSessionRepository.saveLanguage(SessionRepositoryImpl.LANG_PT) }
+    }
+
+    @Test
+    fun `ToggleLanguage action switches from PT to EN and persists the new value`() = runTest {
+        // Arrange
+        coEvery { mockUseCase() } returns emptyList()
+        every { mockSessionRepository.getLanguage() } returns SessionRepositoryImpl.LANG_PT
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionRepository)
+
+        // Act
+        viewModel.onAction(MatchesScreenAction.ToggleLanguage)
+
+        // Assert
+        assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(SessionRepositoryImpl.LANG_EN)
+        verify { mockSessionRepository.saveLanguage(SessionRepositoryImpl.LANG_EN) }
     }
 
     @Test

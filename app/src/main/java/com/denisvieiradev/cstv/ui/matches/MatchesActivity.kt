@@ -2,8 +2,8 @@ package com.denisvieiradev.cstv.ui.matches
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +16,7 @@ import com.denisvieiradev.design_system.ui.theme.CstvTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MatchesActivity : ComponentActivity() {
+class MatchesActivity : AppCompatActivity() {
 
     private val viewModel: MatchesViewModel by viewModel()
 
@@ -38,6 +38,7 @@ class MatchesActivity : ComponentActivity() {
                 viewModel.navigationEvents.collect { event ->
                     when (event) {
                         MatchesNavigationEvent.NavigateToTokenScreen -> navigateToTokenScreen()
+                        MatchesNavigationEvent.RecreateActivity -> recreate()
                     }
                 }
             }

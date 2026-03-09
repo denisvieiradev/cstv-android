@@ -35,7 +35,9 @@ fun MatchesScreen(
         topBar = {
             MatchesTopBar(
                 isDarkTheme = uiState.isDarkTheme,
+                currentLanguage = uiState.currentLanguage,
                 onThemeToggleClick = { onAction(MatchesScreenAction.ToggleTheme) },
+                onLanguageToggleClick = { onAction(MatchesScreenAction.ToggleLanguage) },
                 onLogoutClick = { onAction(MatchesScreenAction.Logout) }
             )
         }

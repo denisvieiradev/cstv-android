@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">cstv</string>
+    <string name="matches_title">Partidas</string>
+    <string name="matches_error_title">Erro ao carregar partidas</string>
+    <string name="matches_error_body">Verifique sua conexão e tente novamente.</string>
+    <string name="matches_retry">Tentar novamente</string>
+    <string name="matches_empty">Nenhuma partida disponível no momento.</string>
+    <string name="match_status_live">AGORA</string>
+    <string name="match_vs">vs</string>
+    <string name="token_screen_title">CSTV</string>
+    <string name="token_screen_body">Insira o seu token da PandaScore para acessar as partidas</string>
+    <string name="token_field_label">Token PandaScore</string>
+    <string name="token_confirm_button">Confirmar</string>
+    <string name="token_error_message">Não foi possível salvar o token. Tente novamente.</string>
+    <string name="matches_logout_content_desc">Sair</string>
+    <string name="matches_logout_dialog_title">Sair da conta</string>
+    <string name="matches_logout_dialog_message">Tem certeza que deseja sair?</string>
+    <string name="matches_logout_confirm">Confirmar</string>
+    <string name="matches_logout_cancel">Cancelar</string>
+    <string name="matches_auth_error_title">Acesso expirado</string>
+    <string name="matches_auth_error_body">Seu token é inválido ou expirou.</string>
+    <string name="matches_configure_token">Reconfigurar token</string>
+    <string name="matches_theme_toggle_content_desc">Toggle theme</string>
+    <string name="matches_language_toggle_content_desc">Alterar idioma</string>
+</resources>

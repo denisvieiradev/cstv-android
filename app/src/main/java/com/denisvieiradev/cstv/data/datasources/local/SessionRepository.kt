@@ -6,4 +6,6 @@ interface SessionRepository {
     fun clearSession()
     fun isDarkTheme(): Boolean
     fun saveDarkTheme(isDark: Boolean)
+    fun getLanguage(): String?
+    fun saveLanguage(languageTag: String)
 }
