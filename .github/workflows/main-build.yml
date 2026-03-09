@@ -1,0 +1,70 @@
+name: Android CI
+# GOAL https://gist.github.com/alexanderbazo/227476190ef5ab655795e34ec0d314d6
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" , "develop" ]
+
+jobs:
+  build_and_test_app:
+    runs-on: ubuntu-latest
+
+    env:
+      BEMFACIL_BASE_API_URL: ${{vars.BEMFACIL_BASE_API_URL}}
+      HML_BEMFACIL_BASE_API_URL: ${{vars.HML_BEMFACIL_BASE_API_URL}}
+      HML_EXECUTIVE_APP_BASE_API: ${{vars.HML_EXECUTIVE_APP_BASE_API}}
+      PROD_EXECUTIVE_APP_BASE_API: ${{vars.PROD_EXECUTIVE_APP_BASE_API}}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Use latest stable version
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4 # Use latest stable version
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Create google-services.json for Production
+        # Assumes your secret PROD_GOOGLE_SERVICES_JSON contains the RAW content of the file.
+        # If it's base64 encoded, you'd need to add the base64 decode step back.
+        env:
+          GOOGLE_SERVICES_JSON_CONTENT: ${{ secrets.PROD_GOOGLE_SERVICES_JSON }}
+        run: |
+          echo "Writing google-services.json from secret..."
+          if [ -z "$GOOGLE_SERVICES_JSON_CONTENT" ]; then
+            echo "Error: PROD_GOOGLE_SERVICES_JSON secret is not set or empty."
+            exit 1
+          fi
+          # Ensure the directory exists
+          mkdir -p app/src/production
+          echo "$GOOGLE_SERVICES_JSON_CONTENT" | base64 --decode > app/src/production/google-services.json
+          echo "google-services.json written successfully."
+
+      # Optional: Add Linting Step
+      # - name: Run Android Lint
+      #   run: ./gradlew lintProdDebug # Or your specific lint task (e.g., lintProdRelease)
+
+      # Optional: Add Unit Test Step
+      # - name: Run Unit Tests
+      #   run: ./gradlew testProdDebugUnitTest # Or your specific unit test task (e.g., testProdReleaseUnitTest)
+
+      - name: Build Production Debug APK
+        run: ./gradlew assembleProdDebug
+        # If you need a release build for 'main' branch pushes, you might add another job
+        # or conditional steps, e.g.:
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # run: ./gradlew assembleProdRelease
+
+      # Optional: Upload Artifacts (e.g., APK)
+      # - name: Upload Production Debug APK
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: app-prod-debug.apk
+      #     path: app/build/outputs/apk/prod/debug/app-prod-debug.apk
