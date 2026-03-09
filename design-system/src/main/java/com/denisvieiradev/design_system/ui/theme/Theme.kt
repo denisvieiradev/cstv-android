@@ -29,9 +29,8 @@ fun CstvTheme(
 
             val insets = WindowCompat.getInsetsController(window, view)
             val darkIcons = barColor.luminance() > 0.5f
-            insets.isAppearanceLightStatusBars = darkIcons
             insets.isAppearanceLightNavigationBars = darkIcons
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            insets.isAppearanceLightStatusBars = !darkTheme
         }
     }
 
@@ -63,7 +62,7 @@ val LightColorScheme = lightColorScheme(
     onErrorContainer = LightOnErrorContainer,
     surfaceDim = LightSurfaceDim,
     surface = LightSurface,
-    surfaceVariant = LightSurfaceDim,
+    surfaceVariant = LightSurfaceContainerHigh,
     onSurface = LightOnSurface,
     surfaceBright = LightSurfaceBright,
     surfaceContainerLowest = LightSurfaceContainerLowest,
@@ -101,7 +100,7 @@ val DarkColorScheme = darkColorScheme(
     onErrorContainer = DarkOnErrorContainer,
     surfaceDim = DarkSurfaceDim,
     surface = DarkSurface,
-    surfaceVariant = DarkSurfaceDim,
+    surfaceVariant = DarkSurfaceContainerHigh,
     onSurface = DarkOnSurface,
     surfaceBright = DarkSurfaceBright,
     surfaceContainerLowest = DarkSurfaceContainerLowest,

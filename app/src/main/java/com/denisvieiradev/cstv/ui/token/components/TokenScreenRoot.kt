@@ -23,6 +23,7 @@ fun TokenScreenRoot(
     LaunchedEffect(uiState.navigateToMatches) {
         if (uiState.navigateToMatches) {
             navigateToMatches(context)
+            viewModel.onNavigationConsumed()
         }
     }
 

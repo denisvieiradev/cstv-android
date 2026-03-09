@@ -1,7 +1,7 @@
 package com.denisvieiradev.cstv.ui.token
 
 import androidx.lifecycle.ViewModel
-import com.denisvieiradev.cachemanager.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +19,10 @@ class TokenViewModel(
             is TokenScreenAction.OnTokenChanged -> _uiState.update { it.copy(token = action.value) }
             is TokenScreenAction.Confirm -> saveToken()
         }
+    }
+
+    fun onNavigationConsumed() {
+        _uiState.update { it.copy(navigateToMatches = false) }
     }
 
     private fun saveToken() {

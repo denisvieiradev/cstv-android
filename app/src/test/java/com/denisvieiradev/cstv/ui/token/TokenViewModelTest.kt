@@ -1,6 +1,6 @@
 package com.denisvieiradev.cstv.ui.token
 
-import com.denisvieiradev.cachemanager.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -44,6 +44,34 @@ class TokenViewModelTest {
         // Assert
         verify { mockSessionRepository.saveToken("my-token") }
         assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
+    }
+
+    @Test
+    fun `should not navigate when submitting blank token`() {
+        // Arrange
+        val viewModel = TokenViewModel(mockSessionRepository)
+        viewModel.onAction(TokenScreenAction.OnTokenChanged("   "))
+
+        // Act
+        viewModel.onAction(TokenScreenAction.Confirm)
+
+        // Assert
+        assertThat(viewModel.uiState.value.navigateToMatches).isFalse()
+    }
+
+    @Test
+    fun `should reset navigateToMatches after onNavigationConsumed`() {
+        // Arrange
+        val viewModel = TokenViewModel(mockSessionRepository)
+        viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
+        viewModel.onAction(TokenScreenAction.Confirm)
+        assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
+
+        // Act
+        viewModel.onNavigationConsumed()
+
+        // Assert
+        assertThat(viewModel.uiState.value.navigateToMatches).isFalse()
     }
 
     @Test

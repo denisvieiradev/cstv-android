@@ -1,6 +1,7 @@
 package com.denisvieiradev.cstv.core
 
 import android.app.Application
+import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.core.di.getModules
 import com.orhanobut.hawk.Hawk
 import org.koin.android.ext.koin.androidContext
@@ -12,7 +13,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 
         Hawk.init(this).build()
 

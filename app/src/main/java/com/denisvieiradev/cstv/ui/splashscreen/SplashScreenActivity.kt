@@ -3,9 +3,13 @@ package com.denisvieiradev.cstv.ui.splashscreen
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.denisvieiradev.cachemanager.SessionRepository
+import androidx.lifecycle.lifecycleScope
+import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
 import com.denisvieiradev.cstv.ui.token.TokenActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -14,11 +18,14 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        routeToNextScreen()
+        lifecycleScope.launch {
+            routeToNextScreen()
+        }
     }
 
-    private fun routeToNextScreen() {
-        val destination = if (sessionRepository.getToken() != null) {
+    private suspend fun routeToNextScreen() {
+        val hasToken = withContext(Dispatchers.IO) { sessionRepository.getToken() != null }
+        val destination = if (hasToken) {
             Intent(this, MatchesActivity::class.java)
         } else {
             Intent(this, TokenActivity::class.java)

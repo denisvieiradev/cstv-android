@@ -27,12 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.MatchStatus
 import com.denisvieiradev.cstv.ui.matches.MatchesScreenAction
@@ -44,13 +45,17 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+private val scheduledAtFormatter = DateTimeFormatter
+    .ofPattern("dd.MM HH:mm")
+    .withZone(ZoneId.systemDefault())
+
 @Composable
 fun MatchesScreen(
     uiState: MatchesUiState,
     onAction: (MatchesScreenAction) -> Unit
 ) {
     Scaffold(
-        topBar = { MainTopBar(title = "Partidas") }
+        topBar = { MainTopBar(title = stringResource(R.string.matches_title)) }
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -84,19 +89,19 @@ private fun ErrorContent(onRetry: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Erro ao carregar partidas",
+            text = stringResource(R.string.matches_error_title),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(Spacing.small))
         Text(
-            text = "Verifique sua conexão e tente novamente.",
+            text = stringResource(R.string.matches_error_body),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(Spacing.large))
         PrimaryButton(
-            text = "Tentar novamente",
+            text = stringResource(R.string.matches_retry),
             onClick = onRetry,
             modifier = Modifier.padding(horizontal = Spacing.large)
         )
@@ -107,7 +112,7 @@ private fun ErrorContent(onRetry: () -> Unit) {
 private fun EmptyContent() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            text = "Nenhuma partida disponível no momento.",
+            text = stringResource(R.string.matches_empty),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(Spacing.large)
@@ -183,13 +188,13 @@ private fun StatusBadge(
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(topEnd = 16.dp, bottomStart = 8.dp))
-                .background(Color.Red)
+                .background(MaterialTheme.colorScheme.error)
                 .padding(horizontal = Spacing.small, vertical = 4.dp)
         ) {
             Text(
-                text = "AGORA",
+                text = stringResource(R.string.match_status_live),
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onError
             )
         }
     } else {
@@ -225,7 +230,7 @@ private fun TeamsRow(
         )
 
         Text(
-            text = "vs",
+            text = stringResource(R.string.match_vs),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
             modifier = Modifier.padding(horizontal = Spacing.small)
@@ -240,7 +245,7 @@ private fun TeamsRow(
 }
 
 @Composable
-fun TeamLogo(
+private fun TeamLogo(
     name: String,
     imageUrl: String?,
     modifier: Modifier = Modifier
@@ -322,10 +327,7 @@ private fun LeagueInfo(
 private fun String.formatScheduledAt(): String {
     return try {
         val instant = Instant.parse(this)
-        val formatter = DateTimeFormatter
-            .ofPattern("dd.MM HH:mm")
-            .withZone(ZoneId.systemDefault())
-        formatter.format(instant)
+        scheduledAtFormatter.format(instant)
     } catch (e: Exception) {
         this
     }

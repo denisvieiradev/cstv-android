@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">cstv</string>
+    <string name="matches_title">Partidas</string>
+    <string name="matches_error_title">Erro ao carregar partidas</string>
+    <string name="matches_error_body">Verifique sua conexão e tente novamente.</string>
+    <string name="matches_retry">Tentar novamente</string>
+    <string name="matches_empty">Nenhuma partida disponível no momento.</string>
+    <string name="match_status_live">AGORA</string>
+    <string name="match_vs">vs</string>
+    <string name="token_screen_title">CSTV</string>
+    <string name="token_screen_body">Insira o seu token da PandaScore para acessar as partidas</string>
+    <string name="token_field_label">Token PandaScore</string>
+    <string name="token_confirm_button">Confirmar</string>
 </resources>

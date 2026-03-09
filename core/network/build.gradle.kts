@@ -29,8 +29,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":core:cachemanager"))
-    implementation(libs.bundles.koinBundle)
+implementation(libs.bundles.koinBundle)
     api(libs.retrofit)
     api(libs.retrofitConverterGson)
     implementation(libs.timber)

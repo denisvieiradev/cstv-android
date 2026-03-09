@@ -73,6 +73,46 @@ class MatchMapperTest {
     }
 
     @Test
+    fun `should return null teamA and teamB when opponents is null`() {
+        // Arrange
+        val dto = fakeMatchDto().copy(opponents = null)
+
+        // Act
+        val domain = dto.toDomain()
+
+        // Assert
+        assertThat(domain.teamA).isNull()
+        assertThat(domain.teamB).isNull()
+    }
+
+    @Test
+    fun `should return teamA mapped and teamB null when only one opponent`() {
+        // Arrange
+        val dto = fakeMatchDto().copy(
+            opponents = listOf(OpponentWrapperDto(opponent = TeamDto(id = 1, name = "Solo Team", imageUrl = null)))
+        )
+
+        // Act
+        val domain = dto.toDomain()
+
+        // Assert
+        assertThat(domain.teamA?.name).isEqualTo("Solo Team")
+        assertThat(domain.teamB).isNull()
+    }
+
+    @Test
+    fun `should handle null opponent entry at index 0 without NPE`() {
+        // Arrange
+        val dto = fakeMatchDto().copy(
+            opponents = listOf(OpponentWrapperDto(opponent = null))
+        )
+
+        // Act / Assert — must not throw
+        val domain = dto.toDomain()
+        assertThat(domain.teamA).isNull()
+    }
+
+    @Test
     fun `should map status string to correct MatchStatus enum`() {
         // Arrange / Act / Assert
         assertThat(fakeMatchDto(status = "running").toDomain().status).isEqualTo(MatchStatus.RUNNING)

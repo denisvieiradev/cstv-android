@@ -1,9 +1,9 @@
 package com.denisvieiradev.cachemanager.di
 
-import com.denisvieiradev.cachemanager.SessionRepository
-import com.denisvieiradev.cachemanager.SessionRepositoryImpl
+import com.denisvieiradev.cachemanager.CacheManager
+import com.denisvieiradev.cachemanager.CacheManagerImpl
 import org.koin.dsl.module
 
 val cacheManagerModule = module {
-    single<SessionRepository> { SessionRepositoryImpl() }
+    single<CacheManager> { CacheManagerImpl() }
 }

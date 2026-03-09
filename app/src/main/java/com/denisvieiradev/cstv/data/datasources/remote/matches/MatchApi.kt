@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.data.datasources.matches
+package com.denisvieiradev.cstv.data.datasources.remote.matches
 
 import com.denisvieiradev.cstv.data.dto.MatchDto
 import retrofit2.http.GET

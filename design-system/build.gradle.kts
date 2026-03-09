@@ -30,6 +30,9 @@ kotlin {
 }
 
 dependencies {
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
+
     implementation(libs.appCompat)
     implementation(libs.googleMaterial)
 
@@ -43,5 +46,4 @@ dependencies {
 
     // Non-BOM Compose
     implementation(libs.composeLifecycle)
-    implementation(libs.composeNavigation)
 }

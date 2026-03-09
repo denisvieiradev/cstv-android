@@ -49,6 +49,7 @@ class GetCsMatchesUseCaseTest {
         // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockRepository.getRunningMatches() } throws exception
+        coEvery { mockRepository.getUpcomingMatches() } returns emptyList()
 
         // Act
         var caughtException: Exception? = null
@@ -59,6 +60,7 @@ class GetCsMatchesUseCaseTest {
         }
 
         // Assert
-        assertThat(caughtException).isEqualTo(exception)
+        assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
+        assertThat(caughtException?.message).isEqualTo(exception.message)
     }
 }

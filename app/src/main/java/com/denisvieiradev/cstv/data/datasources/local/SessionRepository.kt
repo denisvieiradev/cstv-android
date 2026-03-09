@@ -1,4 +1,4 @@
-package com.denisvieiradev.cachemanager
+package com.denisvieiradev.cstv.data.datasources.local
 
 interface SessionRepository {
     fun getToken(): String?
