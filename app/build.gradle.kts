@@ -92,6 +92,9 @@ dependencies {
     implementation(libs.okhttps3Logging)
     implementation(libs.gson)
 
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
     // Utils
     implementation(libs.timber)
     implementation(libs.coil)

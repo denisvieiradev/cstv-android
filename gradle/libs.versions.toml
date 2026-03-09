@@ -45,6 +45,9 @@ gson = "2.10.1"
 # Security
 androidxSecurity = "1.1.0-alpha06"
 
+# Splash Screen
+splashscreen = "1.0.1"
+
 # Utils
 hawk = "2.0.1"
 timber = "5.0.1"
@@ -106,6 +109,7 @@ okhttps3Logging = { group = "com.squareup.okhttp3", name = "logging-interceptor"
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 # Utils
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 hawk = { group = "com.orhanobut", name = "hawk", version.ref = "hawk" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidxSecurity" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
