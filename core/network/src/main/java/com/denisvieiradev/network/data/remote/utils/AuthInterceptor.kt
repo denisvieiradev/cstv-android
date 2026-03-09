@@ -9,6 +9,10 @@ class AuthInterceptor(private val tokenProvider: TokenProvider) : Interceptor {
         val request = chain.request().newBuilder()
             .apply { if (token != null) header("Authorization", "Bearer $token") }
             .build()
-        return chain.proceed(request)
+        val response = chain.proceed(request)
+        if (response.code == 401) {
+            throw AuthorizationException(response.code)
+        }
+        return response
     }
 }

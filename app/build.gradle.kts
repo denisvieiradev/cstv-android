@@ -40,6 +40,9 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 kotlin {
@@ -73,6 +76,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -88,6 +92,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okhttps3Logging)
     implementation(libs.gson)
+
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
 
     // Utils
     implementation(libs.timber)

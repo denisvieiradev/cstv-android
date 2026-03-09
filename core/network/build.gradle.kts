@@ -20,6 +20,9 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 kotlin {
@@ -29,9 +32,12 @@ kotlin {
 }
 
 dependencies {
-implementation(libs.bundles.koinBundle)
+    implementation(libs.bundles.koinBundle)
     api(libs.retrofit)
     api(libs.retrofitConverterGson)
     implementation(libs.timber)
     api(libs.okhttps3Logging)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }

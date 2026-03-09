@@ -1,15 +1,25 @@
 <resources>
     <string name="app_name">cstv</string>
-    <string name="matches_title">Partidas</string>
-    <string name="matches_error_title">Erro ao carregar partidas</string>
-    <string name="matches_error_body">Verifique sua conexão e tente novamente.</string>
-    <string name="matches_retry">Tentar novamente</string>
-    <string name="matches_empty">Nenhuma partida disponível no momento.</string>
-    <string name="match_status_live">AGORA</string>
+    <string name="matches_title">Matches</string>
+    <string name="matches_error_title">Failed to load matches</string>
+    <string name="matches_error_body">Check your connection and try again.</string>
+    <string name="matches_retry">Try again</string>
+    <string name="matches_empty">No matches available right now.</string>
+    <string name="match_status_live">LIVE</string>
     <string name="match_vs">vs</string>
     <string name="token_screen_title">CSTV</string>
-    <string name="token_screen_body">Insira o seu token da PandaScore para acessar as partidas</string>
-    <string name="token_field_label">Token PandaScore</string>
-    <string name="token_confirm_button">Confirmar</string>
-    <string name="token_error_message">Não foi possível salvar o token. Tente novamente.</string>
+    <string name="token_screen_body">Enter your PandaScore token to access matches</string>
+    <string name="token_field_label">PandaScore Token</string>
+    <string name="token_confirm_button">Confirm</string>
+    <string name="token_error_message">Could not save token. Please try again.</string>
+    <string name="matches_logout_content_desc">Sign out</string>
+    <string name="matches_logout_dialog_title">Sign out</string>
+    <string name="matches_logout_dialog_message">Are you sure you want to sign out?</string>
+    <string name="matches_logout_confirm">Confirm</string>
+    <string name="matches_logout_cancel">Cancel</string>
+    <string name="matches_auth_error_title">Session expired</string>
+    <string name="matches_auth_error_body">Your token is invalid or has expired.</string>
+    <string name="matches_configure_token">Reconfigure token</string>
+    <string name="matches_theme_toggle_content_desc">Toggle theme</string>
+    <string name="matches_language_toggle_content_desc">Toggle language</string>
 </resources>
