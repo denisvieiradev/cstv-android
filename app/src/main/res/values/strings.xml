@@ -11,4 +11,5 @@
     <string name="token_screen_body">Insira o seu token da PandaScore para acessar as partidas</string>
     <string name="token_field_label">Token PandaScore</string>
     <string name="token_confirm_button">Confirmar</string>
+    <string name="token_error_message">Não foi possível salvar o token. Tente novamente.</string>
 </resources>

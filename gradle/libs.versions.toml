@@ -42,6 +42,9 @@ retrofit = "3.0.0"
 loggingInterceptor = "5.3.0"
 gson = "2.10.1"
 
+# Security
+androidxSecurity = "1.1.0-alpha06"
+
 # Utils
 hawk = "2.0.1"
 timber = "5.0.1"
@@ -104,6 +107,7 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 # Utils
 hawk = { group = "com.orhanobut", name = "hawk", version.ref = "hawk" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidxSecurity" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 

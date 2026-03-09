@@ -56,5 +56,14 @@ fun TokenScreen(
             onClick = { onAction(TokenScreenAction.Confirm) },
             enabled = uiState.isConfirmEnabled
         )
+        if (uiState.error != null) {
+            Spacer(modifier = Modifier.height(Spacing.small))
+            Text(
+                text = stringResource(R.string.token_error_message),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }

@@ -28,4 +28,5 @@ kotlin {
 dependencies {
     implementation(libs.bundles.koinBundle)
     implementation(libs.hawk)
+    implementation(libs.androidx.security.crypto)
 }
