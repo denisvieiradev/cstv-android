@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
-import com.denisvieiradev.cstv.ui.matchdetail.SelectedMatchHolder
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
@@ -24,13 +23,12 @@ class MatchesViewModelTest {
 
     private val mockUseCase: GetCsMatchesUseCase = mockk()
     private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
-    private val selectedMatchHolder = SelectedMatchHolder()
 
     @Test
     fun `should emit loading state when load matches starts`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -45,7 +43,7 @@ class MatchesViewModelTest {
         // Arrange
         val matches = listOf(fakeMatch())
         coEvery { mockUseCase() } returns matches
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -63,7 +61,7 @@ class MatchesViewModelTest {
         // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockUseCase() } throws exception
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -81,7 +79,7 @@ class MatchesViewModelTest {
         // Arrange
         val matches = listOf(fakeMatch())
         coEvery { mockUseCase() } returns matches
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -99,7 +97,7 @@ class MatchesViewModelTest {
     fun `should set isAuthError true and error null when AuthorizationException is thrown`() = runTest {
         // Arrange
         coEvery { mockUseCase() } throws AuthorizationException(401)
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -118,7 +116,7 @@ class MatchesViewModelTest {
         // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockUseCase() } throws exception
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -136,7 +134,7 @@ class MatchesViewModelTest {
     fun `should clear session and emit NavigateToTokenScreen when ConfirmLogout action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.navigationEvents.test {
@@ -151,7 +149,7 @@ class MatchesViewModelTest {
     fun `should clear session and emit NavigateToTokenScreen when ConfigureToken action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.navigationEvents.test {
@@ -169,7 +167,7 @@ class MatchesViewModelTest {
         every { mockSessionLocalDataSource.isDarkTheme() } returns false
 
         // Act
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Assert
         assertThat(viewModel.uiState.value.isDarkTheme).isFalse()
@@ -180,7 +178,7 @@ class MatchesViewModelTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockSessionLocalDataSource.isDarkTheme() } returns false
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleTheme)
@@ -197,7 +195,7 @@ class MatchesViewModelTest {
         every { mockSessionLocalDataSource.getLanguage() } returns Language.PT
 
         // Act
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Assert
         assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.PT)
@@ -208,7 +206,7 @@ class MatchesViewModelTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockSessionLocalDataSource.getLanguage() } returns Language.EN
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
@@ -223,7 +221,7 @@ class MatchesViewModelTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockSessionLocalDataSource.getLanguage() } returns Language.PT
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
@@ -237,7 +235,7 @@ class MatchesViewModelTest {
     fun `should set showLogoutDialog to true when Logout action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act
         viewModel.onAction(MatchesScreenAction.Logout)
@@ -250,7 +248,7 @@ class MatchesViewModelTest {
     fun `should set showLogoutDialog to false when DismissLogout action is dispatched`() = runTest {
         // Arrange
         coEvery { mockUseCase() } returns emptyList()
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
         viewModel.onAction(MatchesScreenAction.Logout)
         assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
 
@@ -267,7 +265,7 @@ class MatchesViewModelTest {
         val initialMatches = listOf(fakeMatch(id = 1))
         val retryMatches = listOf(fakeMatch(id = 2))
         coEvery { mockUseCase() } returnsMany listOf(initialMatches, retryMatches)
-        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
+        val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource)
 
         // Act / Assert
         viewModel.uiState.test {

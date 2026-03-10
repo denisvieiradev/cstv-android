@@ -1,5 +1,9 @@
 package com.denisvieiradev.cstv.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Match(
     val id: Int,
     val status: MatchStatus,
@@ -10,4 +14,4 @@ data class Match(
     val leagueImageUrl: String?,
     val teamA: Team?,
     val teamB: Team?
-)
+) : Parcelable

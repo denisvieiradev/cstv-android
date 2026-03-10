@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PANDASCORE_DEMO_API_TOKEN: ${{vars.PANDASCORE_DEMO_API_TOKEN}}
+      PANDASCORE_DEMO_API_TOKEN: ${{secrets.PANDASCORE_DEMO_API_TOKEN}}
 
     steps:
       - name: Checkout code
