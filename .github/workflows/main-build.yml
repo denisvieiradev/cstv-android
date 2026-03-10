@@ -28,20 +28,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Optional: Add Linting Step
       - name: Run Android Lint
-        run: ./gradlew lintProdDebug # Or your specific lint task (e.g., lintProdRelease)
+        run: ./gradlew lintDebug
 
-      # Optional: Add Unit Test Step
       - name: Run Unit Tests
-        run: ./gradlew testProdDebugUnitTest # Or your specific unit test task (e.g., testProdReleaseUnitTest)
+        run: ./gradlew testDebugUnitTest
 
-      - name: Build Production Debug APK
-        run: ./gradlew assembleProdDebug
-        # If you need a release build for 'main' branch pushes, you might add another job
-        # or conditional steps, e.g.:
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        # run: ./gradlew assembleProdRelease
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
 
       # Optional: Upload Artifacts (e.g., APK)
       # - name: Upload Production Debug APK
