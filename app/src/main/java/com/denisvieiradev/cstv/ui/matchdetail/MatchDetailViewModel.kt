@@ -60,6 +60,7 @@ class MatchDetailViewModel(
             is MatchDetailScreenAction.NavigateBack -> viewModelScope.launch {
                 _navigationEvents.emit(MatchDetailNavigationEvent.NavigateBack)
             }
+            is MatchDetailScreenAction.RetryLoadPlayers -> Unit
         }
     }
 }
