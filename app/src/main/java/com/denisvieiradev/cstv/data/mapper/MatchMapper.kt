@@ -29,7 +29,7 @@ private fun PlayerDto.toDomain() = Player(
     imageUrl = imageUrl
 )
 
-private fun TeamDto.toDomain() = Team(
+internal fun TeamDto.toDomain() = Team(
     id = id ?: 0,
     name = name.orEmpty(),
     imageUrl = imageUrl,
