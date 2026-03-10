@@ -25,7 +25,7 @@ android {
         buildConfigField(
             "String",
             "PANDASCORE_DEMO_API_TOKEN",
-            ProjectConfig.EnvVariables.PANDASCORE_DEMO_API_TOKEN.ifEmpty { "\"\"" }
+            ProjectConfig.EnvVariables.PANDASCORE_DEMO_API_TOKEN
         )
     }
 
