@@ -1,3 +1,7 @@
 package com.denisvieiradev.cstv.domain.model
 
-enum class MatchStatus { RUNNING, NOT_STARTED, FINISHED, CANCELED, POSTPONED }
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class MatchStatus : Parcelable { RUNNING, NOT_STARTED, FINISHED, CANCELED, POSTPONED }

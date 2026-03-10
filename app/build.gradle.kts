@@ -1,4 +1,5 @@
 import config.AppConfig
+import config.ProjectConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -20,6 +21,12 @@ android {
         versionName = AppConfig.version.name
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "PANDASCORE_DEMO_API_TOKEN",
+            ProjectConfig.EnvVariables.PANDASCORE_DEMO_API_TOKEN
+        )
     }
 
     buildTypes {
@@ -42,6 +49,14 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+    }
+
+    applicationVariants.configureEach {
+        val buildVariant = name.replace("Release", "-release").replace("Debug", "-debug")
+        val outputFileName = "cstv-app-${versionName}-${versionCode}-$buildVariant.apk"
+        outputs.configureEach {
+            (this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl)?.outputFileName = outputFileName
+        }
     }
 }
 

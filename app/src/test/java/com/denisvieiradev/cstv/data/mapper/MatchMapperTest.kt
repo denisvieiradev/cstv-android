@@ -2,6 +2,7 @@ package com.denisvieiradev.cstv.data.mapper
 
 import com.denisvieiradev.cstv.data.dto.MatchDto
 import com.denisvieiradev.cstv.data.dto.OpponentWrapperDto
+import com.denisvieiradev.cstv.data.dto.PlayerDto
 import com.denisvieiradev.cstv.data.dto.TeamDto
 import com.denisvieiradev.cstv.domain.model.MatchStatus
 import com.denisvieiradev.cstv.utils.fakeMatchDto
@@ -110,6 +111,82 @@ class MatchMapperTest {
         // Act / Assert — must not throw
         val domain = dto.toDomain()
         assertThat(domain.teamA).isNull()
+    }
+
+    @Test
+    fun `PlayerDto toDomain maps id name and imageUrl correctly`() {
+        // Arrange
+        val playerDto = PlayerDto(id = 7, name = "s1mple", imageUrl = "https://example.com/s1mple.png")
+        val dto = fakeMatchDto().copy(
+            opponents = listOf(
+                OpponentWrapperDto(opponent = TeamDto(id = 1, name = "NaVi", imageUrl = null, players = listOf(playerDto)))
+            )
+        )
+
+        // Act
+        val player = dto.toDomain().teamA?.players?.first()
+
+        // Assert
+        assertThat(player?.id).isEqualTo(7)
+        assertThat(player?.name).isEqualTo("s1mple")
+        assertThat(player?.imageUrl).isEqualTo("https://example.com/s1mple.png")
+    }
+
+    @Test
+    fun `PlayerDto toDomain with null fields uses default values`() {
+        // Arrange
+        val playerDto = PlayerDto(id = null, name = null, imageUrl = null)
+        val dto = fakeMatchDto().copy(
+            opponents = listOf(
+                OpponentWrapperDto(opponent = TeamDto(id = 1, name = "NaVi", imageUrl = null, players = listOf(playerDto)))
+            )
+        )
+
+        // Act
+        val player = dto.toDomain().teamA?.players?.first()
+
+        // Assert
+        assertThat(player?.id).isEqualTo(0)
+        assertThat(player?.name).isEqualTo("")
+        assertThat(player?.imageUrl).isNull()
+    }
+
+    @Test
+    fun `TeamDto toDomain with players list maps players correctly`() {
+        // Arrange
+        val players = listOf(
+            PlayerDto(id = 1, name = "player1", imageUrl = "https://example.com/p1.png"),
+            PlayerDto(id = 2, name = "player2", imageUrl = null)
+        )
+        val dto = fakeMatchDto().copy(
+            opponents = listOf(
+                OpponentWrapperDto(opponent = TeamDto(id = 10, name = "Team X", imageUrl = null, players = players))
+            )
+        )
+
+        // Act
+        val mappedPlayers = dto.toDomain().teamA?.players
+
+        // Assert
+        assertThat(mappedPlayers).hasSize(2)
+        assertThat(mappedPlayers?.get(0)?.name).isEqualTo("player1")
+        assertThat(mappedPlayers?.get(1)?.name).isEqualTo("player2")
+    }
+
+    @Test
+    fun `TeamDto toDomain with null players returns empty list`() {
+        // Arrange
+        val dto = fakeMatchDto().copy(
+            opponents = listOf(
+                OpponentWrapperDto(opponent = TeamDto(id = 10, name = "Team X", imageUrl = null, players = null))
+            )
+        )
+
+        // Act
+        val mappedPlayers = dto.toDomain().teamA?.players
+
+        // Assert
+        assertThat(mappedPlayers).isEmpty()
     }
 
     @Test

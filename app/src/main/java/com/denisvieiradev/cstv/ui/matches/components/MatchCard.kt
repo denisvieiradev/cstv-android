@@ -16,8 +16,9 @@ import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
-fun MatchCard(match: Match) {
+fun MatchCard(match: Match, onClick: () -> Unit) {
     Card(
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(

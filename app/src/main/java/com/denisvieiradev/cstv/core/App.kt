@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.core.di.getModules
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.Language
 import com.orhanobut.hawk.Hawk
 import org.koin.android.ext.android.inject
@@ -33,14 +33,14 @@ class App : Application(), KoinComponent {
     }
 
     private fun applyInitialLocale() {
-        val sessionRepository: SessionRepository by inject()
-        val saved = sessionRepository.getLanguage()
+        val sessionLocalDataSource: SessionLocalDataSource by inject()
+        val saved = sessionLocalDataSource.getLanguage()
         val tag = if (saved != null) {
-            saved
+            if (saved == "pt") Language.PT.also { sessionLocalDataSource.saveLanguage(it) } else saved
         } else {
             val systemLang = Locale.getDefault().language
             val resolved = if (systemLang == "pt") Language.PT else Language.EN
-            sessionRepository.saveLanguage(resolved)
+            sessionLocalDataSource.saveLanguage(resolved)
             resolved
         }
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag))

@@ -1,6 +1,6 @@
 package com.denisvieiradev.cstv.ui.token
 
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -9,12 +9,12 @@ import org.junit.Test
 
 class TokenViewModelTest {
 
-    private val mockSessionRepository: SessionRepository = mockk(relaxed = true)
+    private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
 
     @Test
     fun `should disable confirm button when token is blank`() {
         // Arrange
-        val viewModel = TokenViewModel(mockSessionRepository)
+        val viewModel = TokenViewModel(mockSessionLocalDataSource)
 
         // Act / Assert
         assertThat(viewModel.uiState.value.isConfirmEnabled).isFalse()
@@ -23,7 +23,7 @@ class TokenViewModelTest {
     @Test
     fun `should enable confirm button when token is not blank`() {
         // Arrange
-        val viewModel = TokenViewModel(mockSessionRepository)
+        val viewModel = TokenViewModel(mockSessionLocalDataSource)
 
         // Act
         viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
@@ -35,21 +35,21 @@ class TokenViewModelTest {
     @Test
     fun `should save token when confirm action is dispatched`() {
         // Arrange
-        val viewModel = TokenViewModel(mockSessionRepository)
+        val viewModel = TokenViewModel(mockSessionLocalDataSource)
         viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
 
         // Act
         viewModel.onAction(TokenScreenAction.Confirm)
 
         // Assert
-        verify { mockSessionRepository.saveToken("my-token") }
+        verify { mockSessionLocalDataSource.saveToken("my-token") }
         assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
     }
 
     @Test
     fun `should not navigate when submitting blank token`() {
         // Arrange
-        val viewModel = TokenViewModel(mockSessionRepository)
+        val viewModel = TokenViewModel(mockSessionLocalDataSource)
         viewModel.onAction(TokenScreenAction.OnTokenChanged("   "))
 
         // Act
@@ -62,7 +62,7 @@ class TokenViewModelTest {
     @Test
     fun `should reset navigateToMatches after onNavigationConsumed`() {
         // Arrange
-        val viewModel = TokenViewModel(mockSessionRepository)
+        val viewModel = TokenViewModel(mockSessionLocalDataSource)
         viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
         viewModel.onAction(TokenScreenAction.Confirm)
         assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
@@ -78,8 +78,8 @@ class TokenViewModelTest {
     fun `should emit error state when save token fails`() {
         // Arrange
         val exception = RuntimeException("Save failed")
-        every { mockSessionRepository.saveToken(any()) } throws exception
-        val viewModel = TokenViewModel(mockSessionRepository)
+        every { mockSessionLocalDataSource.saveToken(any()) } throws exception
+        val viewModel = TokenViewModel(mockSessionLocalDataSource)
         viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
 
         // Act

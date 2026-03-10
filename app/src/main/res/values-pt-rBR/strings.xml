@@ -22,4 +22,12 @@
     <string name="matches_configure_token">Reconfigurar token</string>
     <string name="matches_theme_toggle_content_desc">Toggle theme</string>
     <string name="matches_language_toggle_content_desc">Alterar idioma</string>
+    <string name="match_detail_game_not_started">Jogo não iniciado</string>
+    <string name="match_detail_team_logo_desc">Logo do %s</string>
+    <string name="match_detail_player_photo_desc">Foto de %s</string>
+    <string name="match_detail_team_placeholder_desc">Placeholder do time</string>
+    <string name="match_detail_player_placeholder_desc">Placeholder do jogador</string>
+    <string name="match_detail_players_error">Erro ao carregar jogadores</string>
+    <string name="match_detail_players_retry">Tentar novamente</string>
+    <string name="match_detail_player_missing">Jogador não confirmado</string>
 </resources>

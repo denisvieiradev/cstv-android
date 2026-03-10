@@ -18,7 +18,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
@@ -33,13 +35,18 @@ fun TeamDisplay(
         verticalArrangement = Arrangement.Center
     ) {
         if (imageUrl != null) {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = imageUrl,
                 contentDescription = name,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(60.dp)
-                    .clip(CircleShape)
+                    .clip(CircleShape),
+                loading = {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                    }
+                }
             )
         } else {
             Box(
