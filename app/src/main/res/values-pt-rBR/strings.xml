@@ -27,4 +27,7 @@
     <string name="match_detail_player_photo_desc">Foto de %s</string>
     <string name="match_detail_team_placeholder_desc">Placeholder do time</string>
     <string name="match_detail_player_placeholder_desc">Placeholder do jogador</string>
+    <string name="match_detail_players_error">Erro ao carregar jogadores</string>
+    <string name="match_detail_players_retry">Tentar novamente</string>
+    <string name="match_detail_player_missing">Jogador não confirmado</string>
 </resources>

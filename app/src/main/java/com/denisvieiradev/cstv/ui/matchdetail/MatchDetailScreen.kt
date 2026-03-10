@@ -32,7 +32,7 @@ fun MatchDetailScreen(
     val match = uiState.match
     Scaffold(
         topBar = {
-            val title = if (match != null) "${match.leagueName} + ${match.serieFullName}" else ""
+            val title = if (match != null) "${match.leagueName} • ${match.serieFullName}" else ""
             MainTopBar(
                 title = title,
                 onNavigateBack = { onAction(MatchDetailScreenAction.NavigateBack) }
@@ -73,6 +73,7 @@ private fun MatchDetailContent(
         ScheduledTime(scheduledAt = match.scheduledAt)
         Spacer(modifier = Modifier.height(Spacing.large))
         when (playersState) {
+            is PlayersState.Idle -> Box {}
             is PlayersState.Loading -> PlayersSkeleton()
             is PlayersState.Error -> PlayersError(onRetry = { onAction(MatchDetailScreenAction.RetryLoadPlayers) })
             is PlayersState.Success -> {

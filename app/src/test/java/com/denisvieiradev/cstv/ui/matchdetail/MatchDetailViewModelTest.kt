@@ -170,13 +170,13 @@ class MatchDetailViewModelTest {
     }
 
     @Test
-    fun `init with null match does not trigger fetchPlayers and playersState remains Loading`() = runTest {
+    fun `init with null match does not trigger fetchPlayers and playersState is Idle`() = runTest {
         // Arrange
         val holder = SelectedMatchHolder()
         val viewModel = buildViewModel(holder)
 
         // Assert
-        assertThat(viewModel.uiState.value.playersState).isEqualTo(PlayersState.Loading)
+        assertThat(viewModel.uiState.value.playersState).isEqualTo(PlayersState.Idle)
         coVerify(exactly = 0) { mockGetMatchDetailUseCase(any()) }
     }
 }

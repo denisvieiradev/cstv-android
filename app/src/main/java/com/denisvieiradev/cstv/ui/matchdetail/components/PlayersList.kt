@@ -37,13 +37,13 @@ internal fun PlayersList(teamAPlayers: List<Player>, teamBPlayers: List<Player>)
     Row(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             team1Players.forEach { player ->
-                TeamOnePlayerItem(player = player)
+                PlayerItem(player = player, isLeftTeam = false)
             }
         }
         Spacer(modifier = Modifier.width(Spacing.small))
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             team2Players.forEach { player ->
-                TeamTwoPlayerItem(player = player)
+                PlayerItem(player = player, isLeftTeam = true)
             }
         }
     }
@@ -96,7 +96,10 @@ internal fun PlayersError(onRetry: () -> Unit) {
 }
 
 @Composable
-private fun TeamOnePlayerItem(player: Player?) {
+private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
+    val textAlign = if (isLeftTeam) TextAlign.Start else TextAlign.End
+    val columnAlignment = if (isLeftTeam) Alignment.Start else Alignment.End
+    val rowArrangement = if (isLeftTeam) Arrangement.Start else Arrangement.End
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -104,15 +107,19 @@ private fun TeamOnePlayerItem(player: Player?) {
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(Spacing.small),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = rowArrangement
     ) {
-        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+        if (isLeftTeam) {
+            PlayerPhoto(player = player)
+            Spacer(modifier = Modifier.width(Spacing.small))
+        }
+        Column(modifier = Modifier.weight(1f), horizontalAlignment = columnAlignment) {
             if (player != null) {
                 Text(
                     text = player.name,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.End,
+                    textAlign = textAlign,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -122,7 +129,7 @@ private fun TeamOnePlayerItem(player: Player?) {
                         text = fullName,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        textAlign = TextAlign.End,
+                        textAlign = textAlign,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -132,61 +139,15 @@ private fun TeamOnePlayerItem(player: Player?) {
                     text = stringResource(R.string.match_detail_player_missing),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    textAlign = TextAlign.End,
+                    textAlign = textAlign,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
         }
-        Spacer(modifier = Modifier.width(Spacing.small))
-        PlayerPhoto(player = player)
-    }
-}
-
-@Composable
-private fun TeamTwoPlayerItem(player: Player?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(Spacing.small))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(Spacing.small),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        PlayerPhoto(player = player)
-        Spacer(modifier = Modifier.width(Spacing.small))
-        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
-            if (player != null) {
-                Text(
-                    text = player.name,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Start,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                val fullName = listOfNotNull(player.firstName, player.lastName).joinToString(" ")
-                if (fullName.isNotBlank()) {
-                    Text(
-                        text = fullName,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        textAlign = TextAlign.Start,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            } else {
-                Text(
-                    text = stringResource(R.string.match_detail_player_missing),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    textAlign = TextAlign.Start,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+        if (!isLeftTeam) {
+            Spacer(modifier = Modifier.width(Spacing.small))
+            PlayerPhoto(player = player)
         }
     }
 }

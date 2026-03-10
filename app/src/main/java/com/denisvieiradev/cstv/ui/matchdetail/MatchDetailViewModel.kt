@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 sealed interface PlayersState {
+    data object Idle : PlayersState
     data object Loading : PlayersState
     data object Error : PlayersState
     data class Success(val teamA: List<Player>, val teamB: List<Player>) : PlayersState
@@ -24,7 +25,7 @@ sealed interface PlayersState {
 data class MatchDetailUiState(
     val match: Match? = null,
     val darkTheme: Boolean = false,
-    val playersState: PlayersState = PlayersState.Loading
+    val playersState: PlayersState = PlayersState.Idle
 )
 
 sealed interface MatchDetailScreenAction {
@@ -56,7 +57,13 @@ class MatchDetailViewModel(
             Timber.d("SelectedMatchHolder returned null — no match to display")
         }
         selectedMatchHolder.clear()
-        _uiState.update { it.copy(match = match, darkTheme = sessionLocalDataSource.isDarkTheme()) }
+        _uiState.update {
+            it.copy(
+                match = match,
+                darkTheme = sessionLocalDataSource.isDarkTheme(),
+                playersState = if (match == null) PlayersState.Idle else PlayersState.Loading
+            )
+        }
         if (match != null) {
             currentMatchId = match.id
             fetchPlayers(match.id)
