@@ -309,8 +309,8 @@ private fun TeamOnePlayerItem(player: Player?) {
             } else {
                 Text(
                     text = stringResource(R.string.match_detail_player_missing),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     textAlign = TextAlign.End,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -359,8 +359,8 @@ private fun TeamTwoPlayerItem(player: Player?) {
             } else {
                 Text(
                     text = stringResource(R.string.match_detail_player_missing),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     textAlign = TextAlign.Start,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -374,8 +374,12 @@ private fun TeamTwoPlayerItem(player: Player?) {
 private fun PlayerPhoto(player: Player?) {
     val photoSize = 48.dp
     val shape = RoundedCornerShape(Spacing.extraSmall)
-    val initials = playerInitials(player?.firstName, player?.lastName, player?.name.orEmpty())
-    if (player?.imageUrl != null) {
+    if (player == null) {
+        PlayerInitialsBox("?", photoSize, shape)
+        return
+    }
+    val initials = playerInitials(player.firstName, player.lastName, player.name)
+    if (player.imageUrl != null) {
         SubcomposeAsyncImage(
             model = player.imageUrl,
             contentDescription = stringResource(R.string.match_detail_player_photo_desc, player.name),
