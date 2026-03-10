@@ -1,5 +1,6 @@
 package com.denisvieiradev.cstv.ui.matchdetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
@@ -38,10 +39,14 @@ sealed interface MatchDetailNavigationEvent {
 }
 
 class MatchDetailViewModel(
-    private val selectedMatchHolder: SelectedMatchHolder,
+    savedStateHandle: SavedStateHandle,
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val getMatchDetailUseCase: GetMatchDetailUseCase
 ) : ViewModel() {
+
+    companion object {
+        const val EXTRA_MATCH = "match"
+    }
 
     private val _uiState = MutableStateFlow(MatchDetailUiState())
     val uiState: StateFlow<MatchDetailUiState> = _uiState.asStateFlow()
@@ -52,11 +57,10 @@ class MatchDetailViewModel(
     private var currentMatchId: Int? = null
 
     init {
-        val match = selectedMatchHolder.get()
+        val match: Match? = savedStateHandle[EXTRA_MATCH]
         if (match == null) {
-            Timber.d("SelectedMatchHolder returned null — no match to display")
+            Timber.d("No match in SavedStateHandle — no match to display")
         }
-        selectedMatchHolder.clear()
         _uiState.update {
             it.copy(
                 match = match,

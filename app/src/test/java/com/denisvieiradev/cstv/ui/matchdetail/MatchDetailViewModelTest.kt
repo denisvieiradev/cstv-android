@@ -1,7 +1,9 @@
 package com.denisvieiradev.cstv.ui.matchdetail
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.fakeMatch
@@ -25,42 +27,31 @@ class MatchDetailViewModelTest {
     private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
     private val mockGetMatchDetailUseCase: GetMatchDetailUseCase = mockk()
 
-    private fun buildViewModel(holder: SelectedMatchHolder = SelectedMatchHolder()) =
-        MatchDetailViewModel(holder, mockSessionLocalDataSource, mockGetMatchDetailUseCase)
+    private fun buildViewModel(match: Match? = null) = MatchDetailViewModel(
+        savedStateHandle = SavedStateHandle(
+            if (match != null) mapOf(MatchDetailViewModel.EXTRA_MATCH to match) else emptyMap()
+        ),
+        sessionLocalDataSource = mockSessionLocalDataSource,
+        getMatchDetailUseCase = mockGetMatchDetailUseCase
+    )
 
     @Test
-    fun `init with match in holder populates uiState match correctly`() = runTest {
+    fun `init with match in SavedStateHandle populates uiState match correctly`() = runTest {
         // Arrange
         val match = fakeMatch(id = 42)
-        val holder = SelectedMatchHolder().apply { set(match) }
         coEvery { mockGetMatchDetailUseCase(42) } returns match
 
         // Act
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel(match)
 
         // Assert
         assertThat(viewModel.uiState.value.match).isEqualTo(match)
     }
 
     @Test
-    fun `init calls clear on holder after consuming match`() = runTest {
+    fun `init with empty SavedStateHandle leaves uiState match as null`() = runTest {
         // Arrange
-        val match = fakeMatch()
-        val holder = SelectedMatchHolder().apply { set(match) }
-        coEvery { mockGetMatchDetailUseCase(any()) } returns match
-
-        // Act
-        buildViewModel(holder)
-
-        // Assert
-        assertThat(holder.get()).isNull()
-    }
-
-    @Test
-    fun `init with empty holder leaves uiState match as null`() = runTest {
-        // Arrange
-        val holder = SelectedMatchHolder()
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel()
 
         // Assert
         assertThat(viewModel.uiState.value.match).isNull()
@@ -69,8 +60,7 @@ class MatchDetailViewModelTest {
     @Test
     fun `onAction NavigateBack emits MatchDetailNavigationEvent NavigateBack`() = runTest {
         // Arrange
-        val holder = SelectedMatchHolder()
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel()
 
         // Act / Assert
         viewModel.navigationEvents.test {
@@ -84,8 +74,7 @@ class MatchDetailViewModelTest {
     fun `init reads darkTheme from sessionRepository and sets it in uiState`() = runTest {
         // Arrange
         every { mockSessionLocalDataSource.isDarkTheme() } returns true
-        val holder = SelectedMatchHolder()
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel()
 
         // Assert
         assertThat(viewModel.uiState.value.darkTheme).isTrue()
@@ -96,9 +85,8 @@ class MatchDetailViewModelTest {
     fun `init with match sets playersState to Loading before fetch completes`() = runTest {
         // Arrange
         val match = fakeMatch(id = 10)
-        val holder = SelectedMatchHolder().apply { set(match) }
         coEvery { mockGetMatchDetailUseCase(10) } returns match
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel(match)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -113,9 +101,8 @@ class MatchDetailViewModelTest {
         val teamA = fakeTeam(id = 1, players = listOf(fakePlayer()))
         val teamB = fakeTeam(id = 2, players = listOf(fakePlayer(id = 2, name = "NiKo")))
         val detailMatch = fakeMatch(id = 10, teamA = teamA, teamB = teamB)
-        val holder = SelectedMatchHolder().apply { set(fakeMatch(id = 10)) }
         coEvery { mockGetMatchDetailUseCase(10) } returns detailMatch
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel(fakeMatch(id = 10))
 
         // Act / Assert
         viewModel.uiState.test {
@@ -131,9 +118,8 @@ class MatchDetailViewModelTest {
     fun `fetchPlayers sets playersState to Error when use case throws`() = runTest {
         // Arrange
         val match = fakeMatch(id = 10)
-        val holder = SelectedMatchHolder().apply { set(match) }
         coEvery { mockGetMatchDetailUseCase(10) } throws RuntimeException("Network error")
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel(match)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -147,12 +133,11 @@ class MatchDetailViewModelTest {
     fun `onAction RetryLoadPlayers re-triggers fetch transitioning Loading then Success`() = runTest {
         // Arrange
         val match = fakeMatch(id = 10)
-        val holder = SelectedMatchHolder().apply { set(match) }
         val teamA = fakeTeam(id = 1, players = listOf(fakePlayer()))
         val teamB = fakeTeam(id = 2, players = emptyList())
         val detailMatch = fakeMatch(id = 10, teamA = teamA, teamB = teamB)
         coEvery { mockGetMatchDetailUseCase(10) } throws RuntimeException("error") andThen detailMatch
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel(match)
 
         // Act / Assert
         viewModel.uiState.test {
@@ -172,8 +157,7 @@ class MatchDetailViewModelTest {
     @Test
     fun `init with null match does not trigger fetchPlayers and playersState is Idle`() = runTest {
         // Arrange
-        val holder = SelectedMatchHolder()
-        val viewModel = buildViewModel(holder)
+        val viewModel = buildViewModel()
 
         // Assert
         assertThat(viewModel.uiState.value.playersState).isEqualTo(PlayersState.Idle)
