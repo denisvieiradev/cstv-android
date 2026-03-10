@@ -22,7 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Team
 import com.denisvieiradev.cstv.ui.matches.util.MatchDateFormatter
@@ -78,13 +80,18 @@ private fun TeamColumn(
 private fun TeamLogo(imageUrl: String?, teamName: String) {
     val logoSize = 60.dp
     if (imageUrl != null) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = imageUrl,
             contentDescription = stringResource(R.string.match_detail_team_logo_desc, teamName),
             modifier = Modifier
                 .size(logoSize)
                 .clip(CircleShape),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            loading = {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                }
+            }
         )
     } else {
         Box(
