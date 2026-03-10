@@ -29,4 +29,5 @@
     <string name="match_detail_player_placeholder_desc">Player placeholder</string>
     <string name="match_detail_players_error">Failed to load players</string>
     <string name="match_detail_players_retry">Try again</string>
+    <string name="match_detail_player_missing">Player not confirmed</string>
 </resources>

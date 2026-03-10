@@ -286,20 +286,31 @@ private fun TeamOnePlayerItem(player: Player?) {
         horizontalArrangement = Arrangement.End
     ) {
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-            Text(
-                text = player?.name.orEmpty(),
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            val fullName = listOfNotNull(player?.firstName, player?.lastName).joinToString(" ")
-            if (fullName.isNotBlank()) {
+            if (player != null) {
                 Text(
-                    text = fullName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    text = player.name,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                val fullName = listOfNotNull(player.firstName, player.lastName).joinToString(" ")
+                if (fullName.isNotBlank()) {
+                    Text(
+                        text = fullName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            } else {
+                Text(
+                    text = stringResource(R.string.match_detail_player_missing),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.End,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -325,20 +336,31 @@ private fun TeamTwoPlayerItem(player: Player?) {
         PlayerPhoto(player = player)
         Spacer(modifier = Modifier.width(Spacing.small))
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
-            Text(
-                text = player?.name.orEmpty(),
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Start,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            val fullName = listOfNotNull(player?.firstName, player?.lastName).joinToString(" ")
-            if (fullName.isNotBlank()) {
+            if (player != null) {
                 Text(
-                    text = fullName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    text = player.name,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                val fullName = listOfNotNull(player.firstName, player.lastName).joinToString(" ")
+                if (fullName.isNotBlank()) {
+                    Text(
+                        text = fullName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Start,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            } else {
+                Text(
+                    text = stringResource(R.string.match_detail_player_missing),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Start,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
