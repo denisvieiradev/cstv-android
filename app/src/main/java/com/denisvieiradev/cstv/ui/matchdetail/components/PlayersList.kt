@@ -120,8 +120,6 @@ private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
                     textAlign = textAlign,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
                 )
                 val fullName = listOfNotNull(player.firstName, player.lastName).joinToString(" ")
                 if (fullName.isNotBlank()) {
@@ -130,8 +128,6 @@ private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         textAlign = textAlign,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
                     )
                 }
             } else {
@@ -140,8 +136,6 @@ private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     textAlign = textAlign,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

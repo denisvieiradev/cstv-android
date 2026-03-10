@@ -36,7 +36,7 @@ class App : Application(), KoinComponent {
         val sessionLocalDataSource: SessionLocalDataSource by inject()
         val saved = sessionLocalDataSource.getLanguage()
         val tag = if (saved != null) {
-            saved
+            if (saved == "pt") Language.PT.also { sessionLocalDataSource.saveLanguage(it) } else saved
         } else {
             val systemLang = Locale.getDefault().language
             val resolved = if (systemLang == "pt") Language.PT else Language.EN

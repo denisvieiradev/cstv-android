@@ -15,9 +15,5 @@ object ProjectConfig {
         }
 
         val PANDASCORE_DEMO_API_TOKEN: String = env(key = "PANDASCORE_DEMO_API_TOKEN", isRequired = true)
-        val RELEASE_SIGN_KEY_ALIAS: String = env(key = "RELEASE_SIGN_KEY_ALIAS", isRequired = false)
-        val RELEASE_SIGN_KEY_PASSWORD: String = env(key = "RELEASE_SIGN_KEY_PASSWORD", isRequired = false)
-        val RELEASE_SIGN_STORE_PASSWORD: String = env(key = "RELEASE_SIGN_STORE_PASSWORD", isRequired = false)
-        val RELEASE_SIGN_JKS_PATH: String = env(key = "RELEASE_SIGN_JKS_PATH", isRequired = false)
     }
 }
