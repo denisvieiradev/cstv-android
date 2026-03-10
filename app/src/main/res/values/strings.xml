@@ -27,4 +27,6 @@
     <string name="match_detail_player_photo_desc">%s photo</string>
     <string name="match_detail_team_placeholder_desc">Team placeholder</string>
     <string name="match_detail_player_placeholder_desc">Player placeholder</string>
+    <string name="match_detail_players_error">Failed to load players</string>
+    <string name="match_detail_players_retry">Try again</string>
 </resources>

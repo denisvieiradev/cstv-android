@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +35,7 @@ import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
 import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailScreenAction
 import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailUiState
+import com.denisvieiradev.cstv.ui.matchdetail.PlayersState
 import com.denisvieiradev.cstv.ui.matches.util.MatchDateFormatter
 import com.denisvieiradev.design_system.ui.components.maintopbar.MainTopBar
 import com.denisvieiradev.design_system.ui.theme.Spacing
@@ -60,19 +61,23 @@ fun MatchDetailScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (match == null) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else {
-                MatchDetailContent(match = match)
+            if (match != null) {
+                MatchDetailContent(
+                    match = match,
+                    playersState = uiState.playersState,
+                    onAction = onAction
+                )
             }
         }
     }
 }
 
 @Composable
-private fun MatchDetailContent(match: Match) {
-    val hasPlayers = (match.teamA?.players?.isNotEmpty() == true) ||
-            (match.teamB?.players?.isNotEmpty() == true)
+private fun MatchDetailContent(
+    match: Match,
+    playersState: PlayersState,
+    onAction: (MatchDetailScreenAction) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -84,16 +89,69 @@ private fun MatchDetailContent(match: Match) {
         Spacer(modifier = Modifier.height(Spacing.medium))
         ScheduledTime(scheduledAt = match.scheduledAt)
         Spacer(modifier = Modifier.height(Spacing.large))
-        if (hasPlayers) {
-            PlayersList(teamA = match.teamA, teamB = match.teamB)
-        } else {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(R.string.match_detail_game_not_started),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
+        when (playersState) {
+            is PlayersState.Loading -> PlayersSkeleton()
+            is PlayersState.Error -> PlayersError(onRetry = { onAction(MatchDetailScreenAction.RetryLoadPlayers) })
+            is PlayersState.Success -> {
+                val hasPlayers = playersState.teamA.isNotEmpty() || playersState.teamB.isNotEmpty()
+                if (hasPlayers) {
+                    PlayersList(teamAPlayers = playersState.teamA, teamBPlayers = playersState.teamB)
+                } else {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = stringResource(R.string.match_detail_game_not_started),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlayersSkeleton() {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
+            repeat(PLAYERS_PER_TEAM) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .clip(RoundedCornerShape(Spacing.small))
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                 )
+            }
+        }
+        Spacer(modifier = Modifier.width(Spacing.small))
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
+            repeat(PLAYERS_PER_TEAM) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .clip(RoundedCornerShape(Spacing.small))
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlayersError(onRetry: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = stringResource(R.string.match_detail_players_error),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            TextButton(onClick = onRetry) {
+                Text(text = stringResource(R.string.match_detail_players_retry))
             }
         }
     }
@@ -190,9 +248,9 @@ private fun ScheduledTime(scheduledAt: String?) {
 private const val PLAYERS_PER_TEAM = 5
 
 @Composable
-private fun PlayersList(teamA: Team?, teamB: Team?) {
-    val team1Players = buildFixedPlayerList(teamA?.players)
-    val team2Players = buildFixedPlayerList(teamB?.players)
+private fun PlayersList(teamAPlayers: List<Player>, teamBPlayers: List<Player>) {
+    val team1Players = buildFixedPlayerList(teamAPlayers)
+    val team2Players = buildFixedPlayerList(teamBPlayers)
     Row(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             team1Players.forEach { player ->
@@ -208,8 +266,8 @@ private fun PlayersList(teamA: Team?, teamB: Team?) {
     }
 }
 
-private fun buildFixedPlayerList(players: List<Player>?): List<Player?> {
-    val base = players?.take(PLAYERS_PER_TEAM) ?: emptyList()
+private fun buildFixedPlayerList(players: List<Player>): List<Player?> {
+    val base = players.take(PLAYERS_PER_TEAM)
     return base + List(PLAYERS_PER_TEAM - base.size) { null }
 }
 
