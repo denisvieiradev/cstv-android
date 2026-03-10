@@ -28,7 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.Player
@@ -282,17 +285,29 @@ private fun TeamOnePlayerItem(player: Player?) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        Text(
-            text = player?.name ?: "",
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.End,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+            Text(
+                text = player?.name.orEmpty(),
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            val fullName = listOfNotNull(player?.firstName, player?.lastName).joinToString(" ")
+            if (fullName.isNotBlank()) {
+                Text(
+                    text = fullName,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
         Spacer(modifier = Modifier.width(Spacing.small))
-        PlayerPhoto(imageUrl = player?.imageUrl, playerName = player?.name)
+        PlayerPhoto(player = player)
     }
 }
 
@@ -307,40 +322,73 @@ private fun TeamTwoPlayerItem(player: Player?) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        PlayerPhoto(imageUrl = player?.imageUrl, playerName = player?.name)
+        PlayerPhoto(player = player)
         Spacer(modifier = Modifier.width(Spacing.small))
-        Text(
-            text = player?.name ?: "",
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Start,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
+            Text(
+                text = player?.name.orEmpty(),
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            val fullName = listOfNotNull(player?.firstName, player?.lastName).joinToString(" ")
+            if (fullName.isNotBlank()) {
+                Text(
+                    text = fullName,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    textAlign = TextAlign.Start,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun PlayerPhoto(imageUrl: String?, playerName: String?) {
+private fun PlayerPhoto(player: Player?) {
     val photoSize = 48.dp
     val shape = RoundedCornerShape(Spacing.extraSmall)
-    if (imageUrl != null && playerName != null) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = stringResource(R.string.match_detail_player_photo_desc, playerName),
-            modifier = Modifier
-                .size(photoSize)
-                .clip(shape),
-            contentScale = ContentScale.Crop
+    val initials = playerInitials(player?.firstName, player?.lastName, player?.name.orEmpty())
+    if (player?.imageUrl != null) {
+        SubcomposeAsyncImage(
+            model = player.imageUrl,
+            contentDescription = stringResource(R.string.match_detail_player_photo_desc, player.name),
+            modifier = Modifier.size(photoSize).clip(shape),
+            contentScale = ContentScale.Crop,
+            error = { PlayerInitialsBox(initials, photoSize, shape) }
         )
     } else {
-        Box(
-            modifier = Modifier
-                .size(photoSize)
-                .clip(shape)
-                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
-            contentAlignment = Alignment.Center
-        ) {}
+        PlayerInitialsBox(initials, photoSize, shape)
+    }
+}
+
+@Composable
+private fun PlayerInitialsBox(initials: String, size: Dp, shape: Shape) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = initials,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+private fun playerInitials(firstName: String?, lastName: String?, name: String): String {
+    val first = firstName?.firstOrNull()?.uppercaseChar()
+    val last = lastName?.firstOrNull()?.uppercaseChar()
+    return when {
+        first != null && last != null -> "$first$last"
+        first != null -> "$first"
+        else -> name.take(1).uppercase()
     }
 }

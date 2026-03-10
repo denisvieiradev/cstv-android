@@ -42,8 +42,10 @@ fun fakeTeam(
 fun fakePlayer(
     id: Int = 1,
     name: String = "s1mple",
-    imageUrl: String? = "https://example.com/player.png"
-) = Player(id = id, name = name, imageUrl = imageUrl)
+    imageUrl: String? = "https://example.com/player.png",
+    firstName: String? = null,
+    lastName: String? = null
+) = Player(id = id, name = name, imageUrl = imageUrl, firstName = firstName, lastName = lastName)
 
 fun fakeMatchDto(
     id: Int? = 1,

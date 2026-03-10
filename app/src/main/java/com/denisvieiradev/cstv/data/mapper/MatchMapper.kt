@@ -26,7 +26,9 @@ fun MatchDto.toDomain(): Match {
 private fun PlayerDto.toDomain() = Player(
     id = id ?: 0,
     name = name.orEmpty(),
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
+    firstName = firstName,
+    lastName = lastName
 )
 
 internal fun TeamDto.toDomain() = Team(
