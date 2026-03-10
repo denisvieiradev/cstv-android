@@ -1,4 +1,5 @@
 import config.AppConfig
+import config.ProjectConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -20,6 +21,12 @@ android {
         versionName = AppConfig.version.name
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "PANDASCORE_DEMO_API_TOKEN",
+            ProjectConfig.EnvVariables.PANDASCORE_DEMO_API_TOKEN.ifEmpty { "\"\"" }
+        )
     }
 
     buildTypes {
