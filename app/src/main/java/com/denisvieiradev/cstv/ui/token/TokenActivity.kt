@@ -5,7 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
-import com.denisvieiradev.cstv.ui.token.components.TokenScreenRoot
 import com.denisvieiradev.design_system.ui.theme.CstvTheme
 import org.koin.android.ext.android.inject
 

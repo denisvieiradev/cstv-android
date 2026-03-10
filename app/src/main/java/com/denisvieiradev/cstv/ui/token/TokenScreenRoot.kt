@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.token.components
+package com.denisvieiradev.cstv.ui.token
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
-import com.denisvieiradev.cstv.ui.token.TokenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

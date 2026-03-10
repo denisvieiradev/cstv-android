@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.matches.components
+package com.denisvieiradev.cstv.ui.matches
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,8 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Match
-import com.denisvieiradev.cstv.ui.matches.MatchesScreenAction
-import com.denisvieiradev.cstv.ui.matches.MatchesUiState
+import com.denisvieiradev.cstv.ui.matches.components.AuthErrorContent
+import com.denisvieiradev.cstv.ui.matches.components.LogoutConfirmationDialog
+import com.denisvieiradev.cstv.ui.matches.components.MatchCard
+import com.denisvieiradev.cstv.ui.matches.components.MatchesTopBar
 import com.denisvieiradev.design_system.ui.components.button.PrimaryButton
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
@@ -127,7 +129,9 @@ private fun MatchesList(matches: List<Match>, onAction: (MatchesScreenAction) ->
         verticalArrangement = Arrangement.spacedBy(Spacing.medium)
     ) {
         items(matches, key = { it.id }) { match ->
-            MatchCard(match = match, onClick = { onAction(MatchesScreenAction.OpenMatchDetail(match)) })
+            MatchCard(
+                match = match,
+                onClick = { onAction(MatchesScreenAction.OpenMatchDetail(match)) })
         }
     }
 }

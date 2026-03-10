@@ -1,9 +1,8 @@
-package com.denisvieiradev.cstv.ui.matchdetail.components
+package com.denisvieiradev.cstv.ui.matchdetail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

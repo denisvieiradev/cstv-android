@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.token.components
+package com.denisvieiradev.cstv.ui.token
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.denisvieiradev.cstv.R
-import com.denisvieiradev.cstv.ui.token.TokenScreenAction
-import com.denisvieiradev.cstv.ui.token.TokenUiState
 import com.denisvieiradev.design_system.ui.components.button.PrimaryButton
 import com.denisvieiradev.design_system.ui.components.input.AppTextField
 import com.denisvieiradev.design_system.ui.theme.Spacing
