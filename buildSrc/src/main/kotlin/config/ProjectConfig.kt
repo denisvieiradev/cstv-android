@@ -14,6 +14,6 @@ object ProjectConfig {
             error("Required env var: $key value must be set.")
         }
 
-        val PANDASCORE_DEMO_API_TOKEN: String = env(key = "PANDASCORE_DEMO_API_TOKEN", isRequired = true)
+        val PANDASCORE_DEMO_API_TOKEN: String = env(key = "PANDASCORE_DEMO_API_TOKEN", isRequired = false)
     }
 }

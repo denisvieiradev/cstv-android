@@ -34,4 +34,15 @@
     <string name="match_detail_players_retry">Tentar novamente</string>
     <string name="match_detail_player_missing">Jogador não confirmado</string>
     <string name="match_tbd">A definir</string>
+    <string name="token_tutorial_link">Como obter meu token?</string>
+    <string name="token_tutorial_title">Como obter seu token PandaScore</string>
+    <string name="token_tutorial_step_1">Acesse pandascore.co e crie uma conta gratuita</string>
+    <string name="token_tutorial_step_2">No painel, vá em "API Access" → "API Keys"</string>
+    <string name="token_tutorial_step_3">Copie o token gerado</string>
+    <string name="token_tutorial_step_4">Volte ao app e cole o token</string>
+    <string name="token_tutorial_understood">Entendi</string>
+    <string name="token_tutorial_paste">Colar token</string>
+    <string name="matches_demo_expired_title">Demo expirado</string>
+    <string name="matches_demo_expired_body">Você usou todas as requisições do demo. Obtenha um token real para continuar vendo as partidas.</string>
+    <string name="matches_demo_expired_cta">Obter token real</string>
 </resources>

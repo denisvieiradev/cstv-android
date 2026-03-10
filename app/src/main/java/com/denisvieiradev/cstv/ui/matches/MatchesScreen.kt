@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,6 +72,12 @@ fun MatchesScreen(
                 onDismiss = { onAction(MatchesScreenAction.DismissLogout) }
             )
         }
+
+        if (uiState.showDemoExpiredDialog) {
+            DemoExpiredDialog(
+                onConfirm = { onAction(MatchesScreenAction.DismissDemoExpired) }
+            )
+        }
     }
 }
 
@@ -119,6 +127,20 @@ private fun EmptyContent() {
             modifier = Modifier.padding(Spacing.large)
         )
     }
+}
+
+@Composable
+private fun DemoExpiredDialog(onConfirm: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onConfirm,
+        title = { Text(text = stringResource(R.string.matches_demo_expired_title)) },
+        text = { Text(text = stringResource(R.string.matches_demo_expired_body)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(text = stringResource(R.string.matches_demo_expired_cta))
+            }
+        }
+    )
 }
 
 @Composable

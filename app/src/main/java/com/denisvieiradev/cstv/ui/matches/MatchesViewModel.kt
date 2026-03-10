@@ -6,6 +6,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class MatchesViewModel(
     private val getCsMatchesUseCase: GetCsMatchesUseCase,
-    private val sessionLocalDataSource: SessionLocalDataSource
+    private val sessionLocalDataSource: SessionLocalDataSource,
+    private val demoSessionManager: DemoSessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -46,6 +48,10 @@ class MatchesViewModel(
             is MatchesScreenAction.ConfirmLogout -> clearSessionAndNavigate()
             is MatchesScreenAction.DismissLogout -> _uiState.update { it.copy(showLogoutDialog = false) }
             is MatchesScreenAction.ConfigureToken -> clearSessionAndNavigate()
+            is MatchesScreenAction.DismissDemoExpired -> {
+                demoSessionManager.reset()
+                clearSessionAndNavigate()
+            }
             is MatchesScreenAction.ToggleTheme -> {
                 val newValue = !_uiState.value.isDarkTheme
                 sessionLocalDataSource.saveDarkTheme(newValue)
@@ -71,6 +77,10 @@ class MatchesViewModel(
 
     private fun loadMatches() {
         viewModelScope.launch {
+            if (!demoSessionManager.tryConsume(2)) {
+                _uiState.update { it.copy(isLoading = false, showDemoExpiredDialog = true) }
+                return@launch
+            }
             _uiState.update { it.copy(isLoading = true, error = null, isAuthError = false) }
             try {
                 val matches = getCsMatchesUseCase()
