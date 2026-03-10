@@ -43,6 +43,14 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+
+    applicationVariants.configureEach {
+        val buildVariant = name.replace("Release", "-release").replace("Debug", "-debug")
+        val outputFileName = "cstv-app-${versionName}-${versionCode}-$buildVariant.apk"
+        outputs.configureEach {
+            (this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl)?.outputFileName = outputFileName
+        }
+    }
 }
 
 kotlin {
