@@ -27,6 +27,7 @@ import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
+import com.denisvieiradev.design_system.ui.theme.Weight
 
 private const val PLAYERS_PER_TEAM = 5
 
@@ -35,13 +36,13 @@ internal fun PlayersList(teamAPlayers: List<Player>, teamBPlayers: List<Player>)
     val team1Players = buildFixedPlayerList(teamAPlayers)
     val team2Players = buildFixedPlayerList(teamBPlayers)
     Row(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
+        Column(modifier = Modifier.weight(Weight.equal), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             team1Players.forEach { player ->
                 PlayerItem(player = player, isLeftTeam = false)
             }
         }
         Spacer(modifier = Modifier.width(Spacing.small))
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
+        Column(modifier = Modifier.weight(Weight.equal), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             team2Players.forEach { player ->
                 PlayerItem(player = player, isLeftTeam = true)
             }
@@ -52,7 +53,7 @@ internal fun PlayersList(teamAPlayers: List<Player>, teamBPlayers: List<Player>)
 @Composable
 internal fun PlayersSkeleton() {
     Row(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
+        Column(modifier = Modifier.weight(Weight.equal), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             repeat(PLAYERS_PER_TEAM) {
                 Box(
                     modifier = Modifier
@@ -64,7 +65,7 @@ internal fun PlayersSkeleton() {
             }
         }
         Spacer(modifier = Modifier.width(Spacing.small))
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
+        Column(modifier = Modifier.weight(Weight.equal), verticalArrangement = Arrangement.spacedBy(Spacing.small)) {
             repeat(PLAYERS_PER_TEAM) {
                 Box(
                     modifier = Modifier
@@ -113,7 +114,7 @@ private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
             PlayerPhoto(player = player)
             Spacer(modifier = Modifier.width(Spacing.small))
         }
-        Column(modifier = Modifier.weight(1f), horizontalAlignment = columnAlignment) {
+        Column(modifier = Modifier.weight(Weight.equal), horizontalAlignment = columnAlignment) {
             if (player != null) {
                 Text(
                     text = player.name,

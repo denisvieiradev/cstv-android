@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.design_system.ui.theme.Spacing
+import com.denisvieiradev.design_system.ui.theme.Weight
 
 @Composable
 fun MatchTeamsRow(
@@ -26,7 +27,7 @@ fun MatchTeamsRow(
         TeamDisplay(
             name = teamAName ?: "TBD",
             imageUrl = teamAImageUrl,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(Weight.equal)
         )
         Text(
             text = stringResource(R.string.match_vs),
@@ -37,7 +38,7 @@ fun MatchTeamsRow(
         TeamDisplay(
             name = teamBName ?: "TBD",
             imageUrl = teamBImageUrl,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(Weight.equal)
         )
     }
 }

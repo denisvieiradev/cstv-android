@@ -29,9 +29,8 @@ import com.denisvieiradev.cstv.domain.model.Team
 import com.denisvieiradev.cstv.ui.matches.util.MatchDateFormatter
 import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
+import com.denisvieiradev.design_system.ui.theme.Weight
 import java.time.LocalDate
-
-private const val TEAM_COLUMN_WEIGHT = 1f
 
 @Composable
 internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?) {
@@ -41,7 +40,7 @@ internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?) {
     ) {
         TeamColumn(
             team = teamA,
-            modifier = Modifier.weight(TEAM_COLUMN_WEIGHT),
+            modifier = Modifier.weight(Weight.equal),
             horizontalAlignment = Alignment.CenterHorizontally
         )
         Text(
@@ -52,7 +51,7 @@ internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?) {
         )
         TeamColumn(
             team = teamB,
-            modifier = Modifier.weight(TEAM_COLUMN_WEIGHT),
+            modifier = Modifier.weight(Weight.equal),
             horizontalAlignment = Alignment.CenterHorizontally
         )
     }
