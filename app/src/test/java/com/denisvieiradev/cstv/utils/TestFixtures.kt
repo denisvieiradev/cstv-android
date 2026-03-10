@@ -7,6 +7,7 @@ import com.denisvieiradev.cstv.data.dto.SerieDto
 import com.denisvieiradev.cstv.data.dto.TeamDto
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.MatchStatus
+import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
 
 fun fakeMatch(
@@ -34,8 +35,15 @@ fun fakeMatch(
 fun fakeTeam(
     id: Int = 1,
     name: String = "Team A",
-    imageUrl: String? = "https://example.com/team.png"
-) = Team(id = id, name = name, imageUrl = imageUrl)
+    imageUrl: String? = "https://example.com/team.png",
+    players: List<Player> = emptyList()
+) = Team(id = id, name = name, imageUrl = imageUrl, players = players)
+
+fun fakePlayer(
+    id: Int = 1,
+    name: String = "s1mple",
+    imageUrl: String? = "https://example.com/player.png"
+) = Player(id = id, name = name, imageUrl = imageUrl)
 
 fun fakeMatchDto(
     id: Int? = 1,
