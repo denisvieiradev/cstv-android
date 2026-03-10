@@ -15,4 +15,14 @@ object Spacing {
 
     val border: Dp = 1.dp
     val cornerRadiusLarge: Dp = 28.dp
+    val cornerRadiusCard: Dp = 16.dp
+    val cornerRadiusBadgeEnd: Dp = 8.dp
+
+    val iconSmall: Dp = 16.dp
+    val progressTiny: Dp = 10.dp
+    val loadingIndicatorSmall: Dp = 24.dp
+    val loadingIndicatorMedium: Dp = 30.dp
+    val teamLogoSize: Dp = 60.dp
+    val playerPhotoSize: Dp = 48.dp
+    val playerCardHeight: Dp = 64.dp
 }

@@ -16,15 +16,15 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Player
+import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
 internal fun PlayerPhoto(player: Player?) {
-    val photoSize = 48.dp
+    val photoSize = Spacing.playerPhotoSize
     val shape = RoundedCornerShape(Spacing.extraSmall)
     if (player == null) {
         PlayerInitialsBox("?", photoSize, shape)
@@ -39,7 +39,7 @@ internal fun PlayerPhoto(player: Player?) {
             contentScale = ContentScale.Crop,
             loading = {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                    CircularProgressIndicator(modifier = Modifier.size(Spacing.loadingIndicatorSmall))
                 }
             },
             error = { PlayerInitialsBox(initials, photoSize, shape) }
@@ -55,7 +55,7 @@ internal fun PlayerInitialsBox(initials: String, size: Dp, shape: Shape) {
         modifier = Modifier
             .size(size)
             .clip(shape)
-            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)),
+            .background(MaterialTheme.colorScheme.outline.copy(alpha = Alpha.subtle)),
         contentAlignment = Alignment.Center
     ) {
         Text(

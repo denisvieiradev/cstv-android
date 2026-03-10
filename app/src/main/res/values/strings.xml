@@ -30,4 +30,5 @@
     <string name="match_detail_players_error">Failed to load players</string>
     <string name="match_detail_players_retry">Try again</string>
     <string name="match_detail_player_missing">Player not confirmed</string>
+    <string name="match_tbd">TBD</string>
 </resources>

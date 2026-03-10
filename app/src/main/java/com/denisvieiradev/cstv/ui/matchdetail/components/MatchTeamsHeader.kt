@@ -21,15 +21,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Team
 import com.denisvieiradev.cstv.ui.matches.util.MatchDateFormatter
+import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 import java.time.LocalDate
+
+private const val TEAM_COLUMN_WEIGHT = 1f
 
 @Composable
 internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?) {
@@ -39,18 +41,18 @@ internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?) {
     ) {
         TeamColumn(
             team = teamA,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(TEAM_COLUMN_WEIGHT),
             horizontalAlignment = Alignment.CenterHorizontally
         )
         Text(
             text = stringResource(R.string.match_vs),
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = Alpha.dim),
             modifier = Modifier.padding(horizontal = Spacing.medium)
         )
         TeamColumn(
             team = teamB,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(TEAM_COLUMN_WEIGHT),
             horizontalAlignment = Alignment.CenterHorizontally
         )
     }
@@ -63,10 +65,10 @@ private fun TeamColumn(
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally
 ) {
     Column(modifier = modifier, horizontalAlignment = horizontalAlignment) {
-        TeamLogo(imageUrl = team?.imageUrl, teamName = team?.name ?: "TBD")
+        TeamLogo(imageUrl = team?.imageUrl, teamName = team?.name ?: stringResource(R.string.match_tbd))
         Spacer(modifier = Modifier.height(Spacing.small))
         Text(
-            text = team?.name ?: "TBD",
+            text = team?.name ?: stringResource(R.string.match_tbd),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -78,7 +80,7 @@ private fun TeamColumn(
 
 @Composable
 private fun TeamLogo(imageUrl: String?, teamName: String) {
-    val logoSize = 60.dp
+    val logoSize = Spacing.teamLogoSize
     if (imageUrl != null) {
         SubcomposeAsyncImage(
             model = imageUrl,
@@ -89,7 +91,7 @@ private fun TeamLogo(imageUrl: String?, teamName: String) {
             contentScale = ContentScale.Crop,
             loading = {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                    CircularProgressIndicator(modifier = Modifier.size(Spacing.loadingIndicatorMedium))
                 }
             }
         )

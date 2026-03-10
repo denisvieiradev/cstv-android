@@ -9,13 +9,18 @@ import java.util.Locale
 
 object MatchDateFormatter {
 
+    private const val FORMAT_TIME = "HH:mm"
+    private const val FORMAT_DAY_ABBREV = "EEE"
+    private const val FORMAT_DAY_MONTH = "dd.MM"
+    private const val LANG_PT = "pt"
+
     fun format(
         scheduledAt: String?,
         now: LocalDate,
         locale: Locale = Locale.getDefault(),
         zoneId: ZoneId = ZoneId.systemDefault(),
-        todayLabel: String = if (locale.language == "pt") "Hoje" else "Today",
-        tomorrowLabel: String = if (locale.language == "pt") "Amanhã" else "Tomorrow"
+        todayLabel: String = if (locale.language == LANG_PT) "Hoje" else "Today",
+        tomorrowLabel: String = if (locale.language == LANG_PT) "Amanhã" else "Tomorrow"
     ): String {
         scheduledAt ?: return ""
         val zonedDateTime = parseToLocalZone(scheduledAt, zoneId) ?: return ""
@@ -37,15 +42,15 @@ object MatchDateFormatter {
     }
 
     private fun formatTime(dateTime: ZonedDateTime): String {
-        return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+        return dateTime.format(DateTimeFormatter.ofPattern(FORMAT_TIME))
     }
 
     private fun formatDayAbbrev(dateTime: ZonedDateTime, locale: Locale): String {
-        val full = dateTime.format(DateTimeFormatter.ofPattern("EEE", locale))
+        val full = dateTime.format(DateTimeFormatter.ofPattern(FORMAT_DAY_ABBREV, locale))
         return full.replaceFirstChar { it.uppercase(locale) }.trimEnd('.')
     }
 
     private fun formatDayMonth(dateTime: ZonedDateTime): String {
-        return dateTime.format(DateTimeFormatter.ofPattern("dd.MM"))
+        return dateTime.format(DateTimeFormatter.ofPattern(FORMAT_DAY_MONTH))
     }
 }

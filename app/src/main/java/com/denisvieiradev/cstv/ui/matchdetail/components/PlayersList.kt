@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Player
+import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 private const val PLAYERS_PER_TEAM = 5
@@ -57,9 +57,9 @@ internal fun PlayersSkeleton() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp)
+                        .height(Spacing.playerCardHeight)
                         .clip(RoundedCornerShape(Spacing.small))
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = Alpha.dim))
                 )
             }
         }
@@ -69,9 +69,9 @@ internal fun PlayersSkeleton() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp)
+                        .height(Spacing.playerCardHeight)
                         .clip(RoundedCornerShape(Spacing.small))
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = Alpha.dim))
                 )
             }
         }
@@ -126,7 +126,7 @@ private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
                     Text(
                         text = fullName,
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = Alpha.dim),
                         textAlign = textAlign,
                     )
                 }
@@ -134,7 +134,7 @@ private fun PlayerItem(player: Player?, isLeftTeam: Boolean) {
                 Text(
                     text = stringResource(R.string.match_detail_player_missing),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = Alpha.dim),
                     textAlign = textAlign,
                 )
             }

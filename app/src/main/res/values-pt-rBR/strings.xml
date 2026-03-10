@@ -30,4 +30,5 @@
     <string name="match_detail_players_error">Erro ao carregar jogadores</string>
     <string name="match_detail_players_retry">Tentar novamente</string>
     <string name="match_detail_player_missing">Jogador não confirmado</string>
+    <string name="match_tbd">A definir</string>
 </resources>

@@ -11,8 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.denisvieiradev.cstv.domain.model.Match
+import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
@@ -20,7 +20,7 @@ fun MatchCard(match: Match, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Spacing.cornerRadiusCard),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -44,7 +44,7 @@ fun MatchCard(match: Match, onClick: () -> Unit) {
             )
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = Spacing.medium),
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = Alpha.subtle)
             )
             MatchLeagueInfo(
                 leagueName = match.leagueName,

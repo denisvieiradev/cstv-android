@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
@@ -37,13 +36,13 @@ fun MatchLeagueInfo(
                 contentDescription = leagueName,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(16.dp)
+                    .size(Spacing.iconSmall)
                     .clip(CircleShape),
                 loading = {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(10.dp),
-                            strokeWidth = 1.dp
+                            modifier = Modifier.size(Spacing.progressTiny),
+                            strokeWidth = Spacing.border
                         )
                     }
                 }

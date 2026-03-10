@@ -8,6 +8,14 @@ import com.denisvieiradev.cstv.domain.model.MatchStatus
 import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
 
+private object MatchStatusValue {
+    const val RUNNING = "running"
+    const val NOT_STARTED = "not_started"
+    const val FINISHED = "finished"
+    const val CANCELED = "canceled"
+    const val POSTPONED = "postponed"
+}
+
 fun MatchDto.toDomain(): Match {
     val opponents = opponents.orEmpty()
     return Match(
@@ -39,10 +47,10 @@ internal fun TeamDto.toDomain() = Team(
 )
 
 private fun String?.toMatchStatus(): MatchStatus = when (this) {
-    "running" -> MatchStatus.RUNNING
-    "not_started" -> MatchStatus.NOT_STARTED
-    "finished" -> MatchStatus.FINISHED
-    "canceled" -> MatchStatus.CANCELED
-    "postponed" -> MatchStatus.POSTPONED
+    MatchStatusValue.RUNNING -> MatchStatus.RUNNING
+    MatchStatusValue.NOT_STARTED -> MatchStatus.NOT_STARTED
+    MatchStatusValue.FINISHED -> MatchStatus.FINISHED
+    MatchStatusValue.CANCELED -> MatchStatus.CANCELED
+    MatchStatusValue.POSTPONED -> MatchStatus.POSTPONED
     else -> MatchStatus.NOT_STARTED
 }

@@ -17,10 +17,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import coil.compose.SubcomposeAsyncImage
+import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
@@ -40,20 +40,20 @@ fun TeamDisplay(
                 contentDescription = name,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(Spacing.teamLogoSize)
                     .clip(CircleShape),
                 loading = {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                        CircularProgressIndicator(modifier = Modifier.size(Spacing.loadingIndicatorMedium))
                     }
                 }
             )
         } else {
             Box(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(Spacing.teamLogoSize)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f)),
+                    .background(MaterialTheme.colorScheme.outline.copy(alpha = Alpha.faint)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
