@@ -2,7 +2,7 @@ package com.denisvieiradev.cstv.data.datasources.local
 
 import com.denisvieiradev.cachemanager.SecureStorage
 
-class SessionRepositoryImpl(private val secureStorage: SecureStorage) : SessionRepository {
+class SessionLocalDataSourceImpl(private val secureStorage: SecureStorage) : SessionLocalDataSource {
     override fun getToken(): String? = secureStorage.getString(KEY_TOKEN)
     override fun saveToken(token: String) { secureStorage.putString(KEY_TOKEN, token) }
     override fun clearSession() { secureStorage.remove(KEY_TOKEN) }

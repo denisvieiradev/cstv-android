@@ -1,7 +1,7 @@
 package com.denisvieiradev.cstv.data.di
 
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepositoryImpl
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSourceImpl
 import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchApi
 import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchRemoteDataSource
 import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchRemoteDataSourceImpl
@@ -13,9 +13,9 @@ import retrofit2.Retrofit
 
 val datasourcesModule = module {
     // Local
-    single<SessionRepository> { SessionRepositoryImpl(get()) }
+    single<SessionLocalDataSource> { SessionLocalDataSourceImpl(get()) }
     // TokenProvider bridge to core:network's AuthInterceptor
-    single<TokenProvider> { TokenProvider { get<SessionRepository>().getToken() } }
+    single<TokenProvider> { TokenProvider { get<SessionLocalDataSource>().getToken() } }
     // Remote
     single<MatchApi> { get<Retrofit>().create(MatchApi::class.java) }
     single<MatchRemoteDataSource> { MatchRemoteDataSourceImpl(get()) }

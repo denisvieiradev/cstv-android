@@ -1,7 +1,7 @@
 package com.denisvieiradev.cstv.ui.matchdetail
 
 import app.cash.turbine.test
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.fakeMatch
@@ -22,11 +22,11 @@ class MatchDetailViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val mockSessionRepository: SessionRepository = mockk(relaxed = true)
+    private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
     private val mockGetMatchDetailUseCase: GetMatchDetailUseCase = mockk()
 
     private fun buildViewModel(holder: SelectedMatchHolder = SelectedMatchHolder()) =
-        MatchDetailViewModel(holder, mockSessionRepository, mockGetMatchDetailUseCase)
+        MatchDetailViewModel(holder, mockSessionLocalDataSource, mockGetMatchDetailUseCase)
 
     @Test
     fun `init with match in holder populates uiState match correctly`() = runTest {
@@ -83,13 +83,13 @@ class MatchDetailViewModelTest {
     @Test
     fun `init reads darkTheme from sessionRepository and sets it in uiState`() = runTest {
         // Arrange
-        every { mockSessionRepository.isDarkTheme() } returns true
+        every { mockSessionLocalDataSource.isDarkTheme() } returns true
         val holder = SelectedMatchHolder()
         val viewModel = buildViewModel(holder)
 
         // Assert
         assertThat(viewModel.uiState.value.darkTheme).isTrue()
-        verify { mockSessionRepository.isDarkTheme() }
+        verify { mockSessionLocalDataSource.isDarkTheme() }
     }
 
     @Test

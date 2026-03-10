@@ -2,7 +2,7 @@ package com.denisvieiradev.cstv.ui.matchdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
@@ -38,7 +38,7 @@ sealed interface MatchDetailNavigationEvent {
 
 class MatchDetailViewModel(
     private val selectedMatchHolder: SelectedMatchHolder,
-    private val sessionRepository: SessionRepository,
+    private val sessionLocalDataSource: SessionLocalDataSource,
     private val getMatchDetailUseCase: GetMatchDetailUseCase
 ) : ViewModel() {
 
@@ -56,7 +56,7 @@ class MatchDetailViewModel(
             Timber.d("SelectedMatchHolder returned null — no match to display")
         }
         selectedMatchHolder.clear()
-        _uiState.update { it.copy(match = match, darkTheme = sessionRepository.isDarkTheme()) }
+        _uiState.update { it.copy(match = match, darkTheme = sessionLocalDataSource.isDarkTheme()) }
         if (match != null) {
             currentMatchId = match.id
             fetchPlayers(match.id)

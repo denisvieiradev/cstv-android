@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.ui.matchdetail.SelectedMatchHolder
@@ -21,14 +21,14 @@ import kotlinx.coroutines.launch
 
 class MatchesViewModel(
     private val getCsMatchesUseCase: GetCsMatchesUseCase,
-    private val sessionRepository: SessionRepository,
+    private val sessionLocalDataSource: SessionLocalDataSource,
     private val selectedMatchHolder: SelectedMatchHolder
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         MatchesUiState(
-            isDarkTheme = sessionRepository.isDarkTheme(),
-            currentLanguage = sessionRepository.getLanguage() ?: Language.EN
+            isDarkTheme = sessionLocalDataSource.isDarkTheme(),
+            currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN
         )
     )
     val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
@@ -50,7 +50,7 @@ class MatchesViewModel(
             is MatchesScreenAction.ConfigureToken -> clearSessionAndNavigate()
             is MatchesScreenAction.ToggleTheme -> {
                 val newValue = !_uiState.value.isDarkTheme
-                sessionRepository.saveDarkTheme(newValue)
+                sessionLocalDataSource.saveDarkTheme(newValue)
                 _uiState.update { it.copy(isDarkTheme = newValue) }
             }
             is MatchesScreenAction.OpenMatchDetail -> {
@@ -62,7 +62,7 @@ class MatchesViewModel(
             is MatchesScreenAction.ToggleLanguage -> {
                 val next = if (_uiState.value.currentLanguage == Language.EN)
                     Language.PT else Language.EN
-                sessionRepository.saveLanguage(next)
+                sessionLocalDataSource.saveLanguage(next)
                 _uiState.update { it.copy(currentLanguage = next) }
                 AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -90,7 +90,7 @@ class MatchesViewModel(
 
     private fun clearSessionAndNavigate() {
         viewModelScope.launch {
-            sessionRepository.clearSession()
+            sessionLocalDataSource.clearSession()
             Timber.d("Session cleared, navigating to TokenActivity")
             _uiState.update { it.copy(showLogoutDialog = false) }
             _navigationEvents.emit(MatchesNavigationEvent.NavigateToTokenScreen)

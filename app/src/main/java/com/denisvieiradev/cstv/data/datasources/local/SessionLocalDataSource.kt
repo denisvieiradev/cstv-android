@@ -1,6 +1,6 @@
 package com.denisvieiradev.cstv.data.datasources.local
 
-interface SessionRepository {
+interface SessionLocalDataSource {
     fun getToken(): String?
     fun saveToken(token: String)
     fun clearSession()
