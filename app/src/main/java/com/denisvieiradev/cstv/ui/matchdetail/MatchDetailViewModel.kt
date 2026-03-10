@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.Player
+import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +38,8 @@ sealed interface MatchDetailNavigationEvent {
 
 class MatchDetailViewModel(
     private val selectedMatchHolder: SelectedMatchHolder,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
+    private val getMatchDetailUseCase: GetMatchDetailUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MatchDetailUiState())
@@ -46,6 +48,8 @@ class MatchDetailViewModel(
     private val _navigationEvents = MutableSharedFlow<MatchDetailNavigationEvent>()
     val navigationEvents: Flow<MatchDetailNavigationEvent> = _navigationEvents
 
+    private var currentMatchId: Int? = null
+
     init {
         val match = selectedMatchHolder.get()
         if (match == null) {
@@ -53,6 +57,10 @@ class MatchDetailViewModel(
         }
         selectedMatchHolder.clear()
         _uiState.update { it.copy(match = match, darkTheme = sessionRepository.isDarkTheme()) }
+        if (match != null) {
+            currentMatchId = match.id
+            fetchPlayers(match.id)
+        }
     }
 
     fun onAction(action: MatchDetailScreenAction) {
@@ -60,7 +68,26 @@ class MatchDetailViewModel(
             is MatchDetailScreenAction.NavigateBack -> viewModelScope.launch {
                 _navigationEvents.emit(MatchDetailNavigationEvent.NavigateBack)
             }
-            is MatchDetailScreenAction.RetryLoadPlayers -> Unit
+            is MatchDetailScreenAction.RetryLoadPlayers -> {
+                val matchId = currentMatchId ?: return
+                fetchPlayers(matchId)
+            }
+        }
+    }
+
+    private fun fetchPlayers(matchId: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(playersState = PlayersState.Loading) }
+            Timber.d("Fetching match detail for matchId=$matchId")
+            try {
+                val match = getMatchDetailUseCase(matchId)
+                val teamAPlayers = match.teamA?.players ?: emptyList()
+                val teamBPlayers = match.teamB?.players ?: emptyList()
+                _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
+                _uiState.update { it.copy(playersState = PlayersState.Error) }
+            }
         }
     }
 }
