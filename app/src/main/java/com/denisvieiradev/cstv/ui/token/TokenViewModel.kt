@@ -18,6 +18,7 @@ class TokenViewModel(
         when (action) {
             is TokenScreenAction.OnTokenChanged -> _uiState.update { it.copy(token = action.value) }
             is TokenScreenAction.Confirm -> saveToken()
+            is TokenScreenAction.TryDemo -> enterDemoMode()
         }
     }
 
@@ -34,5 +35,18 @@ class TokenViewModel(
         } catch (e: Exception) {
             _uiState.update { it.copy(error = e) }
         }
+    }
+
+    private fun enterDemoMode() {
+        try {
+            sessionLocalDataSource.saveToken(DEMO_TOKEN)
+            _uiState.update { it.copy(navigateToMatches = true) }
+        } catch (e: Exception) {
+            _uiState.update { it.copy(error = e) }
+        }
+    }
+
+    companion object {
+        const val DEMO_TOKEN = "DEMO"
     }
 }
