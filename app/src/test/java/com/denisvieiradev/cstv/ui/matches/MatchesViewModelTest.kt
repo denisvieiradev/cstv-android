@@ -96,7 +96,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `loadMatches with AuthorizationException sets isAuthError true and error null`() = runTest {
+    fun `should set isAuthError true and error null when AuthorizationException is thrown`() = runTest {
         // Arrange
         coEvery { mockUseCase() } throws AuthorizationException(401)
         val viewModel = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, selectedMatchHolder)
@@ -114,7 +114,7 @@ class MatchesViewModelTest {
     }
 
     @Test
-    fun `loadMatches with generic exception sets error and isAuthError false`() = runTest {
+    fun `should set error and isAuthError false when generic exception is thrown`() = runTest {
         // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockUseCase() } throws exception
