@@ -1,5 +1,7 @@
 package com.denisvieiradev.cstv.ui.matches
 
+import com.denisvieiradev.cstv.domain.model.Match
+
 sealed interface MatchesScreenAction {
     data object LoadMatches : MatchesScreenAction
     data object Retry : MatchesScreenAction
@@ -9,4 +11,5 @@ sealed interface MatchesScreenAction {
     data object ConfigureToken : MatchesScreenAction
     data object ToggleTheme : MatchesScreenAction
     data object ToggleLanguage : MatchesScreenAction
+    data class OpenMatchDetail(val match: Match) : MatchesScreenAction
 }

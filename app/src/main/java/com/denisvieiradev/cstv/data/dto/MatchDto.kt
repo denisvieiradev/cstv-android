@@ -28,5 +28,6 @@ data class OpponentWrapperDto(
 data class TeamDto(
     @SerializedName("id") val id: Int?,
     @SerializedName("name") val name: String?,
-    @SerializedName("image_url") val imageUrl: String?
+    @SerializedName("image_url") val imageUrl: String?,
+    @SerializedName("players") val players: List<PlayerDto>? = null
 )

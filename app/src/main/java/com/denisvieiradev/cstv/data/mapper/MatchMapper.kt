@@ -1,9 +1,11 @@
 package com.denisvieiradev.cstv.data.mapper
 
 import com.denisvieiradev.cstv.data.dto.MatchDto
+import com.denisvieiradev.cstv.data.dto.PlayerDto
 import com.denisvieiradev.cstv.data.dto.TeamDto
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.MatchStatus
+import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
 
 fun MatchDto.toDomain(): Match {
@@ -21,10 +23,17 @@ fun MatchDto.toDomain(): Match {
     )
 }
 
-private fun TeamDto.toDomain(): Team = Team(
+private fun PlayerDto.toDomain() = Player(
     id = id ?: 0,
     name = name.orEmpty(),
     imageUrl = imageUrl
+)
+
+private fun TeamDto.toDomain() = Team(
+    id = id ?: 0,
+    name = name.orEmpty(),
+    imageUrl = imageUrl,
+    players = players?.map { it.toDomain() }.orEmpty()
 )
 
 private fun String?.toMatchStatus(): MatchStatus = when (this) {

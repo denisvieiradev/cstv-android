@@ -22,4 +22,9 @@
     <string name="matches_configure_token">Reconfigure token</string>
     <string name="matches_theme_toggle_content_desc">Toggle theme</string>
     <string name="matches_language_toggle_content_desc">Toggle language</string>
+    <string name="match_detail_game_not_started">Game not started</string>
+    <string name="match_detail_team_logo_desc">%s logo</string>
+    <string name="match_detail_player_photo_desc">%s photo</string>
+    <string name="match_detail_team_placeholder_desc">Team placeholder</string>
+    <string name="match_detail_player_placeholder_desc">Player placeholder</string>
 </resources>
