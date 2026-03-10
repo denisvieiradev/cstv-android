@@ -9,12 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TokenScreenRoot(
-    modifier: Modifier = Modifier,
-    viewModel: TokenViewModel = koinViewModel()
+    viewModel: TokenViewModel,
+    modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
