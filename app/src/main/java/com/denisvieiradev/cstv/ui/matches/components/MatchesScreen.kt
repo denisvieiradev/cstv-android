@@ -57,7 +57,7 @@ fun MatchesScreen(
                         onRetry = { onAction(MatchesScreenAction.Retry) }
                     )
                     uiState.isEmpty -> EmptyContent()
-                    else -> MatchesList(matches = uiState.matches)
+                    else -> MatchesList(matches = uiState.matches, onAction = onAction)
                 }
             }
         }
@@ -120,14 +120,14 @@ private fun EmptyContent() {
 }
 
 @Composable
-private fun MatchesList(matches: List<Match>) {
+private fun MatchesList(matches: List<Match>, onAction: (MatchesScreenAction) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(Spacing.medium),
         verticalArrangement = Arrangement.spacedBy(Spacing.medium)
     ) {
         items(matches, key = { it.id }) { match ->
-            MatchCard(match = match)
+            MatchCard(match = match, onClick = { onAction(MatchesScreenAction.OpenMatchDetail(match)) })
         }
     }
 }

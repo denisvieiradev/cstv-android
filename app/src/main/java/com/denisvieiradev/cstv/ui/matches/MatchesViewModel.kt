@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionRepository
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
+import com.denisvieiradev.cstv.ui.matchdetail.SelectedMatchHolder
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class MatchesViewModel(
     private val getCsMatchesUseCase: GetCsMatchesUseCase,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
+    private val selectedMatchHolder: SelectedMatchHolder
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -50,6 +52,12 @@ class MatchesViewModel(
                 val newValue = !_uiState.value.isDarkTheme
                 sessionRepository.saveDarkTheme(newValue)
                 _uiState.update { it.copy(isDarkTheme = newValue) }
+            }
+            is MatchesScreenAction.OpenMatchDetail -> {
+                selectedMatchHolder.set(action.match)
+                viewModelScope.launch {
+                    _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail)
+                }
             }
             is MatchesScreenAction.ToggleLanguage -> {
                 val next = if (_uiState.value.currentLanguage == Language.EN)

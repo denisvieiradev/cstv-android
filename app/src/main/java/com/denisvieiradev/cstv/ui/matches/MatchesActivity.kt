@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailActivity
 import com.denisvieiradev.cstv.ui.matches.components.MatchesScreenRoot
 import com.denisvieiradev.cstv.ui.token.TokenActivity
 import com.denisvieiradev.design_system.ui.theme.CstvTheme
@@ -39,6 +40,7 @@ class MatchesActivity : AppCompatActivity() {
                     when (event) {
                         MatchesNavigationEvent.NavigateToTokenScreen -> navigateToTokenScreen()
                         MatchesNavigationEvent.RecreateActivity -> recreate()
+                        MatchesNavigationEvent.OpenMatchDetail -> startActivity(Intent(this@MatchesActivity, MatchDetailActivity::class.java))
                     }
                 }
             }

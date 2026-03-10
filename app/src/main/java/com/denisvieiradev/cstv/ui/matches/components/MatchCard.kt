@@ -1,5 +1,6 @@
 package com.denisvieiradev.cstv.ui.matches.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,9 +17,9 @@ import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
-fun MatchCard(match: Match) {
+fun MatchCard(match: Match, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
