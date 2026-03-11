@@ -3,7 +3,7 @@
     <style name="Theme.Cstv" parent="Theme.Material3.DayNight.NoActionBar" />
 
     <style name="Theme.Cstv.SplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/fuze_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/fuze_logo</item>
         <item name="windowSplashScreenBackground">@color/splash_background</item>
         <item name="postSplashScreenTheme">@style/Theme.Cstv</item>
     </style>
