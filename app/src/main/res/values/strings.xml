@@ -8,7 +8,7 @@
     <string name="match_status_live">LIVE</string>
     <string name="match_vs">vs</string>
     <string name="token_screen_title">CSTV Matches</string>
-    <string name="token_screen_body">Enter your PandaScore API token to fetch live esports data, or try the demo with a limited test token.</string>
+    <string name="token_screen_body">Enter your PandaScore API token to fetch live Counter Strike matches, or try the demo with a limited test token.</string>
     <string name="token_field_label">Paste your API token…</string>
     <string name="token_confirm_button">Connect to PandaScore</string>
     <string name="token_error_message">Could not save token. Please try again.</string>

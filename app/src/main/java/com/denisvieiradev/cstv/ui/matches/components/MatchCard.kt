@@ -31,7 +31,6 @@ fun MatchCard(match: Match, onClick: () -> Unit) {
                 scheduledAt = match.scheduledAt,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .padding(top = Spacing.small, end = Spacing.small)
             )
             MatchTeamsRow(
                 teamAName = match.teamA?.name,
