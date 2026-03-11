@@ -11,5 +11,6 @@ sealed interface MatchesScreenAction {
     data object ConfigureToken : MatchesScreenAction
     data object ToggleTheme : MatchesScreenAction
     data object ToggleLanguage : MatchesScreenAction
+    data object DismissDemoExpired : MatchesScreenAction
     data class OpenMatchDetail(val match: Match) : MatchesScreenAction
 }

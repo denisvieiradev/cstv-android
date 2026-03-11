@@ -13,7 +13,6 @@ class MatchMapperTest {
 
     @Test
     fun `should map all fields correctly when dto is complete`() {
-        // Arrange
         val dto = fakeMatchDto(
             id = 42,
             status = "running",
@@ -30,10 +29,8 @@ class MatchMapperTest {
             teamBImageUrl = "https://example.com/faze.png"
         )
 
-        // Act
         val domain = dto.toDomain()
 
-        // Assert
         assertThat(domain.id).isEqualTo(42)
         assertThat(domain.status).isEqualTo(MatchStatus.RUNNING)
         assertThat(domain.scheduledAt).isEqualTo("2024-06-01T18:00:00Z")
@@ -51,59 +48,46 @@ class MatchMapperTest {
 
     @Test
     fun `should use empty string for null team name`() {
-        // Arrange
         val dto = fakeMatchDto(teamAName = null)
 
-        // Act
         val domain = dto.toDomain()
 
-        // Assert
         assertThat(domain.teamA?.name).isEqualTo("")
     }
 
     @Test
     fun `should use null for missing team image url`() {
-        // Arrange
         val dto = fakeMatchDto(teamAImageUrl = null)
 
-        // Act
         val domain = dto.toDomain()
 
-        // Assert
         assertThat(domain.teamA?.imageUrl).isNull()
     }
 
     @Test
     fun `should return null teamA and teamB when opponents is null`() {
-        // Arrange
         val dto = fakeMatchDto().copy(opponents = null)
 
-        // Act
         val domain = dto.toDomain()
 
-        // Assert
         assertThat(domain.teamA).isNull()
         assertThat(domain.teamB).isNull()
     }
 
     @Test
     fun `should return teamA mapped and teamB null when only one opponent`() {
-        // Arrange
         val dto = fakeMatchDto().copy(
             opponents = listOf(OpponentWrapperDto(opponent = TeamDto(id = 1, name = "Solo Team", imageUrl = null)))
         )
 
-        // Act
         val domain = dto.toDomain()
 
-        // Assert
         assertThat(domain.teamA?.name).isEqualTo("Solo Team")
         assertThat(domain.teamB).isNull()
     }
 
     @Test
     fun `should handle null opponent entry at index 0 without NPE`() {
-        // Arrange
         val dto = fakeMatchDto().copy(
             opponents = listOf(OpponentWrapperDto(opponent = null))
         )
@@ -115,7 +99,6 @@ class MatchMapperTest {
 
     @Test
     fun `PlayerDto toDomain maps id name and imageUrl correctly`() {
-        // Arrange
         val playerDto = PlayerDto(id = 7, name = "s1mple", imageUrl = "https://example.com/s1mple.png")
         val dto = fakeMatchDto().copy(
             opponents = listOf(
@@ -123,10 +106,8 @@ class MatchMapperTest {
             )
         )
 
-        // Act
         val player = dto.toDomain().teamA?.players?.first()
 
-        // Assert
         assertThat(player?.id).isEqualTo(7)
         assertThat(player?.name).isEqualTo("s1mple")
         assertThat(player?.imageUrl).isEqualTo("https://example.com/s1mple.png")
@@ -134,7 +115,6 @@ class MatchMapperTest {
 
     @Test
     fun `PlayerDto toDomain with null fields uses default values`() {
-        // Arrange
         val playerDto = PlayerDto(id = null, name = null, imageUrl = null)
         val dto = fakeMatchDto().copy(
             opponents = listOf(
@@ -142,10 +122,8 @@ class MatchMapperTest {
             )
         )
 
-        // Act
         val player = dto.toDomain().teamA?.players?.first()
 
-        // Assert
         assertThat(player?.id).isEqualTo(0)
         assertThat(player?.name).isEqualTo("")
         assertThat(player?.imageUrl).isNull()
@@ -153,7 +131,6 @@ class MatchMapperTest {
 
     @Test
     fun `TeamDto toDomain with players list maps players correctly`() {
-        // Arrange
         val players = listOf(
             PlayerDto(id = 1, name = "player1", imageUrl = "https://example.com/p1.png"),
             PlayerDto(id = 2, name = "player2", imageUrl = null)
@@ -164,10 +141,8 @@ class MatchMapperTest {
             )
         )
 
-        // Act
         val mappedPlayers = dto.toDomain().teamA?.players
 
-        // Assert
         assertThat(mappedPlayers).hasSize(2)
         assertThat(mappedPlayers?.get(0)?.name).isEqualTo("player1")
         assertThat(mappedPlayers?.get(1)?.name).isEqualTo("player2")
@@ -175,17 +150,14 @@ class MatchMapperTest {
 
     @Test
     fun `TeamDto toDomain with null players returns empty list`() {
-        // Arrange
         val dto = fakeMatchDto().copy(
             opponents = listOf(
                 OpponentWrapperDto(opponent = TeamDto(id = 10, name = "Team X", imageUrl = null, players = null))
             )
         )
 
-        // Act
         val mappedPlayers = dto.toDomain().teamA?.players
 
-        // Assert
         assertThat(mappedPlayers).isEmpty()
     }
 

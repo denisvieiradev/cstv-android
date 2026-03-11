@@ -2,10 +2,8 @@ package com.denisvieiradev.cstv.ui.matchdetail.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +14,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Player
+import com.denisvieiradev.design_system.ui.components.image.NetworkImage
 import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
@@ -31,22 +29,14 @@ internal fun PlayerPhoto(player: Player?) {
         return
     }
     val initials = playerInitials(player.firstName, player.lastName, player.name)
-    if (player.imageUrl != null) {
-        SubcomposeAsyncImage(
-            model = player.imageUrl,
-            contentDescription = stringResource(R.string.match_detail_player_photo_desc, player.name),
-            modifier = Modifier.size(photoSize).clip(shape),
-            contentScale = ContentScale.Crop,
-            loading = {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(modifier = Modifier.size(Spacing.loadingIndicatorSmall))
-                }
-            },
-            error = { PlayerInitialsBox(initials, photoSize, shape) }
-        )
-    } else {
-        PlayerInitialsBox(initials, photoSize, shape)
-    }
+    NetworkImage(
+        imageUrl = player.imageUrl,
+        contentDescription = stringResource(R.string.match_detail_player_photo_desc, player.name),
+        size = photoSize,
+        shape = shape,
+        contentScale = ContentScale.Crop,
+        fallback = { PlayerInitialsBox(initials, photoSize, shape) }
+    )
 }
 
 @Composable

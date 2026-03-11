@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Player
+import com.denisvieiradev.design_system.ui.components.state.FullScreenError
 import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 import com.denisvieiradev.design_system.ui.theme.Weight
@@ -81,19 +81,11 @@ internal fun PlayersSkeleton() {
 
 @Composable
 internal fun PlayersError(onRetry: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = stringResource(R.string.match_detail_players_error),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            TextButton(onClick = onRetry) {
-                Text(text = stringResource(R.string.match_detail_players_retry))
-            }
-        }
-    }
+    FullScreenError(
+        title = stringResource(R.string.match_detail_players_error),
+        retryLabel = stringResource(R.string.match_detail_players_retry),
+        onRetry = onRetry
+    )
 }
 
 @Composable

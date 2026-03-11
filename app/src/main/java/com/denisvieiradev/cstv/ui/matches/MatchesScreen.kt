@@ -2,18 +2,16 @@ package com.denisvieiradev.cstv.ui.matches
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +23,8 @@ import com.denisvieiradev.cstv.ui.matches.components.AuthErrorContent
 import com.denisvieiradev.cstv.ui.matches.components.LogoutConfirmationDialog
 import com.denisvieiradev.cstv.ui.matches.components.MatchCard
 import com.denisvieiradev.cstv.ui.matches.components.MatchesTopBar
-import com.denisvieiradev.design_system.ui.components.button.PrimaryButton
+import com.denisvieiradev.design_system.ui.components.state.FullScreenError
+import com.denisvieiradev.design_system.ui.components.state.FullScreenLoading
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
@@ -51,11 +50,14 @@ fun MatchesScreen(
                     .padding(innerPadding)
             ) {
                 when {
-                    uiState.isLoading -> LoadingContent()
+                    uiState.isLoading -> FullScreenLoading()
                     uiState.isAuthError -> AuthErrorContent(
                         onConfigureTokenClick = { onAction(MatchesScreenAction.ConfigureToken) }
                     )
-                    uiState.hasError -> ErrorContent(
+                    uiState.hasError -> FullScreenError(
+                        title = stringResource(R.string.matches_error_title),
+                        body = stringResource(R.string.matches_error_body),
+                        retryLabel = stringResource(R.string.matches_retry),
                         onRetry = { onAction(MatchesScreenAction.Retry) }
                     )
                     uiState.isEmpty -> EmptyContent()
@@ -70,42 +72,12 @@ fun MatchesScreen(
                 onDismiss = { onAction(MatchesScreenAction.DismissLogout) }
             )
         }
-    }
-}
 
-@Composable
-private fun LoadingContent() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-private fun ErrorContent(onRetry: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(Spacing.large),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(R.string.matches_error_title),
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(Spacing.small))
-        Text(
-            text = stringResource(R.string.matches_error_body),
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(Spacing.large))
-        PrimaryButton(
-            text = stringResource(R.string.matches_retry),
-            onClick = onRetry,
-            modifier = Modifier.padding(horizontal = Spacing.large)
-        )
+        if (uiState.showDemoExpiredDialog) {
+            DemoExpiredDialog(
+                onConfirm = { onAction(MatchesScreenAction.DismissDemoExpired) }
+            )
+        }
     }
 }
 
@@ -119,6 +91,20 @@ private fun EmptyContent() {
             modifier = Modifier.padding(Spacing.large)
         )
     }
+}
+
+@Composable
+private fun DemoExpiredDialog(onConfirm: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onConfirm,
+        title = { Text(text = stringResource(R.string.matches_demo_expired_title)) },
+        text = { Text(text = stringResource(R.string.matches_demo_expired_body)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(text = stringResource(R.string.matches_demo_expired_cta))
+            }
+        }
+    )
 }
 
 @Composable

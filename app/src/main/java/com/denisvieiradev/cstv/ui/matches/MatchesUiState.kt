@@ -10,7 +10,8 @@ data class MatchesUiState(
     val isAuthError: Boolean = false,
     val showLogoutDialog: Boolean = false,
     val isDarkTheme: Boolean = true,
-    val currentLanguage: String = Language.EN
+    val currentLanguage: String = Language.EN,
+    val showDemoExpiredDialog: Boolean = false
 ) {
     val hasError: Boolean get() = error != null || isAuthError
     val isEmpty: Boolean get() = !isLoading && matches.isEmpty() && !hasError

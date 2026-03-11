@@ -6,6 +6,7 @@ import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchApi
 import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchRemoteDataSource
 import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchRemoteDataSourceImpl
 import com.denisvieiradev.cstv.data.repository.MatchRepositoryImpl
+import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.repository.MatchRepository
 import com.denisvieiradev.network.data.remote.utils.TokenProvider
 import org.koin.dsl.module
@@ -20,4 +21,5 @@ val datasourcesModule = module {
     single<MatchApi> { get<Retrofit>().create(MatchApi::class.java) }
     single<MatchRemoteDataSource> { MatchRemoteDataSourceImpl(get()) }
     single<MatchRepository> { MatchRepositoryImpl(get()) }
+    single { DemoSessionManager() }
 }
