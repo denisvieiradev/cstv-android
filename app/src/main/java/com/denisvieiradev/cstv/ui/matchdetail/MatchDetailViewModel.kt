@@ -7,6 +7,10 @@ import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailNavigationEvent
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailScreenAction
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailUiState
+import com.denisvieiradev.cstv.ui.matchdetail.model.PlayersState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,28 +25,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
-sealed interface PlayersState {
-    data object Idle : PlayersState
-    data object Loading : PlayersState
-    data object Error : PlayersState
-    data class Success(val teamA: List<Player>, val teamB: List<Player>) : PlayersState
-}
-
-data class MatchDetailUiState(
-    val match: Match? = null,
-    val darkTheme: Boolean = false,
-    val playersState: PlayersState = PlayersState.Idle
-)
-
-sealed interface MatchDetailScreenAction {
-    data object NavigateBack : MatchDetailScreenAction
-    data object RetryLoadPlayers : MatchDetailScreenAction
-}
-
-sealed interface MatchDetailNavigationEvent {
-    data object NavigateBack : MatchDetailNavigationEvent
-}
 
 class MatchDetailViewModel(
     savedStateHandle: SavedStateHandle,

@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailActivity
+import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailViewModel
 import com.denisvieiradev.cstv.ui.token.TokenActivity
 import kotlinx.coroutines.launch

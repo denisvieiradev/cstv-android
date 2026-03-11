@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.denisvieiradev.cstv.R
-import com.denisvieiradev.cstv.ui.token.TokenScreenAction
-import com.denisvieiradev.cstv.ui.token.TokenUiState
+import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
+import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import com.denisvieiradev.design_system.ui.components.button.PrimaryButton
 import com.denisvieiradev.design_system.ui.components.input.AppTextField
 import com.denisvieiradev.design_system.ui.theme.Spacing

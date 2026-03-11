@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.matches
+package com.denisvieiradev.cstv.ui.matches.model
 
 import com.denisvieiradev.cstv.domain.model.Match
 

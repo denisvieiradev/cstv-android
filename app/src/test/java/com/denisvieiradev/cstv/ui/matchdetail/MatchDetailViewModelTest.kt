@@ -5,6 +5,9 @@ import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailNavigationEvent
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailScreenAction
+import com.denisvieiradev.cstv.ui.matchdetail.model.PlayersState
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatch

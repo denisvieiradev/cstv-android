@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.token
+package com.denisvieiradev.cstv.ui.token.model
 
 sealed interface TokenScreenAction {
     data class OnTokenChanged(val value: String) : TokenScreenAction

@@ -6,6 +6,8 @@ import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.ui.matches.LocaleManager
 import com.denisvieiradev.cstv.ui.matches.ThemeManager
+import com.denisvieiradev.cstv.ui.token.model.TokenNavigationEvent
+import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.TestConstants
 import com.google.common.truth.Truth.assertThat

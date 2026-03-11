@@ -3,6 +3,9 @@ package com.denisvieiradev.cstv.ui.splashscreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenAction
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenNavigationEvent
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

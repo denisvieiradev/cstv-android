@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.Language
-import com.denisvieiradev.cstv.ui.token.TokenScreenAction
-import com.denisvieiradev.cstv.ui.token.TokenUiState
+import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
+import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable

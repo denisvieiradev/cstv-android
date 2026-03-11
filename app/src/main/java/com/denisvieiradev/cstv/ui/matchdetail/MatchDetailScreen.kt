@@ -15,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.denisvieiradev.cstv.R
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailScreenAction
+import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailUiState
+import com.denisvieiradev.cstv.ui.matchdetail.model.PlayersState
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.ui.matchdetail.components.MatchTeamsHeader
 import com.denisvieiradev.cstv.ui.matchdetail.components.PlayersError

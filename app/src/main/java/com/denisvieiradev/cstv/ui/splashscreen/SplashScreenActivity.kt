@@ -8,6 +8,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenAction
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenNavigationEvent
 import com.denisvieiradev.cstv.ui.token.TokenActivity
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

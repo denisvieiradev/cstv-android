@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.token
+package com.denisvieiradev.cstv.ui.token.model
 
 import com.denisvieiradev.cstv.domain.Language
 

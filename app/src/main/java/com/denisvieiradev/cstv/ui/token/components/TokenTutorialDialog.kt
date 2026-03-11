@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.denisvieiradev.cstv.R
-import com.denisvieiradev.cstv.ui.token.TokenScreenAction
+import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
 import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 

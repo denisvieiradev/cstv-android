@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
+import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import com.denisvieiradev.design_system.ui.theme.CstvTheme
 
 @Composable

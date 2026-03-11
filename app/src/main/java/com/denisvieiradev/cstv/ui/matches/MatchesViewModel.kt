@@ -8,6 +8,9 @@ import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
+import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
+import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
+import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
 import kotlinx.coroutines.CoroutineDispatcher
