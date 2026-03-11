@@ -108,6 +108,7 @@ CSTV follows **Clean Architecture** with **MVVM**, organized in a multi-module s
 | MockK | 1.13.5 | Mocking |
 | Turbine | 1.2.1 | Flow testing |
 | Google Truth | 1.1.5 | Assertion library |
+| Detekt | 1.23.7 | Static code analysis |
 
 ---
 
@@ -187,6 +188,30 @@ Tests use **MockK** for mocking, **Turbine** for Flow assertions, **Google Truth
 | `AppLoggingTest` | Logging setup |
 | `FontAssetTest` | Design system font assets |
 | `MatchesFlowIntegrationTest` | End-to-end flow integration |
+
+---
+
+## Static Analysis
+
+The project uses [Detekt](https://detekt.dev/) for static code analysis.
+
+```bash
+# Run static analysis
+./gradlew detekt
+
+# Update the baseline (suppresses new pre-existing violations)
+./gradlew detektBaseline
+```
+
+**Config:** `config/detekt/detekt.yml`
+
+**Baseline:** `detekt-baseline.xml` — suppresses pre-existing issues (mainly Compose naming conventions and color constants) so CI only fails on newly introduced violations.
+
+**Notable enforced rules:**
+- Max line length: 160 characters
+- Max cyclomatic complexity: 15
+- Coroutine safety rules (GlobalScope, `runBlocking` in production code)
+- `print` / `println` forbidden (use `Timber` instead)
 
 ---
 
