@@ -7,11 +7,17 @@ import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -87,18 +93,19 @@ class MatchDetailViewModel(
     }
 
     private fun fetchPlayers(matchId: Int) {
-        viewModelScope.launch {
-            _uiState.update { it.copy(playersState = PlayersState.Loading) }
-            Timber.d("Fetching match detail for matchId=$matchId")
-            try {
-                val match = getMatchDetailUseCase(matchId)
+        _uiState.update { it.copy(playersState = PlayersState.Loading) }
+        Timber.d("Fetching match detail for matchId=$matchId")
+        flow { emit(getMatchDetailUseCase(matchId)) }
+            .flowOn(Dispatchers.IO)
+            .onEach { match ->
                 val teamAPlayers = match.teamA?.players ?: emptyList()
                 val teamBPlayers = match.teamB?.players ?: emptyList()
                 _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
-            } catch (e: Exception) {
+            }
+            .catch { e ->
                 Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
                 _uiState.update { it.copy(playersState = PlayersState.Error) }
             }
-        }
+            .launchIn(viewModelScope)
     }
 }

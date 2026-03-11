@@ -14,6 +14,9 @@ object MatchDateFormatter {
     private const val FORMAT_DAY_MONTH = "dd.MM"
     private const val LANG_PT = "pt"
 
+    private val TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_TIME)
+    private val DAY_MONTH_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DAY_MONTH)
+
     fun format(
         scheduledAt: String?,
         now: LocalDate,
@@ -42,7 +45,7 @@ object MatchDateFormatter {
     }
 
     private fun formatTime(dateTime: ZonedDateTime): String {
-        return dateTime.format(DateTimeFormatter.ofPattern(FORMAT_TIME))
+        return dateTime.format(TIME_FORMATTER)
     }
 
     private fun formatDayAbbrev(dateTime: ZonedDateTime, locale: Locale): String {
@@ -51,6 +54,6 @@ object MatchDateFormatter {
     }
 
     private fun formatDayMonth(dateTime: ZonedDateTime): String {
-        return dateTime.format(DateTimeFormatter.ofPattern(FORMAT_DAY_MONTH))
+        return dateTime.format(DAY_MONTH_FORMATTER)
     }
 }
