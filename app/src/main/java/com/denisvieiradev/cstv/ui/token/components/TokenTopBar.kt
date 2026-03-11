@@ -8,18 +8,16 @@ import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
 import com.denisvieiradev.cstv.ui.token.model.TokenUiState
+import com.denisvieiradev.design_system.ui.components.languageswitcher.LanguageOption
+import com.denisvieiradev.design_system.ui.components.languageswitcher.LanguageSwitcher
 import com.denisvieiradev.design_system.ui.theme.Spacing
 
 @Composable
@@ -34,37 +32,14 @@ internal fun TokenTopBar(
             .padding(top = Spacing.medium, end = Spacing.small),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TextButton(onClick = {
-            if (uiState.currentLanguage != Language.EN) onAction(TokenScreenAction.ToggleLanguage)
-        }) {
-            Text(
-                text = "EN",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = if (uiState.currentLanguage == Language.EN) FontWeight.Bold else FontWeight.Normal,
-                color = if (uiState.currentLanguage == Language.EN)
-                    MaterialTheme.colorScheme.onSurface
-                else
-                    MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Text(
-            text = "|",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+        LanguageSwitcher(
+            options = listOf(
+                LanguageOption(code = Language.EN, label = Language.EN_LABEL),
+                LanguageOption(code = Language.PT, label = Language.PT_LABEL)
+            ),
+            selectedLanguageCode = uiState.currentLanguage,
+            onToggle = { onAction(TokenScreenAction.ToggleLanguage) }
         )
-        TextButton(onClick = {
-            if (uiState.currentLanguage != Language.PT) onAction(TokenScreenAction.ToggleLanguage)
-        }) {
-            Text(
-                text = "PT",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = if (uiState.currentLanguage == Language.PT) FontWeight.Bold else FontWeight.Normal,
-                color = if (uiState.currentLanguage == Language.PT)
-                    MaterialTheme.colorScheme.onSurface
-                else
-                    MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
         IconButton(onClick = { onAction(TokenScreenAction.ToggleTheme) }) {
             Icon(
                 imageVector = if (uiState.isDarkTheme) Icons.Filled.DarkMode else Icons.Filled.LightMode,
