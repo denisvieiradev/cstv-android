@@ -12,8 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import com.denisvieiradev.cstv.ui.token.components.DemoConfirmationDialog
 import com.denisvieiradev.cstv.ui.token.components.TokenInputCard
 import com.denisvieiradev.cstv.ui.token.components.TokenLogo
@@ -32,14 +30,6 @@ fun TokenScreen(
     onAction: (TokenScreenAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val logoGradient = Brush.linearGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primary,
-            MaterialTheme.colorScheme.tertiary
-        ),
-        start = Offset(0f, 0f),
-        end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
-    )
     val glowColor = MaterialTheme.colorScheme.primary.copy(alpha = Alpha.faint)
 
     Surface(modifier = modifier.fillMaxSize()) {
@@ -53,7 +43,7 @@ fun TokenScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                TokenLogo(logoGradient = logoGradient)
+                TokenLogo()
                 Spacer(modifier = Modifier.height(Spacing.medium))
                 TokenScreenHeader()
                 Spacer(modifier = Modifier.height(Spacing.extraLarge))
