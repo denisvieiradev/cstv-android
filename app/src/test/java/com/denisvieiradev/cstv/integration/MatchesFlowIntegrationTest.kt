@@ -40,7 +40,7 @@ class MatchesFlowIntegrationTest {
             private val useCase = GetCsMatchesUseCase(repository)
             private val mockSession: SessionLocalDataSource = mockk(relaxed = true)
             private val mockDemo: DemoSessionManager = mockk(relaxed = true) {
-                every { tryConsume(any()) } returns true
+                every { tryConsume() } returns true
             }
 
             private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
@@ -101,7 +101,7 @@ class MatchesFlowIntegrationTest {
             private val useCase = GetCsMatchesUseCase(repository)
             private val mockSession: SessionLocalDataSource = mockk(relaxed = true)
             private val mockDemo: DemoSessionManager = mockk(relaxed = true) {
-                every { tryConsume(any()) } returns true
+                every { tryConsume() } returns true
             }
 
             private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
@@ -158,7 +158,7 @@ class MatchesFlowIntegrationTest {
             private val useCase = GetCsMatchesUseCase(repository)
             private val mockSession: SessionLocalDataSource = mockk(relaxed = true)
             private val mockDemo: DemoSessionManager = mockk(relaxed = true) {
-                every { tryConsume(any()) } returns true
+                every { tryConsume() } returns true
             }
 
             private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
@@ -216,7 +216,7 @@ class MatchesFlowIntegrationTest {
             private val useCase = GetCsMatchesUseCase(repository)
             private val mockSession: SessionLocalDataSource = mockk(relaxed = true)
             private val mockDemo: DemoSessionManager = mockk(relaxed = true) {
-                every { tryConsume(any()) } returns true
+                every { tryConsume() } returns true
             }
 
             private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)

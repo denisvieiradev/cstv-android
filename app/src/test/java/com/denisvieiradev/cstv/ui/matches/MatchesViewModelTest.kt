@@ -229,20 +229,32 @@ class MatchesViewModelTest {
     class GivenDemoSessionIsExpired {
 
         @OptIn(ExperimentalCoroutinesApi::class)
-        class WhenViewModelIsCreated : MatchesViewModelTestBase() {
+        class WhenOpenMatchDetailIsDispatched : MatchesViewModelTestBase() {
 
             init {
-                every { mockDemo.tryConsume(any()) } returns false
+                every { mockDemo.tryConsume() } returns false
             }
 
             @Test
             fun `then showDemoExpiredDialog is true`() = runTest {
+                val match = fakeMatch(id = 1)
+                coEvery { mockUseCase() } returns listOf(match)
                 val viewModel = createViewModel()
 
-                viewModel.uiState.test {
-                    val state = awaitItem()
-                    assertThat(state.showDemoExpiredDialog).isTrue()
-                    assertThat(state.isLoading).isFalse()
+                viewModel.onAction(MatchesScreenAction.OpenMatchDetail(match))
+
+                assertThat(viewModel.uiState.value.showDemoExpiredDialog).isTrue()
+            }
+
+            @Test
+            fun `then OpenMatchDetail event is NOT emitted`() = runTest {
+                val match = fakeMatch(id = 1)
+                coEvery { mockUseCase() } returns listOf(match)
+                val viewModel = createViewModel()
+
+                viewModel.navigationEvents.test {
+                    viewModel.onAction(MatchesScreenAction.OpenMatchDetail(match))
+                    expectNoEvents()
                     cancelAndConsumeRemainingEvents()
                 }
             }
@@ -530,6 +542,20 @@ class MatchesViewModelTest {
                     cancelAndConsumeRemainingEvents()
                 }
             }
+
+            @Test
+            fun `then tryConsume is called`() = runTest {
+                val match = fakeMatch(id = 42)
+                coEvery { mockUseCase() } returns listOf(match)
+                val viewModel = createViewModel()
+
+                viewModel.navigationEvents.test {
+                    viewModel.onAction(MatchesScreenAction.OpenMatchDetail(match))
+                    awaitItem()
+                    cancelAndConsumeRemainingEvents()
+                }
+                verify { mockDemo.tryConsume() }
+            }
         }
     }
 
@@ -543,7 +569,7 @@ abstract class MatchesViewModelTestBase {
     val mockUseCase: GetCsMatchesUseCase = mockk()
     val mockSession: SessionLocalDataSource = mockk(relaxed = true)
     val mockDemo: DemoSessionManager = mockk(relaxed = true) {
-        every { tryConsume(any()) } returns true
+        every { tryConsume() } returns true
     }
     val mockThemeManager: ThemeManager = mockk(relaxed = true)
     val mockLocaleManager: LocaleManager = mockk(relaxed = true)

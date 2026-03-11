@@ -77,6 +77,10 @@ class MatchesViewModel(
     }
 
     private fun openMatchDetail(match: Match) {
+        if (!demoSessionManager.tryConsume()) {
+            _uiState.update { it.copy(showDemoExpiredDialog = true) }
+            return
+        }
         viewModelScope.launch {
             _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail(match))
         }
@@ -93,10 +97,6 @@ class MatchesViewModel(
     }
 
     private fun loadMatches() {
-        if (!demoSessionManager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD)) {
-            _uiState.update { it.copy(isLoading = false, showDemoExpiredDialog = true) }
-            return
-        }
         _uiState.update { it.copy(isLoading = true, error = null, isAuthError = false) }
         viewModelScope.launch(ioDispatcher) {
             try {

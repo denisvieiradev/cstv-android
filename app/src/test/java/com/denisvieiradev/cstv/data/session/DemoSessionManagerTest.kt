@@ -6,7 +6,7 @@ import org.junit.Test
 class DemoSessionManagerTest {
 
     @Test
-    fun `should set isActive to true and reset remaining requests when startDemo is called`() {
+    fun `should set isActive to true and reset remaining views when startDemo is called`() {
         val manager = DemoSessionManager()
 
         manager.startDemo()
@@ -15,21 +15,24 @@ class DemoSessionManagerTest {
     }
 
     @Test
-    fun `should return true three times and false on fourth call when tryConsume is called with 2`() {
+    fun `should return true six times and false on seventh call when tryConsume is called`() {
         val manager = DemoSessionManager()
         manager.startDemo()
 
-        assertThat(manager.tryConsume(2)).isTrue()
-        assertThat(manager.tryConsume(2)).isTrue()
-        assertThat(manager.tryConsume(2)).isTrue()
-        assertThat(manager.tryConsume(2)).isFalse()
+        assertThat(manager.tryConsume()).isTrue()
+        assertThat(manager.tryConsume()).isTrue()
+        assertThat(manager.tryConsume()).isTrue()
+        assertThat(manager.tryConsume()).isTrue()
+        assertThat(manager.tryConsume()).isTrue()
+        assertThat(manager.tryConsume()).isTrue()
+        assertThat(manager.tryConsume()).isFalse()
     }
 
     @Test
-    fun `should set isActive to false and reset remaining requests when reset is called`() {
+    fun `should set isActive to false and reset remaining views when reset is called`() {
         val manager = DemoSessionManager()
         manager.startDemo()
-        manager.tryConsume(2)
+        manager.tryConsume()
 
         manager.reset()
 
@@ -40,7 +43,7 @@ class DemoSessionManagerTest {
     fun `should return true when tryConsume is called and demo is not active`() {
         val manager = DemoSessionManager()
 
-        val result = manager.tryConsume(2)
+        val result = manager.tryConsume()
 
         assertThat(result).isTrue()
     }
@@ -49,9 +52,9 @@ class DemoSessionManagerTest {
     fun `should keep returning false after limit is exhausted`() {
         val manager = DemoSessionManager()
         manager.startDemo()
-        repeat(DemoSessionManager.DEMO_PAGE_LIMIT) { manager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD) }
+        repeat(DemoSessionManager.DEMO_DETAIL_LIMIT) { manager.tryConsume() }
 
-        assertThat(manager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD)).isFalse()
-        assertThat(manager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD)).isFalse()
+        assertThat(manager.tryConsume()).isFalse()
+        assertThat(manager.tryConsume()).isFalse()
     }
 }
