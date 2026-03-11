@@ -21,6 +21,5 @@ val datasourcesModule = module {
     single<MatchApi> { get<Retrofit>().create(MatchApi::class.java) }
     single<MatchRemoteDataSource> { MatchRemoteDataSourceImpl(get()) }
     single<MatchRepository> { MatchRepositoryImpl(get()) }
-    // Demo
     single { DemoSessionManager() }
 }
