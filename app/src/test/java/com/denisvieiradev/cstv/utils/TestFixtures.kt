@@ -47,6 +47,12 @@ fun fakePlayer(
     lastName: String? = null
 ) = Player(id = id, name = name, imageUrl = imageUrl, firstName = firstName, lastName = lastName)
 
+fun fakeTeamDto(
+    id: Int? = 1,
+    name: String? = "Team A",
+    imageUrl: String? = "https://example.com/team.png"
+) = TeamDto(id = id, name = name, imageUrl = imageUrl)
+
 fun fakeMatchDto(
     id: Int? = 1,
     status: String? = "not_started",
@@ -55,12 +61,8 @@ fun fakeMatchDto(
     leagueName: String? = "ESL Pro League",
     leagueImageUrl: String? = "https://example.com/league.png",
     serieFullName: String? = "Season 20",
-    teamAId: Int? = 1,
-    teamAName: String? = "Team A",
-    teamAImageUrl: String? = "https://example.com/team_a.png",
-    teamBId: Int? = 2,
-    teamBName: String? = "Team B",
-    teamBImageUrl: String? = "https://example.com/team_b.png"
+    teamA: TeamDto = fakeTeamDto(id = 1, name = "Team A", imageUrl = "https://example.com/team_a.png"),
+    teamB: TeamDto = fakeTeamDto(id = 2, name = "Team B", imageUrl = "https://example.com/team_b.png")
 ) = MatchDto(
     id = id,
     status = status,
@@ -69,7 +71,7 @@ fun fakeMatchDto(
     league = LeagueDto(name = leagueName, imageUrl = leagueImageUrl),
     serie = SerieDto(fullName = serieFullName),
     opponents = listOf(
-        OpponentWrapperDto(opponent = TeamDto(id = teamAId, name = teamAName, imageUrl = teamAImageUrl)),
-        OpponentWrapperDto(opponent = TeamDto(id = teamBId, name = teamBName, imageUrl = teamBImageUrl))
+        OpponentWrapperDto(opponent = teamA),
+        OpponentWrapperDto(opponent = teamB)
     )
 )

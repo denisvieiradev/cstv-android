@@ -80,6 +80,7 @@ class TokenViewModelTest {
         val viewModel = createViewModel()
         viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
         viewModel.onAction(TokenScreenAction.Confirm)
+        advanceUntilIdle()
         assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
 
         viewModel.onNavigationConsumed()
@@ -98,6 +99,7 @@ class TokenViewModelTest {
         advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.error).isEqualTo(exception)
+        assertThat(viewModel.uiState.value.navigateToMatches).isFalse()
     }
 
     @Test
@@ -116,6 +118,7 @@ class TokenViewModelTest {
     @Test
     fun `should switch language from EN to PT and emit RecreateActivity when ToggleLanguage action is dispatched`() = runTest {
         every { mockSessionLocalDataSource.getLanguage() } returns Language.EN
+        every { mockLocaleManager.apply(any()) } returns true
         val viewModel = createViewModel()
 
         viewModel.navigationEvents.test {

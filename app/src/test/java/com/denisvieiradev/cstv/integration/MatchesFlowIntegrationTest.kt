@@ -43,11 +43,16 @@ class MatchesFlowIntegrationTest {
                 every { tryConsume(any()) } returns true
             }
 
+            private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
+            private val mockLocaleManager: com.denisvieiradev.cstv.ui.core.LocaleManager = mockk(relaxed = true)
+
             private fun createViewModel() = MatchesViewModel(
                 getCsMatchesUseCase = useCase,
                 sessionLocalDataSource = mockSession,
                 demoSessionManager = mockDemo,
-                ioDispatcher = mainDispatcherRule.testDispatcher
+                ioDispatcher = mainDispatcherRule.testDispatcher,
+                themeManager = mockThemeManager,
+                localeManager = mockLocaleManager
             )
 
             @Test
@@ -99,11 +104,16 @@ class MatchesFlowIntegrationTest {
                 every { tryConsume(any()) } returns true
             }
 
+            private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
+            private val mockLocaleManager: com.denisvieiradev.cstv.ui.core.LocaleManager = mockk(relaxed = true)
+
             private fun createViewModel() = MatchesViewModel(
                 getCsMatchesUseCase = useCase,
                 sessionLocalDataSource = mockSession,
                 demoSessionManager = mockDemo,
-                ioDispatcher = mainDispatcherRule.testDispatcher
+                ioDispatcher = mainDispatcherRule.testDispatcher,
+                themeManager = mockThemeManager,
+                localeManager = mockLocaleManager
             )
 
             @Test
@@ -151,11 +161,16 @@ class MatchesFlowIntegrationTest {
                 every { tryConsume(any()) } returns true
             }
 
+            private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
+            private val mockLocaleManager: com.denisvieiradev.cstv.ui.core.LocaleManager = mockk(relaxed = true)
+
             private fun createViewModel() = MatchesViewModel(
                 getCsMatchesUseCase = useCase,
                 sessionLocalDataSource = mockSession,
                 demoSessionManager = mockDemo,
-                ioDispatcher = mainDispatcherRule.testDispatcher
+                ioDispatcher = mainDispatcherRule.testDispatcher,
+                themeManager = mockThemeManager,
+                localeManager = mockLocaleManager
             )
 
             @Test
@@ -204,11 +219,16 @@ class MatchesFlowIntegrationTest {
                 every { tryConsume(any()) } returns true
             }
 
+            private val mockThemeManager: com.denisvieiradev.cstv.ui.core.ThemeManager = mockk(relaxed = true)
+            private val mockLocaleManager: com.denisvieiradev.cstv.ui.core.LocaleManager = mockk(relaxed = true)
+
             private fun createViewModel() = MatchesViewModel(
                 getCsMatchesUseCase = useCase,
                 sessionLocalDataSource = mockSession,
                 demoSessionManager = mockDemo,
-                ioDispatcher = mainDispatcherRule.testDispatcher
+                ioDispatcher = mainDispatcherRule.testDispatcher,
+                themeManager = mockThemeManager,
+                localeManager = mockLocaleManager
             )
 
             @Test

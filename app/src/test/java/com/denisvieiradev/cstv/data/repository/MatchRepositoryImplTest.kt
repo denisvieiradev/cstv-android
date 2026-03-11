@@ -8,7 +8,9 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
@@ -36,19 +38,15 @@ class MatchRepositoryImplTest {
             }
 
             @Test
-            fun `then it propagates exception from the data source`() = runTest {
+            fun `then it propagates exception from the data source`() {
                 val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockDataSource.getRunningMatches() } throws exception
 
-                var caughtException: Exception? = null
-                try {
-                    repository.getRunningMatches()
-                } catch (e: Exception) {
-                    caughtException = e
+                val caught = assertThrows(RuntimeException::class.java) {
+                    runBlocking { repository.getRunningMatches() }
                 }
 
-                assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
-                assertThat(caughtException?.message).isEqualTo(exception.message)
+                assertThat(caught.message).isEqualTo(exception.message)
             }
         }
 
@@ -69,19 +67,15 @@ class MatchRepositoryImplTest {
             }
 
             @Test
-            fun `then it propagates exception from the data source`() = runTest {
+            fun `then it propagates exception from the data source`() {
                 val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockDataSource.getUpcomingMatches() } throws exception
 
-                var caughtException: Exception? = null
-                try {
-                    repository.getUpcomingMatches()
-                } catch (e: Exception) {
-                    caughtException = e
+                val caught = assertThrows(RuntimeException::class.java) {
+                    runBlocking { repository.getUpcomingMatches() }
                 }
 
-                assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
-                assertThat(caughtException?.message).isEqualTo(exception.message)
+                assertThat(caught.message).isEqualTo(exception.message)
             }
         }
 
@@ -102,19 +96,15 @@ class MatchRepositoryImplTest {
             }
 
             @Test
-            fun `then it propagates exception from the data source`() = runTest {
+            fun `then it propagates exception from the data source`() {
                 val exception = RuntimeException("Not found")
                 coEvery { mockDataSource.getMatchDetail(any()) } throws exception
 
-                var caughtException: Exception? = null
-                try {
-                    repository.getMatchDetail(TestConstants.MATCH_ID_NOT_FOUND)
-                } catch (e: Exception) {
-                    caughtException = e
+                val caught = assertThrows(RuntimeException::class.java) {
+                    runBlocking { repository.getMatchDetail(TestConstants.MATCH_ID_NOT_FOUND) }
                 }
 
-                assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
-                assertThat(caughtException?.message).isEqualTo(exception.message)
+                assertThat(caught.message).isEqualTo(exception.message)
             }
         }
 
@@ -135,19 +125,15 @@ class MatchRepositoryImplTest {
             }
 
             @Test
-            fun `then it propagates exception from the data source`() = runTest {
+            fun `then it propagates exception from the data source`() {
                 val exception = RuntimeException("Team not found")
                 coEvery { mockDataSource.getTeamWithPlayers(any()) } throws exception
 
-                var caughtException: Exception? = null
-                try {
-                    repository.getTeamWithPlayers(TestConstants.MATCH_ID_NOT_FOUND)
-                } catch (e: Exception) {
-                    caughtException = e
+                val caught = assertThrows(RuntimeException::class.java) {
+                    runBlocking { repository.getTeamWithPlayers(TestConstants.MATCH_ID_NOT_FOUND) }
                 }
 
-                assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
-                assertThat(caughtException?.message).isEqualTo(exception.message)
+                assertThat(caught.message).isEqualTo(exception.message)
             }
         }
     }

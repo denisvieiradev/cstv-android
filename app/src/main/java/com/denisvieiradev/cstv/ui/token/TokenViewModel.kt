@@ -1,6 +1,5 @@
 package com.denisvieiradev.cstv.ui.token
 
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.BuildConfig
@@ -66,12 +65,12 @@ class TokenViewModel(
     private fun saveToken() {
         val token = _uiState.value.token
         if (token.isBlank()) return
-        _uiState.update { it.copy(navigateToMatches = true) }
         viewModelScope.launch(ioDispatcher) {
             try {
                 sessionLocalDataSource.saveToken(token)
+                _uiState.update { it.copy(navigateToMatches = true) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(navigateToMatches = false, error = e) }
+                _uiState.update { it.copy(error = e) }
             }
         }
     }
@@ -87,8 +86,8 @@ class TokenViewModel(
         val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
         _uiState.update { it.copy(currentLanguage = next) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
-        localeManager.apply(next)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        val needsRecreate = localeManager.apply(next)
+        if (needsRecreate) {
             viewModelScope.launch { _navigationEvents.emit(TokenNavigationEvent.RecreateActivity) }
         }
     }

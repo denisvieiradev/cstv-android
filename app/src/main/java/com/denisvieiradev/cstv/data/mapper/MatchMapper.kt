@@ -7,6 +7,7 @@ import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.model.MatchStatus
 import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
+import timber.log.Timber
 
 private object MatchStatusValue {
     const val RUNNING = "running"
@@ -52,5 +53,8 @@ private fun String?.toMatchStatus(): MatchStatus = when (this) {
     MatchStatusValue.FINISHED -> MatchStatus.FINISHED
     MatchStatusValue.CANCELED -> MatchStatus.CANCELED
     MatchStatusValue.POSTPONED -> MatchStatus.POSTPONED
-    else -> MatchStatus.NOT_STARTED
+    else -> {
+        Timber.w("Unknown match status: $this")
+        MatchStatus.NOT_STARTED
+    }
 }

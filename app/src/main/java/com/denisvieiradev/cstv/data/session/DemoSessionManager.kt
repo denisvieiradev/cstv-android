@@ -26,6 +26,7 @@ class DemoSessionManager {
 
     companion object {
         const val DEMO_PAGE_LIMIT = 3
-        const val DEMO_REQUEST_LIMIT = DEMO_PAGE_LIMIT * 2 // Each page load consumes 2 requests
+        const val REQUESTS_PER_PAGE_LOAD = 2
+        const val DEMO_REQUEST_LIMIT = DEMO_PAGE_LIMIT * REQUESTS_PER_PAGE_LOAD
     }
 }

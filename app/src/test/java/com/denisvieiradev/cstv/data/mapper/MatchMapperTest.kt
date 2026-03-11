@@ -7,6 +7,7 @@ import com.denisvieiradev.cstv.data.dto.TeamDto
 import com.denisvieiradev.cstv.domain.model.MatchStatus
 import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatchDto
+import com.denisvieiradev.cstv.utils.fakeTeamDto
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
@@ -22,12 +23,8 @@ class MatchMapperTest {
             leagueName = "ESL Pro League",
             leagueImageUrl = "https://example.com/league.png",
             serieFullName = "Season 20",
-            teamAId = 10,
-            teamAName = "Natus Vincere",
-            teamAImageUrl = "https://example.com/navi.png",
-            teamBId = 20,
-            teamBName = "FaZe Clan",
-            teamBImageUrl = "https://example.com/faze.png"
+            teamA = fakeTeamDto(id = 10, name = "Natus Vincere", imageUrl = "https://example.com/navi.png"),
+            teamB = fakeTeamDto(id = 20, name = "FaZe Clan", imageUrl = "https://example.com/faze.png")
         )
 
         val domain = dto.toDomain()
@@ -49,7 +46,7 @@ class MatchMapperTest {
 
     @Test
     fun `should use empty string for null team name`() {
-        val dto = fakeMatchDto(teamAName = null)
+        val dto = fakeMatchDto(teamA = fakeTeamDto(name = null))
 
         val domain = dto.toDomain()
 
@@ -58,7 +55,7 @@ class MatchMapperTest {
 
     @Test
     fun `should use null for missing team image url`() {
-        val dto = fakeMatchDto(teamAImageUrl = null)
+        val dto = fakeMatchDto(teamA = fakeTeamDto(imageUrl = null))
 
         val domain = dto.toDomain()
 

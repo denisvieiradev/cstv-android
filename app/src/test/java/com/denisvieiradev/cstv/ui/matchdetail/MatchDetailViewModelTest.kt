@@ -189,6 +189,7 @@ abstract class MatchDetailViewModelTestBase {
             if (match != null) mapOf(MatchDetailViewModel.EXTRA_MATCH to match) else emptyMap()
         ),
         sessionLocalDataSource = mockSessionLocalDataSource,
-        getMatchDetailUseCase = mockGetMatchDetailUseCase
+        getMatchDetailUseCase = mockGetMatchDetailUseCase,
+        ioDispatcher = mainDispatcherRule.testDispatcher
     )
 }

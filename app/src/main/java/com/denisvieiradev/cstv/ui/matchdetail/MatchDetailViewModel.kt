@@ -11,17 +11,13 @@ import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailNavigationEvent
 import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailScreenAction
 import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailUiState
 import com.denisvieiradev.cstv.ui.matchdetail.model.PlayersState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -29,7 +25,8 @@ import timber.log.Timber
 class MatchDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val sessionLocalDataSource: SessionLocalDataSource,
-    private val getMatchDetailUseCase: GetMatchDetailUseCase
+    private val getMatchDetailUseCase: GetMatchDetailUseCase,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     companion object {
@@ -77,17 +74,16 @@ class MatchDetailViewModel(
     private fun fetchPlayers(matchId: Int) {
         _uiState.update { it.copy(playersState = PlayersState.Loading) }
         Timber.d("Fetching match detail for matchId=$matchId")
-        flow { emit(getMatchDetailUseCase(matchId)) }
-            .flowOn(Dispatchers.IO)
-            .onEach { match ->
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val match = getMatchDetailUseCase(matchId)
                 val teamAPlayers = match.teamA?.players ?: emptyList()
                 val teamBPlayers = match.teamB?.players ?: emptyList()
                 _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
-            }
-            .catch { e ->
+            } catch (e: Exception) {
                 Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
                 _uiState.update { it.copy(playersState = PlayersState.Error) }
             }
-            .launchIn(viewModelScope)
+        }
     }
 }

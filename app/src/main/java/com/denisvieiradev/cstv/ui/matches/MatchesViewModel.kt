@@ -1,6 +1,5 @@
 package com.denisvieiradev.cstv.ui.matches
 
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
@@ -10,8 +9,6 @@ import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
-import com.denisvieiradev.cstv.ui.core.AppCompatLocaleManager
-import com.denisvieiradev.cstv.ui.core.AppCompatThemeManager
 import com.denisvieiradev.cstv.ui.core.LocaleManager
 import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
@@ -33,8 +30,8 @@ class MatchesViewModel(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val demoSessionManager: DemoSessionManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val themeManager: ThemeManager = AppCompatThemeManager(),
-    private val localeManager: LocaleManager = AppCompatLocaleManager()
+    private val themeManager: ThemeManager,
+    private val localeManager: LocaleManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -89,14 +86,14 @@ class MatchesViewModel(
         val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
         _uiState.update { it.copy(currentLanguage = next) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
-        localeManager.apply(next)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        val needsRecreate = localeManager.apply(next)
+        if (needsRecreate) {
             viewModelScope.launch { _navigationEvents.emit(MatchesNavigationEvent.RecreateActivity) }
         }
     }
 
     private fun loadMatches() {
-        if (!demoSessionManager.tryConsume(2)) {
+        if (!demoSessionManager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD)) {
             _uiState.update { it.copy(isLoading = false, showDemoExpiredDialog = true) }
             return
         }

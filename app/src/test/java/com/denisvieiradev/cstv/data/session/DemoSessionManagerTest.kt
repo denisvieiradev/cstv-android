@@ -44,4 +44,14 @@ class DemoSessionManagerTest {
 
         assertThat(result).isTrue()
     }
+
+    @Test
+    fun `should keep returning false after limit is exhausted`() {
+        val manager = DemoSessionManager()
+        manager.startDemo()
+        repeat(DemoSessionManager.DEMO_PAGE_LIMIT) { manager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD) }
+
+        assertThat(manager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD)).isFalse()
+        assertThat(manager.tryConsume(DemoSessionManager.REQUESTS_PER_PAGE_LOAD)).isFalse()
+    }
 }
