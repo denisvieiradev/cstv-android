@@ -65,6 +65,8 @@ class MatchesViewModel(
                 val newValue = !_uiState.value.isDarkTheme
                 _uiState.update { it.copy(isDarkTheme = newValue) }
                 viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(newValue) }
+                val nightMode = if (newValue) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                AppCompatDelegate.setDefaultNightMode(nightMode)
             }
             is MatchesScreenAction.OpenMatchDetail -> viewModelScope.launch {
                 _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail(action.match))

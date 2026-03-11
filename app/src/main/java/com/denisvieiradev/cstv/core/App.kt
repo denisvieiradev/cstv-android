@@ -30,6 +30,17 @@ class App : Application(), KoinComponent {
         }
 
         applyInitialLocale()
+        applyInitialNightMode()
+    }
+
+    private fun applyInitialNightMode() {
+        val sessionLocalDataSource: SessionLocalDataSource by inject()
+        val mode = if (sessionLocalDataSource.isDarkTheme()) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 
     private fun applyInitialLocale() {

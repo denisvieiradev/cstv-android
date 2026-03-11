@@ -75,6 +75,8 @@ class TokenViewModel(
         val new = !_uiState.value.isDarkTheme
         _uiState.update { it.copy(isDarkTheme = new) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(new) }
+        val nightMode = if (new) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        AppCompatDelegate.setDefaultNightMode(nightMode)
     }
 
     private fun toggleLanguage() {
