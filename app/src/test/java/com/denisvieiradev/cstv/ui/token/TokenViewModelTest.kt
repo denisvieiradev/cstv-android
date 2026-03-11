@@ -4,6 +4,8 @@ import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
+import com.denisvieiradev.cstv.ui.matches.LocaleManager
+import com.denisvieiradev.cstv.ui.matches.ThemeManager
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -21,10 +23,14 @@ class TokenViewModelTest {
 
     private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
     private val mockDemoSessionManager: DemoSessionManager = mockk(relaxed = true)
+    private val mockThemeManager: ThemeManager = mockk(relaxed = true)
+    private val mockLocaleManager: LocaleManager = mockk(relaxed = true)
 
     private fun createViewModel() = TokenViewModel(
         mockSessionLocalDataSource,
         mockDemoSessionManager,
+        mockThemeManager,
+        mockLocaleManager,
         mainDispatcherRule.testDispatcher
     )
 
@@ -101,6 +107,7 @@ class TokenViewModelTest {
 
         assertThat(viewModel.uiState.value.isDarkTheme).isTrue()
         verify { mockSessionLocalDataSource.saveDarkTheme(true) }
+        verify { mockThemeManager.apply(true) }
     }
 
     @Test
@@ -115,6 +122,7 @@ class TokenViewModelTest {
             cancelAndConsumeRemainingEvents()
         }
         verify { mockSessionLocalDataSource.saveLanguage(Language.PT) }
+        verify { mockLocaleManager.apply(Language.PT) }
     }
 
     @Test

@@ -1,8 +1,6 @@
 package com.denisvieiradev.cstv.ui.matches
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
@@ -18,11 +16,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,7 +24,9 @@ class MatchesViewModel(
     private val getCsMatchesUseCase: GetCsMatchesUseCase,
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val demoSessionManager: DemoSessionManager,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val themeManager: ThemeManager = AppCompatThemeManager(),
+    private val localeManager: LocaleManager = AppCompatLocaleManager()
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -65,8 +60,7 @@ class MatchesViewModel(
                 val newValue = !_uiState.value.isDarkTheme
                 _uiState.update { it.copy(isDarkTheme = newValue) }
                 viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(newValue) }
-                val nightMode = if (newValue) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-                AppCompatDelegate.setDefaultNightMode(nightMode)
+                themeManager.apply(newValue)
             }
             is MatchesScreenAction.OpenMatchDetail -> viewModelScope.launch {
                 _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail(action.match))
@@ -75,7 +69,7 @@ class MatchesViewModel(
                 val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
                 _uiState.update { it.copy(currentLanguage = next) }
                 viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
-                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
+                localeManager.apply(next)
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                     viewModelScope.launch { _navigationEvents.emit(MatchesNavigationEvent.RecreateActivity) }
                 }
@@ -89,22 +83,16 @@ class MatchesViewModel(
             return
         }
         _uiState.update { it.copy(isLoading = true, error = null, isAuthError = false) }
-        flow { emit(getCsMatchesUseCase()) }
-            .flowOn(ioDispatcher)
-            .onEach { matches ->
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val matches = getCsMatchesUseCase()
                 _uiState.update { it.copy(isLoading = false, matches = matches) }
+            } catch (e: AuthorizationException) {
+                _uiState.update { it.copy(isLoading = false, isAuthError = true, error = null) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isLoading = false, error = e, isAuthError = false) }
             }
-            .catch { e ->
-                when (e) {
-                    is AuthorizationException -> _uiState.update {
-                        it.copy(isLoading = false, isAuthError = true, error = null)
-                    }
-                    else -> _uiState.update {
-                        it.copy(isLoading = false, error = e, isAuthError = false)
-                    }
-                }
-            }
-            .launchIn(viewModelScope)
+        }
     }
 
     private fun clearSessionAndNavigate() {
@@ -115,5 +103,4 @@ class MatchesViewModel(
             _navigationEvents.emit(MatchesNavigationEvent.NavigateToTokenScreen)
         }
     }
-
 }

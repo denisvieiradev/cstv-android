@@ -1,14 +1,14 @@
 package com.denisvieiradev.cstv.ui.token
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
+import com.denisvieiradev.cstv.ui.matches.LocaleManager
+import com.denisvieiradev.cstv.ui.matches.ThemeManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +22,8 @@ import kotlinx.coroutines.launch
 class TokenViewModel(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val demoSessionManager: DemoSessionManager,
+    private val themeManager: ThemeManager,
+    private val localeManager: LocaleManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
@@ -75,15 +77,14 @@ class TokenViewModel(
         val new = !_uiState.value.isDarkTheme
         _uiState.update { it.copy(isDarkTheme = new) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(new) }
-        val nightMode = if (new) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        AppCompatDelegate.setDefaultNightMode(nightMode)
+        themeManager.apply(new)
     }
 
     private fun toggleLanguage() {
         val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
         _uiState.update { it.copy(currentLanguage = next) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
+        localeManager.apply(next)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             viewModelScope.launch { _navigationEvents.emit(TokenNavigationEvent.RecreateActivity) }
         }
