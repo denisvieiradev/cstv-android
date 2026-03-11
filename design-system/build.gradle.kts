@@ -46,4 +46,7 @@ dependencies {
 
     // Non-BOM Compose
     implementation(libs.composeLifecycle)
+
+    // Image loading
+    implementation(libs.coil)
 }

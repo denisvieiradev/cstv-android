@@ -21,12 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
-import coil.compose.SubcomposeAsyncImage
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.domain.model.Team
 import com.denisvieiradev.cstv.ui.matches.util.MatchDateFormatter
+import com.denisvieiradev.design_system.ui.components.image.NetworkImage
 import com.denisvieiradev.design_system.ui.theme.Alpha
 import com.denisvieiradev.design_system.ui.theme.Spacing
 import com.denisvieiradev.design_system.ui.theme.Weight
@@ -63,51 +61,38 @@ private fun TeamColumn(
     modifier: Modifier = Modifier,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally
 ) {
+    val teamName = team?.name ?: stringResource(R.string.match_tbd)
     Column(modifier = modifier, horizontalAlignment = horizontalAlignment) {
-        TeamLogo(imageUrl = team?.imageUrl, teamName = team?.name ?: stringResource(R.string.match_tbd))
+        NetworkImage(
+            imageUrl = team?.imageUrl,
+            contentDescription = stringResource(R.string.match_detail_team_logo_desc, teamName),
+            size = Spacing.teamLogoSize,
+            contentScale = ContentScale.Crop,
+            fallback = {
+                Box(
+                    modifier = Modifier
+                        .size(Spacing.teamLogoSize)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = teamName.take(1).uppercase(),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        )
         Spacer(modifier = Modifier.height(Spacing.small))
         Text(
-            text = team?.name ?: stringResource(R.string.match_tbd),
+            text = teamName,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-    }
-}
-
-@Composable
-private fun TeamLogo(imageUrl: String?, teamName: String) {
-    val logoSize = Spacing.teamLogoSize
-    if (imageUrl != null) {
-        SubcomposeAsyncImage(
-            model = imageUrl,
-            contentDescription = stringResource(R.string.match_detail_team_logo_desc, teamName),
-            modifier = Modifier
-                .size(logoSize)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop,
-            loading = {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(modifier = Modifier.size(Spacing.loadingIndicatorMedium))
-                }
-            }
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .size(logoSize)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = teamName.take(1).uppercase(),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
     }
 }
 
