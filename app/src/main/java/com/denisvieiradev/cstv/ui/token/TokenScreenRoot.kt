@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
+import com.denisvieiradev.design_system.ui.theme.CstvTheme
 
 @Composable
 fun TokenScreenRoot(
@@ -25,11 +26,13 @@ fun TokenScreenRoot(
         }
     }
 
-    TokenScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
-        modifier = modifier
-    )
+    CstvTheme(darkTheme = uiState.isDarkTheme) {
+        TokenScreen(
+            uiState = uiState,
+            onAction = viewModel::onAction,
+            modifier = modifier
+        )
+    }
 }
 
 private fun navigateToMatches(context: Context) {

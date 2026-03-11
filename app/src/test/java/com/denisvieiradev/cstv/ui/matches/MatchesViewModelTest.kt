@@ -13,10 +13,13 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MatchesViewModelTest {
 
     @get:Rule
@@ -26,7 +29,12 @@ class MatchesViewModelTest {
     private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
     private val mockDemoSessionManager: DemoSessionManager = mockk(relaxed = true)
 
-    private fun createViewModel() = MatchesViewModel(mockUseCase, mockSessionLocalDataSource, mockDemoSessionManager)
+    private fun createViewModel() = MatchesViewModel(
+        mockUseCase,
+        mockSessionLocalDataSource,
+        mockDemoSessionManager,
+        mainDispatcherRule.testDispatcher
+    )
 
     @Test
     fun `should emit loading state when load matches starts`() = runTest {
@@ -37,7 +45,6 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             assertThat(awaitItem().isLoading).isTrue()
             cancelAndConsumeRemainingEvents()
         }
@@ -53,7 +60,6 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             awaitItem() // loading state
             val successState = awaitItem()
             assertThat(successState.isLoading).isFalse()
@@ -72,11 +78,11 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             awaitItem() // loading state
             val errorState = awaitItem()
             assertThat(errorState.isLoading).isFalse()
-            assertThat(errorState.error).isEqualTo(exception)
+            assertThat(errorState.error).isInstanceOf(RuntimeException::class.java)
+            assertThat(errorState.error?.message).isEqualTo(exception.message)
             cancelAndConsumeRemainingEvents()
         }
     }
@@ -91,7 +97,6 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             awaitItem() // loading state
             val successState = awaitItem()
             assertThat(successState.isLoading).isFalse()
@@ -110,7 +115,6 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             awaitItem() // loading state
             val errorState = awaitItem()
             assertThat(errorState.isLoading).isFalse()
@@ -130,11 +134,11 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             awaitItem() // loading state
             val errorState = awaitItem()
             assertThat(errorState.isLoading).isFalse()
-            assertThat(errorState.error).isEqualTo(exception)
+            assertThat(errorState.error).isInstanceOf(RuntimeException::class.java)
+            assertThat(errorState.error?.message).isEqualTo(exception.message)
             assertThat(errorState.isAuthError).isFalse()
             cancelAndConsumeRemainingEvents()
         }
@@ -196,6 +200,7 @@ class MatchesViewModelTest {
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleTheme)
+        advanceUntilIdle()
 
         // Assert
         assertThat(viewModel.uiState.value.isDarkTheme).isTrue()
@@ -226,6 +231,7 @@ class MatchesViewModelTest {
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
+        advanceUntilIdle()
 
         // Assert
         assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.PT)
@@ -242,6 +248,7 @@ class MatchesViewModelTest {
 
         // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
+        advanceUntilIdle()
 
         // Assert
         assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.EN)
@@ -289,7 +296,6 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             awaitItem() // loading from init
             awaitItem() // result from init
 
@@ -310,7 +316,6 @@ class MatchesViewModelTest {
 
         // Act / Assert
         viewModel.uiState.test {
-            awaitItem() // initial state
             val expiredState = awaitItem()
             assertThat(expiredState.showDemoExpiredDialog).isTrue()
             assertThat(expiredState.isLoading).isFalse()

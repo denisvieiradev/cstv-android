@@ -5,9 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.denisvieiradev.design_system.ui.theme.CstvTheme
 import org.koin.androidx.compose.koinViewModel
 
 class TokenActivity : AppCompatActivity() {
@@ -17,8 +14,6 @@ class TokenActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: TokenViewModel = koinViewModel()
-            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
             LaunchedEffect(Unit) {
                 viewModel.navigationEvents.collect { event ->
                     when (event) {
@@ -26,10 +21,7 @@ class TokenActivity : AppCompatActivity() {
                     }
                 }
             }
-
-            CstvTheme(darkTheme = uiState.isDarkTheme) {
-                TokenScreenRoot(viewModel = viewModel)
-            }
+            TokenScreenRoot(viewModel = viewModel)
         }
     }
 }

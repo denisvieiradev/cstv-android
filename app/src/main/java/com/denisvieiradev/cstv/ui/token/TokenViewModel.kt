@@ -9,6 +9,8 @@ import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class TokenViewModel(
     private val sessionLocalDataSource: SessionLocalDataSource,
-    private val demoSessionManager: DemoSessionManager
+    private val demoSessionManager: DemoSessionManager,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -58,24 +61,26 @@ class TokenViewModel(
     private fun saveToken() {
         val token = _uiState.value.token
         if (token.isBlank()) return
-        try {
-            sessionLocalDataSource.saveToken(token)
-            _uiState.update { it.copy(navigateToMatches = true) }
-        } catch (e: Exception) {
-            _uiState.update { it.copy(error = e) }
+        _uiState.update { it.copy(navigateToMatches = true) }
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                sessionLocalDataSource.saveToken(token)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(navigateToMatches = false, error = e) }
+            }
         }
     }
 
     private fun toggleTheme() {
         val new = !_uiState.value.isDarkTheme
-        sessionLocalDataSource.saveDarkTheme(new)
         _uiState.update { it.copy(isDarkTheme = new) }
+        viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(new) }
     }
 
     private fun toggleLanguage() {
         val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
-        sessionLocalDataSource.saveLanguage(next)
         _uiState.update { it.copy(currentLanguage = next) }
+        viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             viewModelScope.launch { _navigationEvents.emit(TokenNavigationEvent.RecreateActivity) }
@@ -84,8 +89,10 @@ class TokenViewModel(
 
     private fun enterDemoMode() {
         demoSessionManager.startDemo()
-        sessionLocalDataSource.saveToken(BuildConfig.PANDASCORE_DEMO_API_TOKEN)
         _uiState.update { it.copy(navigateToMatches = true) }
+        viewModelScope.launch(ioDispatcher) {
+            sessionLocalDataSource.saveToken(BuildConfig.PANDASCORE_DEMO_API_TOKEN)
+        }
     }
 
     private fun pasteFromClipboard(text: String?) {
