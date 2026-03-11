@@ -1,6 +1,7 @@
 package com.denisvieiradev.cstv.data.repository
 
 import com.denisvieiradev.cstv.data.datasources.remote.matches.MatchRemoteDataSource
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.cstv.utils.fakeTeam
 import com.google.common.truth.Truth.assertThat
@@ -36,7 +37,7 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it propagates exception from the data source`() = runTest {
-                val exception = RuntimeException("Network error")
+                val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockDataSource.getRunningMatches() } throws exception
 
                 var caughtException: Exception? = null
@@ -69,7 +70,7 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it propagates exception from the data source`() = runTest {
-                val exception = RuntimeException("Network error")
+                val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockDataSource.getUpcomingMatches() } throws exception
 
                 var caughtException: Exception? = null
@@ -91,13 +92,13 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it returns the match from the data source`() = runTest {
-                val match = fakeMatch(id = 42)
-                coEvery { mockDataSource.getMatchDetail(42) } returns match
+                val match = fakeMatch(id = TestConstants.MATCH_ID)
+                coEvery { mockDataSource.getMatchDetail(TestConstants.MATCH_ID) } returns match
 
-                val result = repository.getMatchDetail(42)
+                val result = repository.getMatchDetail(TestConstants.MATCH_ID)
 
                 assertThat(result).isEqualTo(match)
-                coVerify(exactly = 1) { mockDataSource.getMatchDetail(42) }
+                coVerify(exactly = 1) { mockDataSource.getMatchDetail(TestConstants.MATCH_ID) }
             }
 
             @Test
@@ -107,7 +108,7 @@ class MatchRepositoryImplTest {
 
                 var caughtException: Exception? = null
                 try {
-                    repository.getMatchDetail(99)
+                    repository.getMatchDetail(TestConstants.MATCH_ID_NOT_FOUND)
                 } catch (e: Exception) {
                     caughtException = e
                 }
@@ -124,13 +125,13 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it returns the team from the data source`() = runTest {
-                val team = fakeTeam(id = 7, name = "Natus Vincere")
-                coEvery { mockDataSource.getTeamWithPlayers(7) } returns team
+                val team = fakeTeam(id = TestConstants.TEAM_NAVI_ID, name = "Natus Vincere")
+                coEvery { mockDataSource.getTeamWithPlayers(TestConstants.TEAM_NAVI_ID) } returns team
 
-                val result = repository.getTeamWithPlayers(7)
+                val result = repository.getTeamWithPlayers(TestConstants.TEAM_NAVI_ID)
 
                 assertThat(result).isEqualTo(team)
-                coVerify(exactly = 1) { mockDataSource.getTeamWithPlayers(7) }
+                coVerify(exactly = 1) { mockDataSource.getTeamWithPlayers(TestConstants.TEAM_NAVI_ID) }
             }
 
             @Test
@@ -140,7 +141,7 @@ class MatchRepositoryImplTest {
 
                 var caughtException: Exception? = null
                 try {
-                    repository.getTeamWithPlayers(99)
+                    repository.getTeamWithPlayers(TestConstants.MATCH_ID_NOT_FOUND)
                 } catch (e: Exception) {
                     caughtException = e
                 }

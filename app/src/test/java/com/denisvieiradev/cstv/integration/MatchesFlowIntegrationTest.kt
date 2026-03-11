@@ -9,6 +9,7 @@ import com.denisvieiradev.cstv.domain.model.MatchStatus
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.ui.matches.MatchesViewModel
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import com.google.common.truth.Truth.assertThat
@@ -159,7 +160,7 @@ class MatchesFlowIntegrationTest {
 
             @Test
             fun `then ViewModel uiState contains the exception`() = runTest {
-                val exception = RuntimeException("Network error")
+                val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockDataSource.getRunningMatches() } throws exception
                 coEvery { mockDataSource.getUpcomingMatches() } returns emptyList()
                 val viewModel = createViewModel()
@@ -175,7 +176,7 @@ class MatchesFlowIntegrationTest {
 
             @Test
             fun `then ViewModel uiState does not set isAuthError`() = runTest {
-                val exception = RuntimeException("Network error")
+                val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockDataSource.getRunningMatches() } throws exception
                 coEvery { mockDataSource.getUpcomingMatches() } returns emptyList()
                 val viewModel = createViewModel()

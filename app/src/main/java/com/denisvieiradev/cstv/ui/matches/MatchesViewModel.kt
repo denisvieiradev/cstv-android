@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
+import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
@@ -52,28 +53,38 @@ class MatchesViewModel(
             is MatchesScreenAction.ConfirmLogout -> clearSessionAndNavigate()
             is MatchesScreenAction.DismissLogout -> _uiState.update { it.copy(showLogoutDialog = false) }
             is MatchesScreenAction.ConfigureToken -> clearSessionAndNavigate()
-            is MatchesScreenAction.DismissDemoExpired -> {
-                demoSessionManager.reset()
-                clearSessionAndNavigate()
-            }
-            is MatchesScreenAction.ToggleTheme -> {
-                val newValue = !_uiState.value.isDarkTheme
-                _uiState.update { it.copy(isDarkTheme = newValue) }
-                viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(newValue) }
-                themeManager.apply(newValue)
-            }
-            is MatchesScreenAction.OpenMatchDetail -> viewModelScope.launch {
-                _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail(action.match))
-            }
-            is MatchesScreenAction.ToggleLanguage -> {
-                val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
-                _uiState.update { it.copy(currentLanguage = next) }
-                viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
-                localeManager.apply(next)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    viewModelScope.launch { _navigationEvents.emit(MatchesNavigationEvent.RecreateActivity) }
-                }
-            }
+            is MatchesScreenAction.DismissDemoExpired -> dismissDemoExpiredAndNavigate()
+            is MatchesScreenAction.ToggleTheme -> toggleTheme()
+            is MatchesScreenAction.OpenMatchDetail -> openMatchDetail(action.match)
+            is MatchesScreenAction.ToggleLanguage -> toggleLanguage()
+        }
+    }
+
+    private fun dismissDemoExpiredAndNavigate() {
+        demoSessionManager.reset()
+        clearSessionAndNavigate()
+    }
+
+    private fun toggleTheme() {
+        val newValue = !_uiState.value.isDarkTheme
+        _uiState.update { it.copy(isDarkTheme = newValue) }
+        viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(newValue) }
+        themeManager.apply(newValue)
+    }
+
+    private fun openMatchDetail(match: Match) {
+        viewModelScope.launch {
+            _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail(match))
+        }
+    }
+
+    private fun toggleLanguage() {
+        val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
+        _uiState.update { it.copy(currentLanguage = next) }
+        viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
+        localeManager.apply(next)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            viewModelScope.launch { _navigationEvents.emit(MatchesNavigationEvent.RecreateActivity) }
         }
     }
 

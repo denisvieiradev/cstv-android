@@ -7,6 +7,7 @@ import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.ui.matches.LocaleManager
 import com.denisvieiradev.cstv.ui.matches.ThemeManager
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -45,7 +46,7 @@ class TokenViewModelTest {
     fun `should enable confirm button when token is not blank`() {
         val viewModel = createViewModel()
 
-        viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
+        viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
 
         assertThat(viewModel.uiState.value.isConfirmEnabled).isTrue()
     }
@@ -53,12 +54,12 @@ class TokenViewModelTest {
     @Test
     fun `should save token when confirm action is dispatched`() = runTest {
         val viewModel = createViewModel()
-        viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
+        viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
 
         viewModel.onAction(TokenScreenAction.Confirm)
         advanceUntilIdle()
 
-        verify { mockSessionLocalDataSource.saveToken("my-token") }
+        verify { mockSessionLocalDataSource.saveToken(TestConstants.TOKEN) }
         assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
     }
 
@@ -75,7 +76,7 @@ class TokenViewModelTest {
     @Test
     fun `should reset navigateToMatches after onNavigationConsumed`() = runTest {
         val viewModel = createViewModel()
-        viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
+        viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
         viewModel.onAction(TokenScreenAction.Confirm)
         assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
 
@@ -89,7 +90,7 @@ class TokenViewModelTest {
         val exception = RuntimeException("Save failed")
         every { mockSessionLocalDataSource.saveToken(any()) } throws exception
         val viewModel = createViewModel()
-        viewModel.onAction(TokenScreenAction.OnTokenChanged("my-token"))
+        viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
 
         viewModel.onAction(TokenScreenAction.Confirm)
         advanceUntilIdle()
@@ -160,21 +161,21 @@ class TokenViewModelTest {
         val viewModel = createViewModel()
         viewModel.onAction(TokenScreenAction.ShowTutorial)
 
-        viewModel.onAction(TokenScreenAction.PasteTokenFromClipboard("abc123"))
+        viewModel.onAction(TokenScreenAction.PasteTokenFromClipboard(TestConstants.TOKEN_CLIPBOARD))
 
-        assertThat(viewModel.uiState.value.token).isEqualTo("abc123")
+        assertThat(viewModel.uiState.value.token).isEqualTo(TestConstants.TOKEN_CLIPBOARD)
         assertThat(viewModel.uiState.value.showTutorialDialog).isFalse()
     }
 
     @Test
     fun `should keep token unchanged and close tutorial when PasteTokenFromClipboard is dispatched with null`() {
         val viewModel = createViewModel()
-        viewModel.onAction(TokenScreenAction.OnTokenChanged("existing-token"))
+        viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN_EXISTING))
         viewModel.onAction(TokenScreenAction.ShowTutorial)
 
         viewModel.onAction(TokenScreenAction.PasteTokenFromClipboard(null))
 
-        assertThat(viewModel.uiState.value.token).isEqualTo("existing-token")
+        assertThat(viewModel.uiState.value.token).isEqualTo(TestConstants.TOKEN_EXISTING)
         assertThat(viewModel.uiState.value.showTutorialDialog).isFalse()
     }
 
@@ -182,8 +183,8 @@ class TokenViewModelTest {
     fun `should trim whitespace from clipboard text when PasteTokenFromClipboard is dispatched with spaces`() {
         val viewModel = createViewModel()
 
-        viewModel.onAction(TokenScreenAction.PasteTokenFromClipboard("  abc  "))
+        viewModel.onAction(TokenScreenAction.PasteTokenFromClipboard(TestConstants.TOKEN_WITH_SPACES))
 
-        assertThat(viewModel.uiState.value.token).isEqualTo("abc")
+        assertThat(viewModel.uiState.value.token).isEqualTo(TestConstants.TOKEN_TRIMMED)
     }
 }

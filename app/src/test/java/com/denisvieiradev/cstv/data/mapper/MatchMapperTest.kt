@@ -5,6 +5,7 @@ import com.denisvieiradev.cstv.data.dto.OpponentWrapperDto
 import com.denisvieiradev.cstv.data.dto.PlayerDto
 import com.denisvieiradev.cstv.data.dto.TeamDto
 import com.denisvieiradev.cstv.domain.model.MatchStatus
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatchDto
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
@@ -164,11 +165,11 @@ class MatchMapperTest {
     @Test
     fun `should map status string to correct MatchStatus enum`() {
         // Arrange / Act / Assert
-        assertThat(fakeMatchDto(status = "running").toDomain().status).isEqualTo(MatchStatus.RUNNING)
-        assertThat(fakeMatchDto(status = "not_started").toDomain().status).isEqualTo(MatchStatus.NOT_STARTED)
-        assertThat(fakeMatchDto(status = "finished").toDomain().status).isEqualTo(MatchStatus.FINISHED)
-        assertThat(fakeMatchDto(status = "canceled").toDomain().status).isEqualTo(MatchStatus.CANCELED)
-        assertThat(fakeMatchDto(status = "postponed").toDomain().status).isEqualTo(MatchStatus.POSTPONED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_RUNNING).toDomain().status).isEqualTo(MatchStatus.RUNNING)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_NOT_STARTED).toDomain().status).isEqualTo(MatchStatus.NOT_STARTED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_FINISHED).toDomain().status).isEqualTo(MatchStatus.FINISHED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_CANCELED).toDomain().status).isEqualTo(MatchStatus.CANCELED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_POSTPONED).toDomain().status).isEqualTo(MatchStatus.POSTPONED)
         assertThat(fakeMatchDto(status = null).toDomain().status).isEqualTo(MatchStatus.NOT_STARTED)
     }
 }
