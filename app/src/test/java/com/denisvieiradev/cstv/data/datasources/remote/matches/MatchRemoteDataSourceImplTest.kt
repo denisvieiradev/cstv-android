@@ -1,6 +1,5 @@
 package com.denisvieiradev.cstv.data.datasources.remote.matches
 
-import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.cstv.utils.fakeMatchDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -15,14 +14,11 @@ class MatchRemoteDataSourceImplTest {
 
     @Test
     fun `getRunningMatches should map API response to domain models`() = runTest {
-        // Arrange
         val dto = fakeMatchDto(id = 1, status = "running", teamAName = "Natus Vincere", teamBName = "FaZe Clan")
         coEvery { mockApi.getRunningMatches() } returns listOf(dto)
 
-        // Act
         val result = dataSource.getRunningMatches()
 
-        // Assert
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(1)
         assertThat(result[0].teamA?.name).isEqualTo("Natus Vincere")
@@ -31,39 +27,30 @@ class MatchRemoteDataSourceImplTest {
 
     @Test
     fun `getRunningMatches should return empty list when API returns empty`() = runTest {
-        // Arrange
         coEvery { mockApi.getRunningMatches() } returns emptyList()
 
-        // Act
         val result = dataSource.getRunningMatches()
 
-        // Assert
         assertThat(result).isEmpty()
     }
 
     @Test
     fun `getUpcomingMatches should map API response to domain models`() = runTest {
-        // Arrange
         val dto = fakeMatchDto(id = 2, status = "not_started")
         coEvery { mockApi.getUpcomingMatches(any()) } returns listOf(dto)
 
-        // Act
         val result = dataSource.getUpcomingMatches()
 
-        // Assert
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(2)
     }
 
     @Test
     fun `getUpcomingMatches should return empty list when API returns empty`() = runTest {
-        // Arrange
         coEvery { mockApi.getUpcomingMatches(any()) } returns emptyList()
 
-        // Act
         val result = dataSource.getUpcomingMatches()
 
-        // Assert
         assertThat(result).isEmpty()
     }
 }

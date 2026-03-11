@@ -37,32 +37,25 @@ class MatchDetailViewModelTest {
 
     @Test
     fun `init with match in SavedStateHandle populates uiState match correctly`() = runTest {
-        // Arrange
         val match = fakeMatch(id = 42)
         coEvery { mockGetMatchDetailUseCase(42) } returns match
 
-        // Act
         val viewModel = buildViewModel(match)
 
-        // Assert
         assertThat(viewModel.uiState.value.match).isEqualTo(match)
     }
 
     @Test
     fun `init with empty SavedStateHandle leaves uiState match as null`() = runTest {
-        // Arrange
         val viewModel = buildViewModel()
 
-        // Assert
         assertThat(viewModel.uiState.value.match).isNull()
     }
 
     @Test
     fun `onAction NavigateBack emits MatchDetailNavigationEvent NavigateBack`() = runTest {
-        // Arrange
         val viewModel = buildViewModel()
 
-        // Act / Assert
         viewModel.navigationEvents.test {
             viewModel.onAction(MatchDetailScreenAction.NavigateBack)
             assertThat(awaitItem()).isEqualTo(MatchDetailNavigationEvent.NavigateBack)
@@ -72,23 +65,19 @@ class MatchDetailViewModelTest {
 
     @Test
     fun `init reads darkTheme from sessionRepository and sets it in uiState`() = runTest {
-        // Arrange
         every { mockSessionLocalDataSource.isDarkTheme() } returns true
         val viewModel = buildViewModel()
 
-        // Assert
         assertThat(viewModel.uiState.value.darkTheme).isTrue()
         verify { mockSessionLocalDataSource.isDarkTheme() }
     }
 
     @Test
     fun `init with match sets playersState to Loading before fetch completes`() = runTest {
-        // Arrange
         val match = fakeMatch(id = 10)
         coEvery { mockGetMatchDetailUseCase(10) } returns match
         val viewModel = buildViewModel(match)
 
-        // Act / Assert
         viewModel.uiState.test {
             assertThat(awaitItem().playersState).isEqualTo(PlayersState.Loading)
             cancelAndConsumeRemainingEvents()
@@ -97,14 +86,12 @@ class MatchDetailViewModelTest {
 
     @Test
     fun `fetchPlayers sets playersState to Success when use case succeeds`() = runTest {
-        // Arrange
         val teamA = fakeTeam(id = 1, players = listOf(fakePlayer()))
         val teamB = fakeTeam(id = 2, players = listOf(fakePlayer(id = 2, name = "NiKo")))
         val detailMatch = fakeMatch(id = 10, teamA = teamA, teamB = teamB)
         coEvery { mockGetMatchDetailUseCase(10) } returns detailMatch
         val viewModel = buildViewModel(fakeMatch(id = 10))
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // initial state (Loading)
             assertThat(awaitItem().playersState).isEqualTo(
@@ -116,12 +103,10 @@ class MatchDetailViewModelTest {
 
     @Test
     fun `fetchPlayers sets playersState to Error when use case throws`() = runTest {
-        // Arrange
         val match = fakeMatch(id = 10)
         coEvery { mockGetMatchDetailUseCase(10) } throws RuntimeException("Network error")
         val viewModel = buildViewModel(match)
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // initial state (Loading)
             assertThat(awaitItem().playersState).isEqualTo(PlayersState.Error)
@@ -131,7 +116,6 @@ class MatchDetailViewModelTest {
 
     @Test
     fun `onAction RetryLoadPlayers re-triggers fetch transitioning Loading then Success`() = runTest {
-        // Arrange
         val match = fakeMatch(id = 10)
         val teamA = fakeTeam(id = 1, players = listOf(fakePlayer()))
         val teamB = fakeTeam(id = 2, players = emptyList())
@@ -139,7 +123,6 @@ class MatchDetailViewModelTest {
         coEvery { mockGetMatchDetailUseCase(10) } throws RuntimeException("error") andThen detailMatch
         val viewModel = buildViewModel(match)
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // initial Loading
             awaitItem() // Error after first fetch
@@ -156,10 +139,8 @@ class MatchDetailViewModelTest {
 
     @Test
     fun `init with null match does not trigger fetchPlayers and playersState is Idle`() = runTest {
-        // Arrange
         val viewModel = buildViewModel()
 
-        // Assert
         assertThat(viewModel.uiState.value.playersState).isEqualTo(PlayersState.Idle)
         coVerify(exactly = 0) { mockGetMatchDetailUseCase(any()) }
     }

@@ -22,35 +22,27 @@ class MatchDetailDateFormatterTest {
 
     @Test
     fun `scheduledAt with today date returns Hoje HH mm`() {
-        // Arrange
         val scheduledAt = utcString(today, 18, 30)
 
-        // Act
         val result = MatchDateFormatter.format(scheduledAt, today, ptBr, utcZone)
 
-        // Assert
         assertThat(result).isEqualTo("Hoje, 18:30")
     }
 
     @Test
     fun `scheduledAt with future date returns localized format`() {
-        // Arrange
         val futureDate = today.plusDays(10)
         val scheduledAt = utcString(futureDate, 20, 0)
 
-        // Act
         val result = MatchDateFormatter.format(scheduledAt, today, ptBr, utcZone)
 
-        // Assert
         assertThat(result).isEqualTo("20.06 20:00")
     }
 
     @Test
     fun `scheduledAt null returns empty string`() {
-        // Act
         val result = MatchDateFormatter.format(null, today, ptBr, utcZone)
 
-        // Assert
         assertThat(result).isEmpty()
     }
 }

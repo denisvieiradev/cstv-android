@@ -38,12 +38,10 @@ class MatchesViewModelTest {
 
     @Test
     fun `should emit loading state when load matches starts`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             assertThat(awaitItem().isLoading).isTrue()
             cancelAndConsumeRemainingEvents()
@@ -52,13 +50,11 @@ class MatchesViewModelTest {
 
     @Test
     fun `should emit matches list when use case succeeds`() = runTest {
-        // Arrange
         val matches = listOf(fakeMatch())
         coEvery { mockUseCase() } returns matches
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // loading state
             val successState = awaitItem()
@@ -70,13 +66,11 @@ class MatchesViewModelTest {
 
     @Test
     fun `should emit error state when use case throws exception`() = runTest {
-        // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockUseCase() } throws exception
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // loading state
             val errorState = awaitItem()
@@ -89,13 +83,11 @@ class MatchesViewModelTest {
 
     @Test
     fun `should emit isAuthError false when use case succeeds`() = runTest {
-        // Arrange
         val matches = listOf(fakeMatch())
         coEvery { mockUseCase() } returns matches
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // loading state
             val successState = awaitItem()
@@ -108,12 +100,10 @@ class MatchesViewModelTest {
 
     @Test
     fun `should set isAuthError true and error null when AuthorizationException is thrown`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } throws AuthorizationException(401)
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // loading state
             val errorState = awaitItem()
@@ -126,13 +116,11 @@ class MatchesViewModelTest {
 
     @Test
     fun `should set error and isAuthError false when generic exception is thrown`() = runTest {
-        // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockUseCase() } throws exception
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // loading state
             val errorState = awaitItem()
@@ -146,12 +134,10 @@ class MatchesViewModelTest {
 
     @Test
     fun `should clear session and emit NavigateToTokenScreen when ConfirmLogout action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.navigationEvents.test {
             viewModel.onAction(MatchesScreenAction.ConfirmLogout)
             assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
@@ -162,12 +148,10 @@ class MatchesViewModelTest {
 
     @Test
     fun `should clear session and emit NavigateToTokenScreen when ConfigureToken action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.navigationEvents.test {
             viewModel.onAction(MatchesScreenAction.ConfigureToken)
             assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
@@ -178,123 +162,100 @@ class MatchesViewModelTest {
 
     @Test
     fun `should initialise isDarkTheme from saved preference on creation`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         every { mockSessionLocalDataSource.isDarkTheme() } returns false
 
-        // Act
         val viewModel = createViewModel()
 
-        // Assert
         assertThat(viewModel.uiState.value.isDarkTheme).isFalse()
     }
 
     @Test
     fun `should flip isDarkTheme and persist new value when ToggleTheme action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         every { mockSessionLocalDataSource.isDarkTheme() } returns false
         val viewModel = createViewModel()
 
-        // Act
         viewModel.onAction(MatchesScreenAction.ToggleTheme)
         advanceUntilIdle()
 
-        // Assert
         assertThat(viewModel.uiState.value.isDarkTheme).isTrue()
         verify { mockSessionLocalDataSource.saveDarkTheme(true) }
     }
 
     @Test
     fun `should initialise currentLanguage from saved preference on creation`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         every { mockSessionLocalDataSource.getLanguage() } returns Language.PT
 
-        // Act
         val viewModel = createViewModel()
 
-        // Assert
         assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.PT)
     }
 
     @Test
     fun `should switch language from EN to PT and persist when ToggleLanguage action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         every { mockSessionLocalDataSource.getLanguage() } returns Language.EN
         val viewModel = createViewModel()
 
-        // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
         advanceUntilIdle()
 
-        // Assert
         assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.PT)
         verify { mockSessionLocalDataSource.saveLanguage(Language.PT) }
     }
 
     @Test
     fun `should switch language from PT to EN and persist when ToggleLanguage action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         every { mockSessionLocalDataSource.getLanguage() } returns Language.PT
         val viewModel = createViewModel()
 
-        // Act
         viewModel.onAction(MatchesScreenAction.ToggleLanguage)
         advanceUntilIdle()
 
-        // Assert
         assertThat(viewModel.uiState.value.currentLanguage).isEqualTo(Language.EN)
         verify { mockSessionLocalDataSource.saveLanguage(Language.EN) }
     }
 
     @Test
     fun `should set showLogoutDialog to true when Logout action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act
         viewModel.onAction(MatchesScreenAction.Logout)
 
-        // Assert
         assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
     }
 
     @Test
     fun `should set showLogoutDialog to false when DismissLogout action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
         viewModel.onAction(MatchesScreenAction.Logout)
         assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
 
-        // Act
         viewModel.onAction(MatchesScreenAction.DismissLogout)
 
-        // Assert
         assertThat(viewModel.uiState.value.showLogoutDialog).isFalse()
     }
 
     @Test
     fun `should reload matches when retry action is dispatched`() = runTest {
-        // Arrange
         val initialMatches = listOf(fakeMatch(id = 1))
         val retryMatches = listOf(fakeMatch(id = 2))
         coEvery { mockUseCase() } returnsMany listOf(initialMatches, retryMatches)
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             awaitItem() // loading from init
             awaitItem() // result from init
@@ -310,11 +271,9 @@ class MatchesViewModelTest {
 
     @Test
     fun `should set showDemoExpiredDialog to true when tryConsume returns false during loadMatches`() = runTest {
-        // Arrange
         every { mockDemoSessionManager.tryConsume(any()) } returns false
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.uiState.test {
             val expiredState = awaitItem()
             assertThat(expiredState.showDemoExpiredDialog).isTrue()
@@ -325,12 +284,10 @@ class MatchesViewModelTest {
 
     @Test
     fun `should reset demo and emit NavigateToTokenScreen when DismissDemoExpired action is dispatched`() = runTest {
-        // Arrange
         coEvery { mockUseCase() } returns emptyList()
         every { mockDemoSessionManager.tryConsume(any()) } returns true
         val viewModel = createViewModel()
 
-        // Act / Assert
         viewModel.navigationEvents.test {
             viewModel.onAction(MatchesScreenAction.DismissDemoExpired)
             assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)

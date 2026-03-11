@@ -18,17 +18,14 @@ class GetMatchDetailUseCaseTest {
 
     @Test
     fun `should return match without fallback when both teams have players`() = runTest {
-        // Arrange
         val players = listOf(fakePlayer())
         val teamA = fakeTeam(id = 1, players = players)
         val teamB = fakeTeam(id = 2, players = players)
         val match = fakeMatch(teamA = teamA, teamB = teamB)
         coEvery { mockRepository.getMatchDetail(match.id) } returns match
 
-        // Act
         val result = useCase(match.id)
 
-        // Assert
         assertThat(result.teamA?.players).isEqualTo(players)
         assertThat(result.teamB?.players).isEqualTo(players)
         coVerify(exactly = 0) { mockRepository.getTeamWithPlayers(any()) }
@@ -36,7 +33,6 @@ class GetMatchDetailUseCaseTest {
 
     @Test
     fun `should call fallback for teamA when teamA has no players`() = runTest {
-        // Arrange
         val players = listOf(fakePlayer())
         val teamA = fakeTeam(id = 1, players = emptyList())
         val teamB = fakeTeam(id = 2, players = players)
@@ -45,10 +41,8 @@ class GetMatchDetailUseCaseTest {
         coEvery { mockRepository.getMatchDetail(match.id) } returns match
         coEvery { mockRepository.getTeamWithPlayers(teamA.id) } returns teamAWithPlayers
 
-        // Act
         val result = useCase(match.id)
 
-        // Assert
         assertThat(result.teamA?.players).isEqualTo(players)
         assertThat(result.teamB?.players).isEqualTo(players)
         coVerify(exactly = 1) { mockRepository.getTeamWithPlayers(teamA.id) }
@@ -57,7 +51,6 @@ class GetMatchDetailUseCaseTest {
 
     @Test
     fun `should call fallback for teamB when teamB has no players`() = runTest {
-        // Arrange
         val players = listOf(fakePlayer())
         val teamA = fakeTeam(id = 1, players = players)
         val teamB = fakeTeam(id = 2, players = emptyList())
@@ -66,10 +59,8 @@ class GetMatchDetailUseCaseTest {
         coEvery { mockRepository.getMatchDetail(match.id) } returns match
         coEvery { mockRepository.getTeamWithPlayers(teamB.id) } returns teamBWithPlayers
 
-        // Act
         val result = useCase(match.id)
 
-        // Assert
         assertThat(result.teamA?.players).isEqualTo(players)
         assertThat(result.teamB?.players).isEqualTo(players)
         coVerify(exactly = 0) { mockRepository.getTeamWithPlayers(teamA.id) }
@@ -78,7 +69,6 @@ class GetMatchDetailUseCaseTest {
 
     @Test
     fun `should call fallback for both teams in parallel when both have no players`() = runTest {
-        // Arrange
         val players = listOf(fakePlayer())
         val teamA = fakeTeam(id = 1, players = emptyList())
         val teamB = fakeTeam(id = 2, players = emptyList())
@@ -89,10 +79,8 @@ class GetMatchDetailUseCaseTest {
         coEvery { mockRepository.getTeamWithPlayers(teamA.id) } returns teamAWithPlayers
         coEvery { mockRepository.getTeamWithPlayers(teamB.id) } returns teamBWithPlayers
 
-        // Act
         val result = useCase(match.id)
 
-        // Assert
         assertThat(result.teamA?.players).isEqualTo(players)
         assertThat(result.teamB?.players).isEqualTo(players)
         coVerify(exactly = 1) { mockRepository.getTeamWithPlayers(teamA.id) }
@@ -101,11 +89,9 @@ class GetMatchDetailUseCaseTest {
 
     @Test
     fun `should propagate exception when getMatchDetail fails`() = runTest {
-        // Arrange
         val exception = RuntimeException("Network error")
         coEvery { mockRepository.getMatchDetail(any()) } throws exception
 
-        // Act
         var caughtException: Exception? = null
         try {
             useCase(matchId = 1)
@@ -113,7 +99,6 @@ class GetMatchDetailUseCaseTest {
             caughtException = e
         }
 
-        // Assert
         assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
         assertThat(caughtException?.message).isEqualTo(exception.message)
     }
