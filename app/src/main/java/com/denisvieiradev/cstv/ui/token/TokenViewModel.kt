@@ -37,11 +37,16 @@ class TokenViewModel(
         when (action) {
             is TokenScreenAction.OnTokenChanged -> _uiState.update { it.copy(token = action.value) }
             is TokenScreenAction.Confirm -> saveToken()
-            is TokenScreenAction.TryDemo -> enterDemoMode()
+            is TokenScreenAction.TryDemo -> {
+                _uiState.update { it.copy(showDemoConfirmationDialog = false) }
+                enterDemoMode()
+            }
             is TokenScreenAction.ToggleTheme -> toggleTheme()
             is TokenScreenAction.ToggleLanguage -> toggleLanguage()
             is TokenScreenAction.ShowTutorial -> _uiState.update { it.copy(showTutorialDialog = true) }
             is TokenScreenAction.DismissTutorial -> _uiState.update { it.copy(showTutorialDialog = false) }
+            is TokenScreenAction.ShowDemoConfirmation -> _uiState.update { it.copy(showDemoConfirmationDialog = true) }
+            is TokenScreenAction.DismissDemoConfirmation -> _uiState.update { it.copy(showDemoConfirmationDialog = false) }
             is TokenScreenAction.PasteTokenFromClipboard -> pasteFromClipboard(action.clipboardText)
         }
     }

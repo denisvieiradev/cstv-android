@@ -8,7 +8,7 @@
     <string name="match_status_live">AGORA</string>
     <string name="match_vs">vs</string>
     <string name="token_screen_title">CSTV Matches</string>
-    <string name="token_screen_body">Insira seu token da PandaScore para ver partidas ao vivo, ou experimente o modo demo com partidas de exemplo.</string>
+    <string name="token_screen_body">Insira seu token da PandaScore para ver partidas ao vivo, ou experimente o modo demo com um token de teste limitado.</string>
     <string name="token_field_label">Cole seu token de API…</string>
     <string name="token_confirm_button">Conectar à PandaScore</string>
     <string name="token_error_message">Não foi possível salvar o token. Tente novamente.</string>
@@ -45,4 +45,10 @@
     <string name="matches_demo_expired_title">Demo expirado</string>
     <string name="matches_demo_expired_body">Você usou todas as requisições do demo. Obtenha um token real para continuar vendo as partidas.</string>
     <string name="matches_demo_expired_cta">Obter token real</string>
+    <string name="token_demo_confirmation_title">Experimentar Demo</string>
+    <string name="token_demo_confirmation_body">Explore o app usando um token de teste limitado antes de obter seu próprio token de API.</string>
+    <string name="token_demo_confirmation_limit">3 carregamentos disponíveis</string>
+    <string name="token_demo_confirmation_warning">O demo expira após carregar partidas 3 vezes. Sem necessidade de conta.</string>
+    <string name="token_demo_confirmation_cancel">Cancelar</string>
+    <string name="token_demo_confirmation_start">Iniciar Demo</string>
 </resources>

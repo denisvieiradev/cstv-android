@@ -8,5 +8,7 @@ sealed interface TokenScreenAction {
     data object ToggleLanguage : TokenScreenAction
     data object ShowTutorial : TokenScreenAction
     data object DismissTutorial : TokenScreenAction
+    data object ShowDemoConfirmation : TokenScreenAction
+    data object DismissDemoConfirmation : TokenScreenAction
     data class PasteTokenFromClipboard(val clipboardText: String?) : TokenScreenAction
 }

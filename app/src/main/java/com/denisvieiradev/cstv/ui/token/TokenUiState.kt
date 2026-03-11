@@ -9,7 +9,8 @@ data class TokenUiState(
     val navigateToMatches: Boolean = false,
     val isDarkTheme: Boolean = true,
     val currentLanguage: String = Language.EN,
-    val showTutorialDialog: Boolean = false
+    val showTutorialDialog: Boolean = false,
+    val showDemoConfirmationDialog: Boolean = false
 ) {
     val isConfirmEnabled: Boolean get() = token.isNotBlank()
 }
