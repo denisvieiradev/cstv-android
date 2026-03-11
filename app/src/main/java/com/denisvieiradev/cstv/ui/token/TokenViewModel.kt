@@ -59,17 +59,13 @@ class TokenViewModel(
         }
     }
 
-    fun onNavigationConsumed() {
-        _uiState.update { it.copy(navigateToMatches = false) }
-    }
-
     private fun saveToken() {
         val token = _uiState.value.token
         if (token.isBlank()) return
         viewModelScope.launch(ioDispatcher) {
             try {
                 sessionLocalDataSource.saveToken(token)
-                _uiState.update { it.copy(navigateToMatches = true) }
+                _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e) }
             }
@@ -95,9 +91,9 @@ class TokenViewModel(
 
     private fun enterDemoMode() {
         demoSessionManager.startDemo()
-        _uiState.update { it.copy(navigateToMatches = true) }
         viewModelScope.launch(ioDispatcher) {
             sessionLocalDataSource.saveToken(BuildConfig.PANDASCORE_DEMO_API_TOKEN)
+            _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
         }
     }
 

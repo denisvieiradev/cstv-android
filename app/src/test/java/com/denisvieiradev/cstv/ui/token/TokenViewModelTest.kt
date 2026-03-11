@@ -56,38 +56,30 @@ class TokenViewModelTest {
     }
 
     @Test
-    fun `should save token when confirm action is dispatched`() = runTest {
+    fun `should save token and emit NavigateToMatches when confirm action is dispatched`() = runTest {
         val viewModel = createViewModel()
         viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
 
-        viewModel.onAction(TokenScreenAction.Confirm)
-        advanceUntilIdle()
-
-        verify { mockSessionLocalDataSource.saveToken(TestConstants.TOKEN) }
-        assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
+        viewModel.navigationEvents.test {
+            viewModel.onAction(TokenScreenAction.Confirm)
+            advanceUntilIdle()
+            verify { mockSessionLocalDataSource.saveToken(TestConstants.TOKEN) }
+            assertThat(awaitItem()).isEqualTo(TokenNavigationEvent.NavigateToMatches)
+            cancelAndConsumeRemainingEvents()
+        }
     }
 
     @Test
-    fun `should not navigate when submitting blank token`() {
+    fun `should not navigate when submitting blank token`() = runTest {
         val viewModel = createViewModel()
         viewModel.onAction(TokenScreenAction.OnTokenChanged("   "))
 
-        viewModel.onAction(TokenScreenAction.Confirm)
-
-        assertThat(viewModel.uiState.value.navigateToMatches).isFalse()
-    }
-
-    @Test
-    fun `should reset navigateToMatches after onNavigationConsumed`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.onAction(TokenScreenAction.OnTokenChanged(TestConstants.TOKEN))
-        viewModel.onAction(TokenScreenAction.Confirm)
-        advanceUntilIdle()
-        assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
-
-        viewModel.onNavigationConsumed()
-
-        assertThat(viewModel.uiState.value.navigateToMatches).isFalse()
+        viewModel.navigationEvents.test {
+            viewModel.onAction(TokenScreenAction.Confirm)
+            advanceUntilIdle()
+            expectNoEvents()
+            cancelAndConsumeRemainingEvents()
+        }
     }
 
     @Test
@@ -101,7 +93,6 @@ class TokenViewModelTest {
         advanceUntilIdle()
 
         assertThat(viewModel.uiState.value.error).isEqualTo(exception)
-        assertThat(viewModel.uiState.value.navigateToMatches).isFalse()
     }
 
     @Test
@@ -154,13 +145,16 @@ class TokenViewModelTest {
     }
 
     @Test
-    fun `should start demo and navigate to matches when TryDemo action is dispatched`() {
+    fun `should start demo and emit NavigateToMatches when TryDemo action is dispatched`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.onAction(TokenScreenAction.TryDemo)
-
-        verify { mockDemoSessionManager.startDemo() }
-        assertThat(viewModel.uiState.value.navigateToMatches).isTrue()
+        viewModel.navigationEvents.test {
+            viewModel.onAction(TokenScreenAction.TryDemo)
+            advanceUntilIdle()
+            verify { mockDemoSessionManager.startDemo() }
+            assertThat(awaitItem()).isEqualTo(TokenNavigationEvent.NavigateToMatches)
+            cancelAndConsumeRemainingEvents()
+        }
     }
 
     @Test
