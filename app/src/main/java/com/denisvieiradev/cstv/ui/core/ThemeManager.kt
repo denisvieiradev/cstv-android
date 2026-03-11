@@ -1,4 +1,4 @@
-package com.denisvieiradev.cstv.ui.matches
+package com.denisvieiradev.cstv.ui.core
 
 import androidx.appcompat.app.AppCompatDelegate
 

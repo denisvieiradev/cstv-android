@@ -7,8 +7,8 @@ import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
-import com.denisvieiradev.cstv.ui.matches.LocaleManager
-import com.denisvieiradev.cstv.ui.matches.ThemeManager
+import com.denisvieiradev.cstv.ui.core.LocaleManager
+import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.denisvieiradev.cstv.ui.token.model.TokenNavigationEvent
 import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
 import com.denisvieiradev.cstv.ui.token.model.TokenUiState

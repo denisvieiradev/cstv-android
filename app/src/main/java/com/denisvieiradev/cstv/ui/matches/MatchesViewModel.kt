@@ -10,6 +10,10 @@ import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
+import com.denisvieiradev.cstv.ui.core.AppCompatLocaleManager
+import com.denisvieiradev.cstv.ui.core.AppCompatThemeManager
+import com.denisvieiradev.cstv.ui.core.LocaleManager
+import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber

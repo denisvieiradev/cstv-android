@@ -5,6 +5,8 @@ import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
+import com.denisvieiradev.cstv.ui.core.LocaleManager
+import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
