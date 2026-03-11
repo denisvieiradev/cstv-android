@@ -25,7 +25,9 @@ class TokenViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
-    private val mockDemoSessionManager: DemoSessionManager = mockk(relaxed = true)
+    private val mockDemoSessionManager: DemoSessionManager = mockk(relaxed = true) {
+        every { isDemoAlreadyUsed() } returns false
+    }
     private val mockThemeManager: ThemeManager = mockk(relaxed = true)
     private val mockLocaleManager: LocaleManager = mockk(relaxed = true)
 
@@ -191,5 +193,21 @@ class TokenViewModelTest {
         viewModel.onAction(TokenScreenAction.PasteTokenFromClipboard(TestConstants.TOKEN_WITH_SPACES))
 
         assertThat(viewModel.uiState.value.token).isEqualTo(TestConstants.TOKEN_TRIMMED)
+    }
+
+    @Test
+    fun `should set isDemoAvailable to false when demo was already used`() {
+        every { mockDemoSessionManager.isDemoAlreadyUsed() } returns true
+        val viewModel = createViewModel()
+
+        assertThat(viewModel.uiState.value.isDemoAvailable).isFalse()
+    }
+
+    @Test
+    fun `should set isDemoAvailable to true when demo was not used`() {
+        every { mockDemoSessionManager.isDemoAlreadyUsed() } returns false
+        val viewModel = createViewModel()
+
+        assertThat(viewModel.uiState.value.isDemoAvailable).isTrue()
     }
 }

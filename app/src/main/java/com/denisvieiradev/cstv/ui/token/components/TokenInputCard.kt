@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.denisvieiradev.cstv.R
 import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
 import com.denisvieiradev.cstv.ui.token.model.TokenUiState
@@ -73,13 +72,17 @@ internal fun TokenInputCard(
             }
             OutlinedButton(
                 onClick = { onAction(TokenScreenAction.ShowDemoConfirmation) },
+                enabled = uiState.isDemoAvailable,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .height(Spacing.huge),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(
-                    text = stringResource(R.string.token_demo_button),
+                    text = stringResource(
+                        if (uiState.isDemoAvailable) R.string.token_demo_button
+                        else R.string.token_demo_button_used
+                    ),
                     style = MaterialTheme.typography.labelLarge
                 )
             }

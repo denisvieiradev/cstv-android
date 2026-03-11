@@ -32,7 +32,8 @@ class TokenViewModel(
     private val _uiState = MutableStateFlow(
         TokenUiState(
             isDarkTheme = sessionLocalDataSource.isDarkTheme(),
-            currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN
+            currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN,
+            isDemoAvailable = !demoSessionManager.isDemoAlreadyUsed()
         )
     )
     val uiState: StateFlow<TokenUiState> = _uiState.asStateFlow()

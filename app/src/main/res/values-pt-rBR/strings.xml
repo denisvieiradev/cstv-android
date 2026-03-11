@@ -14,6 +14,7 @@
     <string name="token_error_message">Não foi possível salvar o token. Tente novamente.</string>
     <string name="token_or_divider">ou</string>
     <string name="token_demo_button">Experimentar Modo Demo</string>
+    <string name="token_demo_button_used">Demo já utilizado</string>
     <string name="token_screen_footer">Obtenha um token gratuito em pandascore.co</string>
     <string name="matches_logout_content_desc">Sair</string>
     <string name="matches_logout_dialog_title">Sair da conta</string>
