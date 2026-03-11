@@ -1,6 +1,7 @@
 package com.denisvieiradev.cachemanager
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
@@ -14,6 +15,6 @@ class SecureStorageImpl(context: Context) : SecureStorage {
     )
 
     override fun getString(key: String): String? = prefs.getString(key, null)
-    override fun putString(key: String, value: String) = prefs.edit().putString(key, value).apply()
-    override fun remove(key: String) = prefs.edit().remove(key).apply()
+    override fun putString(key: String, value: String) = prefs.edit {putString(key, value)}
+    override fun remove(key: String) = prefs.edit {remove(key)}
 }

@@ -39,7 +39,7 @@
     <string name="token_tutorial_step_1">Acesse pandascore.co e crie uma conta gratuita</string>
     <string name="token_tutorial_step_2">No painel, vá em "API Access" → "API Keys"</string>
     <string name="token_tutorial_step_3">Copie o token gerado</string>
-    <string name="token_tutorial_step_4">Volte ao app e cole o token</string>
+    <string name="token_tutorial_open_pandascore">Abrir PandaScore</string>
     <string name="token_tutorial_understood">Entendi</string>
     <string name="token_tutorial_paste">Colar token</string>
     <string name="matches_demo_expired_title">Demo expirado</string>
