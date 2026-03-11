@@ -1,0 +1,194 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:PlayersList.kt$@Composable private fun PlayerItem(player: Player?, isLeftTeam: Boolean)</ID>
+    <ID>CognitiveComplexMethod:TokenTopBar.kt$@Composable internal fun TokenTopBar( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:AppTextField.kt$@Composable fun AppTextField( value: String, onValueChange: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, errorMessage: String? = null, enabled: Boolean = true )</ID>
+    <ID>FunctionNaming:AuthErrorContent.kt$@Composable fun AuthErrorContent(onConfigureTokenClick: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:DemoConfirmationDialog.kt$@Composable internal fun DemoConfirmationDialog( onDismiss: () -&gt; Unit, onConfirm: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:FullScreenError.kt$@Composable fun FullScreenError( title: String, retryLabel: String, onRetry: () -&gt; Unit, modifier: Modifier = Modifier, body: String? = null )</ID>
+    <ID>FunctionNaming:FullScreenLoading.kt$@Composable fun FullScreenLoading(modifier: Modifier = Modifier)</ID>
+    <ID>FunctionNaming:LogoutConfirmationDialog.kt$@Composable fun LogoutConfirmationDialog( onConfirm: () -&gt; Unit, onDismiss: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:MainActivity.kt$@Composable fun Greeting(name: String, modifier: Modifier = Modifier)</ID>
+    <ID>FunctionNaming:MainActivity.kt$@Preview(showBackground = true) @Composable fun GreetingPreview()</ID>
+    <ID>FunctionNaming:MainTopBar.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainTopBar( title: String, onNavigateBack: (() -&gt; Unit)? = null, actions: @Composable () -&gt; Unit = {} )</ID>
+    <ID>FunctionNaming:MatchCard.kt$@Composable fun MatchCard(match: Match, onClick: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:MatchDetailScreen.kt$@Composable fun MatchDetailScreen( uiState: MatchDetailUiState, onAction: (MatchDetailScreenAction) -&gt; Unit )</ID>
+    <ID>FunctionNaming:MatchDetailScreen.kt$@Composable private fun MatchDetailContent( match: Match, playersState: PlayersState, onAction: (MatchDetailScreenAction) -&gt; Unit )</ID>
+    <ID>FunctionNaming:MatchDetailScreenRoot.kt$@Composable fun MatchDetailScreenRoot( viewModel: MatchDetailViewModel = koinViewModel() )</ID>
+    <ID>FunctionNaming:MatchLeagueInfo.kt$@Composable fun MatchLeagueInfo( leagueName: String, serieFullName: String, leagueImageUrl: String?, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:MatchStatusBadge.kt$@Composable fun MatchStatusBadge( status: MatchStatus, scheduledAt: String?, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:MatchTeamsHeader.kt$@Composable internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?)</ID>
+    <ID>FunctionNaming:MatchTeamsHeader.kt$@Composable internal fun ScheduledTime(scheduledAt: String?)</ID>
+    <ID>FunctionNaming:MatchTeamsHeader.kt$@Composable private fun TeamColumn( team: Team?, modifier: Modifier = Modifier, horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally )</ID>
+    <ID>FunctionNaming:MatchTeamsRow.kt$@Composable fun MatchTeamsRow( teamAName: String?, teamAImageUrl: String?, teamBName: String?, teamBImageUrl: String?, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:MatchesScreen.kt$@Composable fun MatchesScreen( uiState: MatchesUiState, onAction: (MatchesScreenAction) -&gt; Unit )</ID>
+    <ID>FunctionNaming:MatchesScreen.kt$@Composable private fun DemoExpiredDialog(onConfirm: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:MatchesScreen.kt$@Composable private fun EmptyContent()</ID>
+    <ID>FunctionNaming:MatchesScreen.kt$@Composable private fun MatchesList(matches: List&lt;Match&gt;, onAction: (MatchesScreenAction) -&gt; Unit)</ID>
+    <ID>FunctionNaming:MatchesScreenRoot.kt$@Composable fun MatchesScreenRoot( viewModel: MatchesViewModel = koinViewModel() )</ID>
+    <ID>FunctionNaming:MatchesTopBar.kt$@Composable fun MatchesTopBar( isDarkTheme: Boolean, currentLanguage: String, onThemeToggleClick: () -&gt; Unit, onLanguageToggleClick: () -&gt; Unit, onLogoutClick: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:NetworkImage.kt$@Composable fun NetworkImage( imageUrl: String?, contentDescription: String, size: Dp, modifier: Modifier = Modifier, shape: Shape = CircleShape, contentScale: ContentScale = ContentScale.Fit, fallback: @Composable () -&gt; Unit = {} )</ID>
+    <ID>FunctionNaming:PlayerPhoto.kt$@Composable internal fun PlayerInitialsBox(initials: String, size: Dp, shape: Shape)</ID>
+    <ID>FunctionNaming:PlayerPhoto.kt$@Composable internal fun PlayerPhoto(player: Player?)</ID>
+    <ID>FunctionNaming:PlayersList.kt$@Composable internal fun PlayersError(onRetry: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:PlayersList.kt$@Composable internal fun PlayersList(teamAPlayers: List&lt;Player&gt;, teamBPlayers: List&lt;Player&gt;)</ID>
+    <ID>FunctionNaming:PlayersList.kt$@Composable internal fun PlayersSkeleton()</ID>
+    <ID>FunctionNaming:PlayersList.kt$@Composable private fun PlayerItem(player: Player?, isLeftTeam: Boolean)</ID>
+    <ID>FunctionNaming:PrimaryButton.kt$@Composable fun PrimaryButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true )</ID>
+    <ID>FunctionNaming:TeamDisplay.kt$@Composable fun TeamDisplay( name: String, imageUrl: String?, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:Theme.kt$@Composable fun CstvTheme( darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -&gt; Unit )</ID>
+    <ID>FunctionNaming:TokenInputCard.kt$@Composable internal fun TokenInputCard( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit )</ID>
+    <ID>FunctionNaming:TokenLogo.kt$@Composable internal fun TokenLogo(logoGradient: Brush)</ID>
+    <ID>FunctionNaming:TokenScreen.kt$@Composable fun TokenScreen( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:TokenScreenBackground.kt$@Composable internal fun TokenScreenBackground(glowColor: Color)</ID>
+    <ID>FunctionNaming:TokenScreenFooter.kt$@Composable internal fun TokenScreenFooter()</ID>
+    <ID>FunctionNaming:TokenScreenHeader.kt$@Composable internal fun TokenScreenHeader()</ID>
+    <ID>FunctionNaming:TokenScreenRoot.kt$@Composable fun TokenScreenRoot( viewModel: TokenViewModel, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:TokenTopBar.kt$@Composable internal fun TokenTopBar( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:TokenTutorialDialog.kt$@Composable fun TokenTutorialDialog( onDismiss: () -&gt; Unit, onAction: (TokenScreenAction) -&gt; Unit )</ID>
+    <ID>FunctionNaming:TokenTutorialDialog.kt$@Composable private fun TutorialDialogHeader(onDismiss: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:TokenTutorialDialog.kt$@Composable private fun TutorialStepIndicator(stepCount: Int, currentStep: Int)</ID>
+    <ID>FunctionNaming:TokenTutorialLink.kt$@Composable internal fun TokenTutorialLink(onClick: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:TokenTutorialSteps.kt$@Composable internal fun TutorialNavigationRow( currentStep: Int, isLastStep: Boolean, onBack: () -&gt; Unit, onNext: () -&gt; Unit, onPaste: () -&gt; Unit )</ID>
+    <ID>FunctionNaming:TokenTutorialSteps.kt$@Composable internal fun TutorialStepContent( currentStep: Int, stepTitles: List&lt;String&gt;, steps: List&lt;String&gt;, stepIcons: List&lt;ImageVector&gt;, onOpenPandaScore: () -&gt; Unit )</ID>
+    <ID>LongMethod:DemoConfirmationDialog.kt$@Composable internal fun DemoConfirmationDialog( onDismiss: () -&gt; Unit, onConfirm: () -&gt; Unit )</ID>
+    <ID>LongMethod:TokenTutorialDialog.kt$@Composable fun TokenTutorialDialog( onDismiss: () -&gt; Unit, onAction: (TokenScreenAction) -&gt; Unit )</ID>
+    <ID>LongMethod:TokenTutorialSteps.kt$@Composable internal fun TutorialStepContent( currentStep: Int, stepTitles: List&lt;String&gt;, steps: List&lt;String&gt;, stepIcons: List&lt;ImageVector&gt;, onOpenPandaScore: () -&gt; Unit )</ID>
+    <ID>LongParameterList:AppTextField.kt$( value: String, onValueChange: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, errorMessage: String? = null, enabled: Boolean = true )</ID>
+    <ID>LongParameterList:FullScreenError.kt$( title: String, retryLabel: String, onRetry: () -&gt; Unit, modifier: Modifier = Modifier, body: String? = null )</ID>
+    <ID>LongParameterList:MatchDateFormatter.kt$MatchDateFormatter$( scheduledAt: String?, now: LocalDate, locale: Locale = Locale.getDefault(), zoneId: ZoneId = ZoneId.systemDefault(), todayLabel: String = if (locale.language == LANG_PT) "Hoje" else "Today", tomorrowLabel: String = if (locale.language == LANG_PT) "Amanhã" else "Tomorrow" )</ID>
+    <ID>LongParameterList:MatchTeamsRow.kt$( teamAName: String?, teamAImageUrl: String?, teamBName: String?, teamBImageUrl: String?, modifier: Modifier = Modifier )</ID>
+    <ID>LongParameterList:MatchesTopBar.kt$( isDarkTheme: Boolean, currentLanguage: String, onThemeToggleClick: () -&gt; Unit, onLanguageToggleClick: () -&gt; Unit, onLogoutClick: () -&gt; Unit )</ID>
+    <ID>LongParameterList:NetworkImage.kt$( imageUrl: String?, contentDescription: String, size: Dp, modifier: Modifier = Modifier, shape: Shape = CircleShape, contentScale: ContentScale = ContentScale.Fit, fallback: @Composable () -&gt; Unit = {} )</ID>
+    <ID>LongParameterList:TokenTutorialSteps.kt$( currentStep: Int, isLastStep: Boolean, onBack: () -&gt; Unit, onNext: () -&gt; Unit, onPaste: () -&gt; Unit )</ID>
+    <ID>LongParameterList:TokenTutorialSteps.kt$( currentStep: Int, stepTitles: List&lt;String&gt;, steps: List&lt;String&gt;, stepIcons: List&lt;ImageVector&gt;, onOpenPandaScore: () -&gt; Unit )</ID>
+    <ID>MagicNumber:AuthInterceptor.kt$AuthInterceptor$401</ID>
+    <ID>MagicNumber:DemoConfirmationDialog.kt$3</ID>
+    <ID>MagicNumber:MatchDateFormatter.kt$MatchDateFormatter$6L</ID>
+    <ID>MagicNumber:NetworkImage.kt$0.5f</ID>
+    <ID>MagicNumber:TokenLogo.kt$0.99f</ID>
+    <ID>MagicNumber:TokenTutorialLink.kt$50</ID>
+    <ID>NewLineAtEndOfFile:CacheManager.kt$com.denisvieiradev.cachemanager.CacheManager.kt</ID>
+    <ID>NewLineAtEndOfFile:MainActivity.kt$com.denisvieiradev.cstv.MainActivity.kt</ID>
+    <ID>ObjectPropertyNaming:Alpha.kt$Alpha$const val dim = 0.5f</ID>
+    <ID>ObjectPropertyNaming:Alpha.kt$Alpha$const val faint = 0.2f</ID>
+    <ID>ObjectPropertyNaming:Alpha.kt$Alpha$const val subtle = 0.3f</ID>
+    <ID>ObjectPropertyNaming:Weight.kt$Weight$const val equal = 1f</ID>
+    <ID>PackageNaming:Alpha.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>PackageNaming:AppTextField.kt$package com.denisvieiradev.design_system.ui.components.input</ID>
+    <ID>PackageNaming:Color.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>PackageNaming:FullScreenError.kt$package com.denisvieiradev.design_system.ui.components.state</ID>
+    <ID>PackageNaming:FullScreenLoading.kt$package com.denisvieiradev.design_system.ui.components.state</ID>
+    <ID>PackageNaming:MainTopBar.kt$package com.denisvieiradev.design_system.ui.components.maintopbar</ID>
+    <ID>PackageNaming:NetworkImage.kt$package com.denisvieiradev.design_system.ui.components.image</ID>
+    <ID>PackageNaming:PrimaryButton.kt$package com.denisvieiradev.design_system.ui.components.button</ID>
+    <ID>PackageNaming:Shape.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>PackageNaming:Spacing.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>PackageNaming:Theme.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>PackageNaming:Typography.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>PackageNaming:Weight.kt$package com.denisvieiradev.design_system.ui.theme</ID>
+    <ID>TooGenericExceptionCaught:TokenViewModel.kt$TokenViewModel$e: Exception</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Dark Error (brighter for dark backgrounds) val DarkError = Color(255, 108, 115)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Dark Primary Palette (red-derived for dark mode) val DarkPrimary = Color(255, 180, 171)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Dark Secondary Palette (blue-derived for dark mode) val DarkSecondary = Color(188, 195, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Dark Surface val DarkSurfaceDim = Color(20, 18, 24)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Dark Tertiary Palette (lighter blue for dark mode) val DarkTertiary = Color(184, 196, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Light Error val LightError = Color(151, 0, 10)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Light Primary Palette val LightPrimary = Color(244, 42, 53)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Light Secondary Palette val LightSecondary = Color(10, 31, 143)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Light Surface val LightSurfaceDim = Color(217, 218, 221)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Light Tertiary Palette val LightTertiary = Color(62, 95, 218)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Neutral val Neutral30 = Color(70, 71, 72)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$// Semantic val SuccessColor = Color(0, 128, 8)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val Alert = Color(114, 92, 0)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val AlertContainer = Color(216, 178, 33)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val AlertOnContainer = Color(52, 41, 0)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkErrorContainer = Color(140, 29, 24)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkInverseOnSurface = Color(50, 47, 53)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkInversePrimary = Color(244, 42, 53)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkInverseSurface = Color(230, 224, 233)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnError = Color(96, 20, 16)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnErrorContainer = Color(255, 222, 220)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnPrimary = Color(104, 0, 5)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnPrimaryContainer = Color(255, 218, 214)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnPrimaryFixed = Color(65, 0, 2)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnPrimaryFixedVariant = Color(147, 0, 9)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnSecondary = Color(42, 58, 165)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnSecondaryContainer = Color(223, 224, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnSecondaryFixed = Color(0, 13, 96)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnSecondaryFixedVariant = Color(42, 58, 165)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnSurface = Color(230, 224, 233)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnSurfaceVariant = Color(202, 196, 208)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnTertiary = Color(8, 56, 182)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnTertiaryContainer = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnTertiaryFixed = Color(0, 20, 84)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOnTertiaryFixedVariant = Color(8, 56, 182)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOutline = Color(147, 143, 153)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkOutlineVariant = Color(73, 69, 79)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkPrimaryContainer = Color(147, 0, 9)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkPrimaryFixed = Color(255, 180, 171)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkPrimaryFixedDim = Color(255, 84, 73)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkScrim = Color(0, 0, 1)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSecondaryContainer = Color(32, 49, 157)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSecondaryFixed = Color(223, 224, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSecondaryFixedDim = Color(188, 195, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkShadow = Color(0, 0, 1)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurface = Color(20, 18, 24)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurfaceBright = Color(59, 56, 62)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurfaceContainer = Color(33, 31, 38)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurfaceContainerHigh = Color(43, 41, 48)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurfaceContainerHighest = Color(54, 52, 59)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurfaceContainerLow = Color(29, 27, 32)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkSurfaceContainerLowest = Color(15, 13, 19)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkTertiaryContainer = Color(62, 95, 218)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkTertiaryFixed = Color(221, 225, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val DarkTertiaryFixedDim = Color(184, 196, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightErrorContainer = Color(207, 43, 39)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightInverseOnSurface = Color(244, 240, 239)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightInversePrimary = Color(255, 180, 171)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightInverseSurface = Color(49, 48, 48)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnError = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnErrorContainer = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnPrimary = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnPrimaryContainer = Color(65, 0, 2)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnPrimaryFixed = Color(65, 0, 2)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnPrimaryFixedVariant = Color(147, 0, 9)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnSecondary = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnSecondaryContainer = Color(204, 209, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnSecondaryFixed = Color(0, 13, 96)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnSecondaryFixedVariant = Color(42, 58, 165)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnSurface = Color(28, 27, 27)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnSurfaceVariant = Color(68, 71, 72)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnTertiary = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnTertiaryContainer = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnTertiaryFixed = Color(0, 20, 84)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOnTertiaryFixedVariant = Color(8, 56, 182)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOutline = Color(116, 120, 120)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightOutlineVariant = Color(196, 199, 199)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightPrimaryContainer = Color(255, 218, 214)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightPrimaryFixed = Color(255, 180, 171)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightPrimaryFixedDim = Color(255, 84, 73)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightScrim = Color(0, 0, 0)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSecondaryContainer = Color(32, 49, 157)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSecondaryFixed = Color(223, 224, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSecondaryFixedDim = Color(188, 195, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightShadow = Color(38, 40, 54)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurface = Color(250, 250, 252)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurfaceBright = Color(248, 249, 252)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurfaceContainer = Color(236, 237, 241)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurfaceContainerHigh = Color(231, 232, 235)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurfaceContainerHighest = Color(225, 226, 229)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurfaceContainerLow = Color(242, 243, 246)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightSurfaceContainerLowest = Color(255, 255, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightTertiaryContainer = Color(62, 95, 218)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightTertiaryFixed = Color(221, 225, 255)</ID>
+    <ID>TopLevelPropertyNaming:Color.kt$val LightTertiaryFixedDim = Color(184, 196, 255)</ID>
+    <ID>TopLevelPropertyNaming:Shape.kt$val AppShapes = Shapes( extraSmall = RoundedCornerShape(2.dp), small = RoundedCornerShape(4.dp), medium = RoundedCornerShape(8.dp), large = RoundedCornerShape(16.dp) )</ID>
+    <ID>TopLevelPropertyNaming:Theme.kt$val DarkColorScheme = darkColorScheme( primary = DarkPrimary, onPrimary = DarkOnPrimary, primaryContainer = DarkPrimaryContainer, onPrimaryContainer = DarkOnPrimaryContainer, inversePrimary = DarkInversePrimary, secondary = DarkSecondary, onSecondary = DarkOnSecondary, secondaryContainer = DarkSecondaryContainer, onSecondaryContainer = DarkOnSecondaryContainer, tertiary = DarkTertiary, onTertiary = DarkOnTertiary, tertiaryContainer = DarkTertiaryContainer, onTertiaryContainer = DarkOnTertiaryContainer, error = DarkError, onError = DarkOnError, errorContainer = DarkErrorContainer, onErrorContainer = DarkOnErrorContainer, surfaceDim = DarkSurfaceDim, surface = DarkSurface, surfaceVariant = DarkSurfaceContainerHigh, onSurface = DarkOnSurface, surfaceBright = DarkSurfaceBright, surfaceContainerLowest = DarkSurfaceContainerLowest, surfaceContainerLow = DarkSurfaceContainerLow, surfaceContainer = DarkSurfaceContainer, surfaceContainerHigh = DarkSurfaceContainerHigh, surfaceContainerHighest = DarkSurfaceContainerHighest, onSurfaceVariant = DarkOnSurfaceVariant, outline = DarkOutline, outlineVariant = DarkOutlineVariant, inverseSurface = DarkInverseSurface, inverseOnSurface = DarkInverseOnSurface, scrim = DarkScrim, background = DarkSurface, onBackground = DarkOnSurface )</ID>
+    <ID>TopLevelPropertyNaming:Theme.kt$val LightColorScheme = lightColorScheme( primary = LightPrimary, onPrimary = LightOnPrimary, primaryContainer = LightPrimaryContainer, onPrimaryContainer = LightOnPrimaryContainer, inversePrimary = LightInversePrimary, secondary = LightSecondary, onSecondary = LightOnSecondary, secondaryContainer = LightSecondaryContainer, onSecondaryContainer = LightOnSecondaryContainer, tertiary = LightTertiary, onTertiary = LightOnTertiary, tertiaryContainer = LightTertiaryContainer, onTertiaryContainer = LightOnTertiaryContainer, error = LightError, onError = LightOnError, errorContainer = LightErrorContainer, onErrorContainer = LightOnErrorContainer, surfaceDim = LightSurfaceDim, surface = LightSurface, surfaceVariant = LightSurfaceContainerHigh, onSurface = LightOnSurface, surfaceBright = LightSurfaceBright, surfaceContainerLowest = LightSurfaceContainerLowest, surfaceContainerLow = LightSurfaceContainerLow, surfaceContainer = LightSurfaceContainer, surfaceContainerHigh = LightSurfaceContainerHigh, surfaceContainerHighest = LightSurfaceContainerHighest, onSurfaceVariant = LightOnSurfaceVariant, outline = LightOutline, outlineVariant = LightOutlineVariant, inverseSurface = LightInverseSurface, inverseOnSurface = LightInverseOnSurface, scrim = LightScrim, background = LightSurface, onBackground = LightOnSurface )</ID>
+    <ID>TopLevelPropertyNaming:Typography.kt$val AppTypography = Typography( displayLarge = TextStyle(fontWeight = FontWeight.Normal, fontSize = 57.sp, lineHeight = 64.sp, letterSpacing = (-0.25).sp, fontFamily = Roboto), displayMedium = TextStyle(fontWeight = FontWeight.Normal, fontSize = 45.sp, lineHeight = 52.sp, letterSpacing = 0.sp, fontFamily = Roboto), displaySmall = TextStyle(fontWeight = FontWeight.Normal, fontSize = 36.sp, lineHeight = 44.sp, letterSpacing = 0.sp, fontFamily = Roboto), headlineLarge = TextStyle(fontWeight = FontWeight.Normal, fontSize = 32.sp, lineHeight = 40.sp, letterSpacing = 0.sp, fontFamily = Roboto), headlineMedium = TextStyle(fontWeight = FontWeight.Normal, fontSize = 28.sp, lineHeight = 36.sp, letterSpacing = 0.sp, fontFamily = Roboto), headlineSmall = TextStyle(fontWeight = FontWeight.Normal, fontSize = 24.sp, lineHeight = 32.sp, letterSpacing = 0.sp, fontFamily = Roboto), titleLarge = TextStyle(fontWeight = FontWeight.Normal, fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0.sp, fontFamily = Roboto), titleMedium = TextStyle(fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = (0.15).sp, fontFamily = Roboto), titleSmall = TextStyle(fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = (0.1).sp, fontFamily = Roboto), labelLarge = TextStyle(fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = (0.1).sp, fontFamily = Roboto), labelMedium = TextStyle(fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = (0.5).sp, fontFamily = Roboto), labelSmall = TextStyle(fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = (0.5).sp, fontFamily = Roboto), bodyLarge = TextStyle(fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = (0.5).sp, fontFamily = Roboto), bodyMedium = TextStyle(fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = (0.25).sp, fontFamily = Roboto), bodySmall = TextStyle(fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = (0.4).sp, fontFamily = Roboto), )</ID>
+    <ID>TopLevelPropertyNaming:Typography.kt$val Roboto = FontFamily( Font(R.font.roboto_regular, FontWeight.Normal), Font(R.font.roboto_medium, FontWeight.Medium), Font(R.font.roboto_bold, FontWeight.Bold) )</ID>
+  </CurrentIssues>
+</SmellBaseline>
