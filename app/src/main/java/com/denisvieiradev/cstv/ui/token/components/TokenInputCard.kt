@@ -57,19 +57,7 @@ internal fun TokenInputCard(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HorizontalDivider(modifier = Modifier.weight(1f))
-                Text(
-                    text = stringResource(R.string.token_or_divider),
-                    modifier = Modifier.padding(horizontal = Spacing.medium),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                HorizontalDivider(modifier = Modifier.weight(1f))
-            }
+            OrDivider()
             OutlinedButton(
                 onClick = { onAction(TokenScreenAction.ShowDemoConfirmation) },
                 enabled = uiState.isDemoAvailable,
@@ -87,5 +75,22 @@ internal fun TokenInputCard(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun OrDivider() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HorizontalDivider(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(R.string.token_or_divider),
+            modifier = Modifier.padding(horizontal = Spacing.medium),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        HorizontalDivider(modifier = Modifier.weight(1f))
     }
 }

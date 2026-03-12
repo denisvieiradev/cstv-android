@@ -6,12 +6,13 @@ import android.util.Log
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import java.security.GeneralSecurityException
 
 class SecureStorageImpl(context: Context) : SecureStorage {
 
     private val prefs: SharedPreferences = try {
         buildPrefs(context)
-    } catch (e: Exception) {
+    } catch (e: GeneralSecurityException) {
         Log.w(TAG, "EncryptedSharedPreferences init failed, clearing prefs and retrying: ${e.message}")
         context.deleteSharedPreferences(PREFS_NAME)
         buildPrefs(context)

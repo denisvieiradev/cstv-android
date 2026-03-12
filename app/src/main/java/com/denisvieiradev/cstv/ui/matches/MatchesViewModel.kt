@@ -14,6 +14,7 @@ import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
+import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Suppress("LongParameterList")
 class MatchesViewModel(
     private val getCsMatchesUseCase: GetCsMatchesUseCase,
     private val sessionLocalDataSource: SessionLocalDataSource,
@@ -103,8 +105,9 @@ class MatchesViewModel(
                 val matches = getCsMatchesUseCase()
                 _uiState.update { it.copy(isLoading = false, matches = matches) }
             } catch (e: AuthorizationException) {
+                Timber.d(e, "Authorization failed")
                 _uiState.update { it.copy(isLoading = false, isAuthError = true, error = null) }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 _uiState.update { it.copy(isLoading = false, error = e, isAuthError = false) }
             }
         }

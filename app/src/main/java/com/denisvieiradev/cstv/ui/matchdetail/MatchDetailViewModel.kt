@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.IOException
 
 class MatchDetailViewModel(
     savedStateHandle: SavedStateHandle,
@@ -80,7 +81,7 @@ class MatchDetailViewModel(
                 val teamAPlayers = match.teamA?.players ?: emptyList()
                 val teamBPlayers = match.teamB?.players ?: emptyList()
                 _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
                 _uiState.update { it.copy(playersState = PlayersState.Error) }
             }
