@@ -11,15 +11,15 @@ import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
 
 fun fakeMatch(
-    id: Int = 1,
+    id: Int = TestConstants.MATCH_ID,
     status: MatchStatus = MatchStatus.NOT_STARTED,
-    scheduledAt: String? = "2024-01-01T00:00:00Z",
+    scheduledAt: String? = TestConstants.DEFAULT_SCHEDULED_AT,
     beginAt: String? = null,
-    leagueName: String = "ESL Pro League",
-    serieFullName: String = "Season 20",
-    leagueImageUrl: String? = "https://example.com/league.png",
-    teamA: Team? = fakeTeam(id = 1, name = "Team A"),
-    teamB: Team? = fakeTeam(id = 2, name = "Team B")
+    leagueName: String = TestConstants.DEFAULT_LEAGUE_NAME,
+    serieFullName: String = TestConstants.DEFAULT_SERIE_NAME,
+    leagueImageUrl: String? = TestConstants.URL_LEAGUE_IMAGE,
+    teamA: Team? = fakeTeam(id = TestConstants.TEAM_A_ID, name = TestConstants.TEAM_NAME_A),
+    teamB: Team? = fakeTeam(id = TestConstants.TEAM_B_ID, name = TestConstants.TEAM_NAME_B)
 ) = Match(
     id = id,
     status = status,
@@ -33,34 +33,36 @@ fun fakeMatch(
 )
 
 fun fakeTeam(
-    id: Int = 1,
-    name: String = "Team A",
-    imageUrl: String? = "https://example.com/team.png",
+    id: Int = TestConstants.TEAM_A_ID,
+    name: String = TestConstants.TEAM_NAME_A,
+    imageUrl: String? = TestConstants.URL_TEAM_IMAGE,
     players: List<Player> = emptyList()
 ) = Team(id = id, name = name, imageUrl = imageUrl, players = players)
 
 fun fakePlayer(
-    id: Int = 1,
-    name: String = "s1mple",
-    imageUrl: String? = "https://example.com/player.png",
+    id: Int = TestConstants.DEFAULT_PLAYER_ID,
+    name: String = TestConstants.DEFAULT_PLAYER_NAME,
+    imageUrl: String? = TestConstants.URL_PLAYER_IMAGE,
     firstName: String? = null,
     lastName: String? = null
 ) = Player(id = id, name = name, imageUrl = imageUrl, firstName = firstName, lastName = lastName)
 
+fun fakeTeamDto(
+    id: Int? = TestConstants.TEAM_A_ID,
+    name: String? = TestConstants.TEAM_NAME_A,
+    imageUrl: String? = TestConstants.URL_TEAM_IMAGE
+) = TeamDto(id = id, name = name, imageUrl = imageUrl)
+
 fun fakeMatchDto(
-    id: Int? = 1,
-    status: String? = "not_started",
-    scheduledAt: String? = "2024-01-01T00:00:00Z",
+    id: Int? = TestConstants.MATCH_ID,
+    status: String? = TestConstants.STATUS_NOT_STARTED,
+    scheduledAt: String? = TestConstants.DEFAULT_SCHEDULED_AT,
     beginAt: String? = null,
-    leagueName: String? = "ESL Pro League",
-    leagueImageUrl: String? = "https://example.com/league.png",
-    serieFullName: String? = "Season 20",
-    teamAId: Int? = 1,
-    teamAName: String? = "Team A",
-    teamAImageUrl: String? = "https://example.com/team_a.png",
-    teamBId: Int? = 2,
-    teamBName: String? = "Team B",
-    teamBImageUrl: String? = "https://example.com/team_b.png"
+    leagueName: String? = TestConstants.DEFAULT_LEAGUE_NAME,
+    leagueImageUrl: String? = TestConstants.URL_LEAGUE_IMAGE,
+    serieFullName: String? = TestConstants.DEFAULT_SERIE_NAME,
+    teamA: TeamDto = fakeTeamDto(id = TestConstants.TEAM_A_ID, name = TestConstants.TEAM_NAME_A, imageUrl = TestConstants.URL_TEAM_A_IMAGE),
+    teamB: TeamDto = fakeTeamDto(id = TestConstants.TEAM_B_ID, name = TestConstants.TEAM_NAME_B, imageUrl = TestConstants.URL_TEAM_B_IMAGE)
 ) = MatchDto(
     id = id,
     status = status,
@@ -69,7 +71,7 @@ fun fakeMatchDto(
     league = LeagueDto(name = leagueName, imageUrl = leagueImageUrl),
     serie = SerieDto(fullName = serieFullName),
     opponents = listOf(
-        OpponentWrapperDto(opponent = TeamDto(id = teamAId, name = teamAName, imageUrl = teamAImageUrl)),
-        OpponentWrapperDto(opponent = TeamDto(id = teamBId, name = teamBName, imageUrl = teamBImageUrl))
+        OpponentWrapperDto(opponent = teamA),
+        OpponentWrapperDto(opponent = teamB)
     )
 )

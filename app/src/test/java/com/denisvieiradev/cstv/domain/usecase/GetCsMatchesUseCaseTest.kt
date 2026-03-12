@@ -6,7 +6,9 @@ import com.denisvieiradev.cstv.utils.fakeMatch
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
@@ -78,20 +80,16 @@ class GetCsMatchesUseCaseTest {
             private val useCase = GetCsMatchesUseCase(mockRepository)
 
             @Test
-            fun `then the exception propagates to the caller`() = runTest {
+            fun `then the exception propagates to the caller`() {
                 val exception = RuntimeException("Network error")
                 coEvery { mockRepository.getRunningMatches() } throws exception
                 coEvery { mockRepository.getUpcomingMatches() } returns emptyList()
 
-                var caughtException: Exception? = null
-                try {
-                    useCase()
-                } catch (e: Exception) {
-                    caughtException = e
+                val caught = assertThrows(RuntimeException::class.java) {
+                    runBlocking { useCase() }
                 }
 
-                assertThat(caughtException).isInstanceOf(RuntimeException::class.java)
-                assertThat(caughtException?.message).isEqualTo(exception.message)
+                assertThat(caught.message).isEqualTo(exception.message)
             }
         }
     }

@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.denisvieiradev.cstv.R
+import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
+import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
 import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.ui.matches.components.AuthErrorContent
 import com.denisvieiradev.cstv.ui.matches.components.LogoutConfirmationDialog
@@ -40,7 +42,7 @@ fun MatchesScreen(
                     currentLanguage = uiState.currentLanguage,
                     onThemeToggleClick = { onAction(MatchesScreenAction.ToggleTheme) },
                     onLanguageToggleClick = { onAction(MatchesScreenAction.ToggleLanguage) },
-                    onLogoutClick = { onAction(MatchesScreenAction.Logout) }
+                    onLogoutClick = { onAction(MatchesScreenAction.PressLogout) }
                 )
             }
         ) { innerPadding ->

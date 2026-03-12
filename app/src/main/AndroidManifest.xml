@@ -37,10 +37,6 @@
             android:name=".ui.matches.MatchesActivity"
             android:exported="false" />
 
-        <activity
-            android:name=".ui.matchdetail.MatchDetailActivity"
-            android:exported="false" />
-
     </application>
 
 </manifest>

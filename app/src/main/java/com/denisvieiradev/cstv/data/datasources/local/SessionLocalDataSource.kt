@@ -8,4 +8,6 @@ interface SessionLocalDataSource {
     fun saveDarkTheme(isDark: Boolean)
     fun getLanguage(): String?
     fun saveLanguage(languageTag: String)
+    fun isDemoUsed(): Boolean
+    fun saveDemoUsed()
 }

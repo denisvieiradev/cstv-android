@@ -17,10 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.denisvieiradev.cstv.R
-import com.denisvieiradev.cstv.ui.token.TokenScreenAction
-import com.denisvieiradev.cstv.ui.token.TokenUiState
+import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
+import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import com.denisvieiradev.design_system.ui.components.button.PrimaryButton
 import com.denisvieiradev.design_system.ui.components.input.AppTextField
 import com.denisvieiradev.design_system.ui.theme.Spacing
@@ -58,31 +57,40 @@ internal fun TokenInputCard(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HorizontalDivider(modifier = Modifier.weight(1f))
-                Text(
-                    text = stringResource(R.string.token_or_divider),
-                    modifier = Modifier.padding(horizontal = Spacing.medium),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                HorizontalDivider(modifier = Modifier.weight(1f))
-            }
+            OrDivider()
             OutlinedButton(
                 onClick = { onAction(TokenScreenAction.ShowDemoConfirmation) },
+                enabled = uiState.isDemoAvailable,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .height(Spacing.huge),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(
-                    text = stringResource(R.string.token_demo_button),
+                    text = stringResource(
+                        if (uiState.isDemoAvailable) R.string.token_demo_button
+                        else R.string.token_demo_button_used
+                    ),
                     style = MaterialTheme.typography.labelLarge
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun OrDivider() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HorizontalDivider(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(R.string.token_or_divider),
+            modifier = Modifier.padding(horizontal = Spacing.medium),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        HorizontalDivider(modifier = Modifier.weight(1f))
     }
 }

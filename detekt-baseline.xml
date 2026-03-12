@@ -4,55 +4,6 @@
   <CurrentIssues>
     <ID>CognitiveComplexMethod:PlayersList.kt$@Composable private fun PlayerItem(player: Player?, isLeftTeam: Boolean)</ID>
     <ID>CognitiveComplexMethod:TokenTopBar.kt$@Composable internal fun TokenTopBar( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:AppTextField.kt$@Composable fun AppTextField( value: String, onValueChange: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, errorMessage: String? = null, enabled: Boolean = true )</ID>
-    <ID>FunctionNaming:AuthErrorContent.kt$@Composable fun AuthErrorContent(onConfigureTokenClick: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:DemoConfirmationDialog.kt$@Composable internal fun DemoConfirmationDialog( onDismiss: () -&gt; Unit, onConfirm: () -&gt; Unit )</ID>
-    <ID>FunctionNaming:FullScreenError.kt$@Composable fun FullScreenError( title: String, retryLabel: String, onRetry: () -&gt; Unit, modifier: Modifier = Modifier, body: String? = null )</ID>
-    <ID>FunctionNaming:FullScreenLoading.kt$@Composable fun FullScreenLoading(modifier: Modifier = Modifier)</ID>
-    <ID>FunctionNaming:LogoutConfirmationDialog.kt$@Composable fun LogoutConfirmationDialog( onConfirm: () -&gt; Unit, onDismiss: () -&gt; Unit )</ID>
-    <ID>FunctionNaming:MainActivity.kt$@Composable fun Greeting(name: String, modifier: Modifier = Modifier)</ID>
-    <ID>FunctionNaming:MainActivity.kt$@Preview(showBackground = true) @Composable fun GreetingPreview()</ID>
-    <ID>FunctionNaming:MainTopBar.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainTopBar( title: String, onNavigateBack: (() -&gt; Unit)? = null, actions: @Composable () -&gt; Unit = {} )</ID>
-    <ID>FunctionNaming:MatchCard.kt$@Composable fun MatchCard(match: Match, onClick: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:MatchDetailScreen.kt$@Composable fun MatchDetailScreen( uiState: MatchDetailUiState, onAction: (MatchDetailScreenAction) -&gt; Unit )</ID>
-    <ID>FunctionNaming:MatchDetailScreen.kt$@Composable private fun MatchDetailContent( match: Match, playersState: PlayersState, onAction: (MatchDetailScreenAction) -&gt; Unit )</ID>
-    <ID>FunctionNaming:MatchDetailScreenRoot.kt$@Composable fun MatchDetailScreenRoot( viewModel: MatchDetailViewModel = koinViewModel() )</ID>
-    <ID>FunctionNaming:MatchLeagueInfo.kt$@Composable fun MatchLeagueInfo( leagueName: String, serieFullName: String, leagueImageUrl: String?, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:MatchStatusBadge.kt$@Composable fun MatchStatusBadge( status: MatchStatus, scheduledAt: String?, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:MatchTeamsHeader.kt$@Composable internal fun MatchTeamsHeader(teamA: Team?, teamB: Team?)</ID>
-    <ID>FunctionNaming:MatchTeamsHeader.kt$@Composable internal fun ScheduledTime(scheduledAt: String?)</ID>
-    <ID>FunctionNaming:MatchTeamsHeader.kt$@Composable private fun TeamColumn( team: Team?, modifier: Modifier = Modifier, horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally )</ID>
-    <ID>FunctionNaming:MatchTeamsRow.kt$@Composable fun MatchTeamsRow( teamAName: String?, teamAImageUrl: String?, teamBName: String?, teamBImageUrl: String?, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:MatchesScreen.kt$@Composable fun MatchesScreen( uiState: MatchesUiState, onAction: (MatchesScreenAction) -&gt; Unit )</ID>
-    <ID>FunctionNaming:MatchesScreen.kt$@Composable private fun DemoExpiredDialog(onConfirm: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:MatchesScreen.kt$@Composable private fun EmptyContent()</ID>
-    <ID>FunctionNaming:MatchesScreen.kt$@Composable private fun MatchesList(matches: List&lt;Match&gt;, onAction: (MatchesScreenAction) -&gt; Unit)</ID>
-    <ID>FunctionNaming:MatchesScreenRoot.kt$@Composable fun MatchesScreenRoot( viewModel: MatchesViewModel = koinViewModel() )</ID>
-    <ID>FunctionNaming:MatchesTopBar.kt$@Composable fun MatchesTopBar( isDarkTheme: Boolean, currentLanguage: String, onThemeToggleClick: () -&gt; Unit, onLanguageToggleClick: () -&gt; Unit, onLogoutClick: () -&gt; Unit )</ID>
-    <ID>FunctionNaming:NetworkImage.kt$@Composable fun NetworkImage( imageUrl: String?, contentDescription: String, size: Dp, modifier: Modifier = Modifier, shape: Shape = CircleShape, contentScale: ContentScale = ContentScale.Fit, fallback: @Composable () -&gt; Unit = {} )</ID>
-    <ID>FunctionNaming:PlayerPhoto.kt$@Composable internal fun PlayerInitialsBox(initials: String, size: Dp, shape: Shape)</ID>
-    <ID>FunctionNaming:PlayerPhoto.kt$@Composable internal fun PlayerPhoto(player: Player?)</ID>
-    <ID>FunctionNaming:PlayersList.kt$@Composable internal fun PlayersError(onRetry: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:PlayersList.kt$@Composable internal fun PlayersList(teamAPlayers: List&lt;Player&gt;, teamBPlayers: List&lt;Player&gt;)</ID>
-    <ID>FunctionNaming:PlayersList.kt$@Composable internal fun PlayersSkeleton()</ID>
-    <ID>FunctionNaming:PlayersList.kt$@Composable private fun PlayerItem(player: Player?, isLeftTeam: Boolean)</ID>
-    <ID>FunctionNaming:PrimaryButton.kt$@Composable fun PrimaryButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true )</ID>
-    <ID>FunctionNaming:TeamDisplay.kt$@Composable fun TeamDisplay( name: String, imageUrl: String?, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:Theme.kt$@Composable fun CstvTheme( darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -&gt; Unit )</ID>
-    <ID>FunctionNaming:TokenInputCard.kt$@Composable internal fun TokenInputCard( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit )</ID>
-    <ID>FunctionNaming:TokenLogo.kt$@Composable internal fun TokenLogo(logoGradient: Brush)</ID>
-    <ID>FunctionNaming:TokenScreen.kt$@Composable fun TokenScreen( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:TokenScreenBackground.kt$@Composable internal fun TokenScreenBackground(glowColor: Color)</ID>
-    <ID>FunctionNaming:TokenScreenFooter.kt$@Composable internal fun TokenScreenFooter()</ID>
-    <ID>FunctionNaming:TokenScreenHeader.kt$@Composable internal fun TokenScreenHeader()</ID>
-    <ID>FunctionNaming:TokenScreenRoot.kt$@Composable fun TokenScreenRoot( viewModel: TokenViewModel, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:TokenTopBar.kt$@Composable internal fun TokenTopBar( uiState: TokenUiState, onAction: (TokenScreenAction) -&gt; Unit, modifier: Modifier = Modifier )</ID>
-    <ID>FunctionNaming:TokenTutorialDialog.kt$@Composable fun TokenTutorialDialog( onDismiss: () -&gt; Unit, onAction: (TokenScreenAction) -&gt; Unit )</ID>
-    <ID>FunctionNaming:TokenTutorialDialog.kt$@Composable private fun TutorialDialogHeader(onDismiss: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:TokenTutorialDialog.kt$@Composable private fun TutorialStepIndicator(stepCount: Int, currentStep: Int)</ID>
-    <ID>FunctionNaming:TokenTutorialLink.kt$@Composable internal fun TokenTutorialLink(onClick: () -&gt; Unit)</ID>
-    <ID>FunctionNaming:TokenTutorialSteps.kt$@Composable internal fun TutorialNavigationRow( currentStep: Int, isLastStep: Boolean, onBack: () -&gt; Unit, onNext: () -&gt; Unit, onPaste: () -&gt; Unit )</ID>
-    <ID>FunctionNaming:TokenTutorialSteps.kt$@Composable internal fun TutorialStepContent( currentStep: Int, stepTitles: List&lt;String&gt;, steps: List&lt;String&gt;, stepIcons: List&lt;ImageVector&gt;, onOpenPandaScore: () -&gt; Unit )</ID>
     <ID>LongMethod:DemoConfirmationDialog.kt$@Composable internal fun DemoConfirmationDialog( onDismiss: () -&gt; Unit, onConfirm: () -&gt; Unit )</ID>
     <ID>LongMethod:TokenTutorialDialog.kt$@Composable fun TokenTutorialDialog( onDismiss: () -&gt; Unit, onAction: (TokenScreenAction) -&gt; Unit )</ID>
     <ID>LongMethod:TokenTutorialSteps.kt$@Composable internal fun TutorialStepContent( currentStep: Int, stepTitles: List&lt;String&gt;, steps: List&lt;String&gt;, stepIcons: List&lt;ImageVector&gt;, onOpenPandaScore: () -&gt; Unit )</ID>
@@ -76,19 +27,6 @@
     <ID>ObjectPropertyNaming:Alpha.kt$Alpha$const val faint = 0.2f</ID>
     <ID>ObjectPropertyNaming:Alpha.kt$Alpha$const val subtle = 0.3f</ID>
     <ID>ObjectPropertyNaming:Weight.kt$Weight$const val equal = 1f</ID>
-    <ID>PackageNaming:Alpha.kt$package com.denisvieiradev.design_system.ui.theme</ID>
-    <ID>PackageNaming:AppTextField.kt$package com.denisvieiradev.design_system.ui.components.input</ID>
-    <ID>PackageNaming:Color.kt$package com.denisvieiradev.design_system.ui.theme</ID>
-    <ID>PackageNaming:FullScreenError.kt$package com.denisvieiradev.design_system.ui.components.state</ID>
-    <ID>PackageNaming:FullScreenLoading.kt$package com.denisvieiradev.design_system.ui.components.state</ID>
-    <ID>PackageNaming:MainTopBar.kt$package com.denisvieiradev.design_system.ui.components.maintopbar</ID>
-    <ID>PackageNaming:NetworkImage.kt$package com.denisvieiradev.design_system.ui.components.image</ID>
-    <ID>PackageNaming:PrimaryButton.kt$package com.denisvieiradev.design_system.ui.components.button</ID>
-    <ID>PackageNaming:Shape.kt$package com.denisvieiradev.design_system.ui.theme</ID>
-    <ID>PackageNaming:Spacing.kt$package com.denisvieiradev.design_system.ui.theme</ID>
-    <ID>PackageNaming:Theme.kt$package com.denisvieiradev.design_system.ui.theme</ID>
-    <ID>PackageNaming:Typography.kt$package com.denisvieiradev.design_system.ui.theme</ID>
-    <ID>PackageNaming:Weight.kt$package com.denisvieiradev.design_system.ui.theme</ID>
     <ID>TooGenericExceptionCaught:TokenViewModel.kt$TokenViewModel$e: Exception</ID>
     <ID>TopLevelPropertyNaming:Color.kt$// Dark Error (brighter for dark backgrounds) val DarkError = Color(255, 108, 115)</ID>
     <ID>TopLevelPropertyNaming:Color.kt$// Dark Primary Palette (red-derived for dark mode) val DarkPrimary = Color(255, 180, 171)</ID>

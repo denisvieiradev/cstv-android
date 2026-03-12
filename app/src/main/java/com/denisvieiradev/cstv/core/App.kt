@@ -1,12 +1,12 @@
 package com.denisvieiradev.cstv.core
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.core.di.getModules
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.Language
+import com.denisvieiradev.cstv.ui.core.LocaleManager
+import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.orhanobut.hawk.Hawk
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -30,10 +30,18 @@ class App : Application(), KoinComponent {
         }
 
         applyInitialLocale()
+        applyInitialNightMode()
+    }
+
+    private fun applyInitialNightMode() {
+        val sessionLocalDataSource: SessionLocalDataSource by inject()
+        val themeManager: ThemeManager by inject()
+        themeManager.apply(sessionLocalDataSource.isDarkTheme())
     }
 
     private fun applyInitialLocale() {
         val sessionLocalDataSource: SessionLocalDataSource by inject()
+        val localeManager: LocaleManager by inject()
         val saved = sessionLocalDataSource.getLanguage()
         val tag = if (saved != null) {
             if (saved == "pt") Language.PT.also { sessionLocalDataSource.saveLanguage(it) } else saved
@@ -43,6 +51,6 @@ class App : Application(), KoinComponent {
             sessionLocalDataSource.saveLanguage(resolved)
             resolved
         }
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag))
+        localeManager.apply(tag)
     }
 }

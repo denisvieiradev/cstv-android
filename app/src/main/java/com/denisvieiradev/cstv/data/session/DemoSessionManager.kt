@@ -1,31 +1,49 @@
 package com.denisvieiradev.cstv.data.session
 
-class DemoSessionManager {
+import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import kotlinx.coroutines.flow.MutableStateFlow
 
-    private var remainingRequests = DEMO_REQUEST_LIMIT
+class DemoSessionManager(
+    private val sessionLocalDataSource: SessionLocalDataSource,
+    private val demoToken: String
+) {
 
-    var isActive = false
-        private set
+    private val _remainingViews = MutableStateFlow(DEMO_DETAIL_LIMIT)
+    private val _isActive = MutableStateFlow(false)
+
+    val isActive: Boolean get() = _isActive.value
+
+    init { restoreIfNeeded() }
 
     fun startDemo() {
-        isActive = true
-        remainingRequests = DEMO_REQUEST_LIMIT
+        sessionLocalDataSource.saveDemoUsed()
+        _isActive.value = true
+        _remainingViews.value = DEMO_DETAIL_LIMIT
     }
 
     fun reset() {
-        isActive = false
-        remainingRequests = DEMO_REQUEST_LIMIT
+        _isActive.value = false
+        _remainingViews.value = DEMO_DETAIL_LIMIT
     }
 
-    fun tryConsume(count: Int): Boolean {
-        if (!isActive) return true
-        if (remainingRequests <= 0) return false
-        remainingRequests = (remainingRequests - count).coerceAtLeast(0)
+    fun tryConsume(): Boolean {
+        if (!_isActive.value) return true
+        val current = _remainingViews.value
+        if (current <= 0) return false
+        _remainingViews.value = current - 1
         return true
     }
 
+    fun isDemoAlreadyUsed(): Boolean = sessionLocalDataSource.isDemoUsed()
+
+    private fun restoreIfNeeded() {
+        if (sessionLocalDataSource.isDemoUsed() && sessionLocalDataSource.getToken() == demoToken) {
+            _isActive.value = true
+            _remainingViews.value = 0
+        }
+    }
+
     companion object {
-        const val DEMO_PAGE_LIMIT = 3
-        const val DEMO_REQUEST_LIMIT = DEMO_PAGE_LIMIT * 2 // Each page load consumes 2 requests
+        const val DEMO_DETAIL_LIMIT = 6
     }
 }

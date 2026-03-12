@@ -1,20 +1,24 @@
 package com.denisvieiradev.cstv.ui.token
 
-import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.BuildConfig
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.data.session.DemoSessionManager
 import com.denisvieiradev.cstv.domain.Language
+import com.denisvieiradev.cstv.ui.core.LocaleManager
+import com.denisvieiradev.cstv.ui.core.ThemeManager
+import com.denisvieiradev.cstv.ui.token.model.TokenNavigationEvent
+import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
+import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -22,19 +26,22 @@ import kotlinx.coroutines.launch
 class TokenViewModel(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val demoSessionManager: DemoSessionManager,
+    private val themeManager: ThemeManager,
+    private val localeManager: LocaleManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         TokenUiState(
             isDarkTheme = sessionLocalDataSource.isDarkTheme(),
-            currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN
+            currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN,
+            isDemoAvailable = !demoSessionManager.isDemoAlreadyUsed()
         )
     )
     val uiState: StateFlow<TokenUiState> = _uiState.asStateFlow()
 
-    private val _navigationEvents = MutableSharedFlow<TokenNavigationEvent>()
-    val navigationEvents: Flow<TokenNavigationEvent> = _navigationEvents
+    private val _navigationEvents = Channel<TokenNavigationEvent>()
+    val navigationEvents: Flow<TokenNavigationEvent> = _navigationEvents.receiveAsFlow()
 
     fun onAction(action: TokenScreenAction) {
         when (action) {
@@ -54,20 +61,16 @@ class TokenViewModel(
         }
     }
 
-    fun onNavigationConsumed() {
-        _uiState.update { it.copy(navigateToMatches = false) }
+    private val saveTokenExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _uiState.update { it.copy(error = throwable) }
     }
 
     private fun saveToken() {
         val token = _uiState.value.token
         if (token.isBlank()) return
-        _uiState.update { it.copy(navigateToMatches = true) }
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                sessionLocalDataSource.saveToken(token)
-            } catch (e: Exception) {
-                _uiState.update { it.copy(navigateToMatches = false, error = e) }
-            }
+        viewModelScope.launch(ioDispatcher + saveTokenExceptionHandler) {
+            sessionLocalDataSource.saveToken(token)
+            _navigationEvents.send(TokenNavigationEvent.NavigateToMatches)
         }
     }
 
@@ -75,23 +78,24 @@ class TokenViewModel(
         val new = !_uiState.value.isDarkTheme
         _uiState.update { it.copy(isDarkTheme = new) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveDarkTheme(new) }
+        themeManager.apply(new)
     }
 
     private fun toggleLanguage() {
         val next = if (_uiState.value.currentLanguage == Language.EN) Language.PT else Language.EN
         _uiState.update { it.copy(currentLanguage = next) }
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(next))
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            viewModelScope.launch { _navigationEvents.emit(TokenNavigationEvent.RecreateActivity) }
+        val needsRecreate = localeManager.apply(next)
+        if (needsRecreate) {
+            viewModelScope.launch { _navigationEvents.send(TokenNavigationEvent.RecreateActivity) }
         }
     }
 
     private fun enterDemoMode() {
-        demoSessionManager.startDemo()
-        _uiState.update { it.copy(navigateToMatches = true) }
         viewModelScope.launch(ioDispatcher) {
+            demoSessionManager.startDemo()
             sessionLocalDataSource.saveToken(BuildConfig.PANDASCORE_DEMO_API_TOKEN)
+            _navigationEvents.send(TokenNavigationEvent.NavigateToMatches)
         }
     }
 

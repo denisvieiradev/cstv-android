@@ -4,35 +4,47 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import androidx.lifecycle.repeatOnLifecycle
 import com.denisvieiradev.cstv.ui.matches.MatchesActivity
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenAction
+import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenNavigationEvent
 import com.denisvieiradev.cstv.ui.token.TokenActivity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val sessionLocalDataSource: SessionLocalDataSource by inject()
+    private val viewModel: SplashScreenViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        collectNavigationEvents()
+        viewModel.onAction(SplashScreenAction.CheckSession)
+    }
+
+    private fun collectNavigationEvents() {
         lifecycleScope.launch {
-            routeToNextScreen()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.navigationEvents.collect { event ->
+                    when (event) {
+                        SplashScreenNavigationEvent.NavigateToMatches -> navigateToMatches()
+                        SplashScreenNavigationEvent.NavigateToToken -> navigateToToken()
+                    }
+                }
+            }
         }
     }
 
-    private suspend fun routeToNextScreen() {
-        val hasToken = withContext(Dispatchers.IO) { sessionLocalDataSource.getToken() != null }
-        val destination = if (hasToken) {
-            Intent(this, MatchesActivity::class.java)
-        } else {
-            Intent(this, TokenActivity::class.java)
-        }
-        startActivity(destination)
+    private fun navigateToMatches() {
+        startActivity(Intent(this, MatchesActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToToken() {
+        startActivity(Intent(this, TokenActivity::class.java))
         finish()
     }
 }

@@ -14,6 +14,11 @@ object MatchDateFormatter {
     private const val FORMAT_DAY_MONTH = "dd.MM"
     private const val LANG_PT = "pt"
 
+    private const val DAY_TODAY = 0L
+    private const val DAY_TOMORROW = 1L
+    private const val DAYS_WEEK_START = 2L
+    private const val DAYS_WEEK_END = 6L
+
     private val TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_TIME)
     private val DAY_MONTH_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DAY_MONTH)
 
@@ -31,9 +36,9 @@ object MatchDateFormatter {
         val days = ChronoUnit.DAYS.between(now, matchDate)
         val time = formatTime(zonedDateTime)
         return when {
-            days == 0L -> "$todayLabel, $time"
-            days == 1L -> "$tomorrowLabel, $time"
-            days in 2L..6L -> "${formatDayAbbrev(zonedDateTime, locale)}, $time"
+            days == DAY_TODAY -> "$todayLabel, $time"
+            days == DAY_TOMORROW -> "$tomorrowLabel, $time"
+            days in DAYS_WEEK_START..DAYS_WEEK_END -> "${formatDayAbbrev(zonedDateTime, locale)}, $time"
             else -> "${formatDayMonth(zonedDateTime)} $time"
         }
     }

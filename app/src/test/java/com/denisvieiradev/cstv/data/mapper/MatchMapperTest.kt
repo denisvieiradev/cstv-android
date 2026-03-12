@@ -5,7 +5,9 @@ import com.denisvieiradev.cstv.data.dto.OpponentWrapperDto
 import com.denisvieiradev.cstv.data.dto.PlayerDto
 import com.denisvieiradev.cstv.data.dto.TeamDto
 import com.denisvieiradev.cstv.domain.model.MatchStatus
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatchDto
+import com.denisvieiradev.cstv.utils.fakeTeamDto
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
@@ -14,41 +16,37 @@ class MatchMapperTest {
     @Test
     fun `should map all fields correctly when dto is complete`() {
         val dto = fakeMatchDto(
-            id = 42,
-            status = "running",
+            id = TestConstants.MATCH_ID,
+            status = TestConstants.STATUS_RUNNING,
             scheduledAt = "2024-06-01T18:00:00Z",
             beginAt = "2024-06-01T18:05:00Z",
-            leagueName = "ESL Pro League",
-            leagueImageUrl = "https://example.com/league.png",
-            serieFullName = "Season 20",
-            teamAId = 10,
-            teamAName = "Natus Vincere",
-            teamAImageUrl = "https://example.com/navi.png",
-            teamBId = 20,
-            teamBName = "FaZe Clan",
-            teamBImageUrl = "https://example.com/faze.png"
+            leagueName = TestConstants.DEFAULT_LEAGUE_NAME,
+            leagueImageUrl = TestConstants.URL_LEAGUE_IMAGE,
+            serieFullName = TestConstants.DEFAULT_SERIE_NAME,
+            teamA = fakeTeamDto(id = 10, name = TestConstants.TEAM_NAME_NAVI, imageUrl = "https://example.com/navi.png"),
+            teamB = fakeTeamDto(id = 20, name = TestConstants.TEAM_NAME_FAZE, imageUrl = "https://example.com/faze.png")
         )
 
         val domain = dto.toDomain()
 
-        assertThat(domain.id).isEqualTo(42)
+        assertThat(domain.id).isEqualTo(TestConstants.MATCH_ID)
         assertThat(domain.status).isEqualTo(MatchStatus.RUNNING)
         assertThat(domain.scheduledAt).isEqualTo("2024-06-01T18:00:00Z")
         assertThat(domain.beginAt).isEqualTo("2024-06-01T18:05:00Z")
-        assertThat(domain.leagueName).isEqualTo("ESL Pro League")
-        assertThat(domain.leagueImageUrl).isEqualTo("https://example.com/league.png")
-        assertThat(domain.serieFullName).isEqualTo("Season 20")
+        assertThat(domain.leagueName).isEqualTo(TestConstants.DEFAULT_LEAGUE_NAME)
+        assertThat(domain.leagueImageUrl).isEqualTo(TestConstants.URL_LEAGUE_IMAGE)
+        assertThat(domain.serieFullName).isEqualTo(TestConstants.DEFAULT_SERIE_NAME)
         assertThat(domain.teamA?.id).isEqualTo(10)
-        assertThat(domain.teamA?.name).isEqualTo("Natus Vincere")
+        assertThat(domain.teamA?.name).isEqualTo(TestConstants.TEAM_NAME_NAVI)
         assertThat(domain.teamA?.imageUrl).isEqualTo("https://example.com/navi.png")
         assertThat(domain.teamB?.id).isEqualTo(20)
-        assertThat(domain.teamB?.name).isEqualTo("FaZe Clan")
+        assertThat(domain.teamB?.name).isEqualTo(TestConstants.TEAM_NAME_FAZE)
         assertThat(domain.teamB?.imageUrl).isEqualTo("https://example.com/faze.png")
     }
 
     @Test
     fun `should use empty string for null team name`() {
-        val dto = fakeMatchDto(teamAName = null)
+        val dto = fakeMatchDto(teamA = fakeTeamDto(name = null))
 
         val domain = dto.toDomain()
 
@@ -57,7 +55,7 @@ class MatchMapperTest {
 
     @Test
     fun `should use null for missing team image url`() {
-        val dto = fakeMatchDto(teamAImageUrl = null)
+        val dto = fakeMatchDto(teamA = fakeTeamDto(imageUrl = null))
 
         val domain = dto.toDomain()
 
@@ -164,11 +162,11 @@ class MatchMapperTest {
     @Test
     fun `should map status string to correct MatchStatus enum`() {
         // Arrange / Act / Assert
-        assertThat(fakeMatchDto(status = "running").toDomain().status).isEqualTo(MatchStatus.RUNNING)
-        assertThat(fakeMatchDto(status = "not_started").toDomain().status).isEqualTo(MatchStatus.NOT_STARTED)
-        assertThat(fakeMatchDto(status = "finished").toDomain().status).isEqualTo(MatchStatus.FINISHED)
-        assertThat(fakeMatchDto(status = "canceled").toDomain().status).isEqualTo(MatchStatus.CANCELED)
-        assertThat(fakeMatchDto(status = "postponed").toDomain().status).isEqualTo(MatchStatus.POSTPONED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_RUNNING).toDomain().status).isEqualTo(MatchStatus.RUNNING)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_NOT_STARTED).toDomain().status).isEqualTo(MatchStatus.NOT_STARTED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_FINISHED).toDomain().status).isEqualTo(MatchStatus.FINISHED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_CANCELED).toDomain().status).isEqualTo(MatchStatus.CANCELED)
+        assertThat(fakeMatchDto(status = TestConstants.STATUS_POSTPONED).toDomain().status).isEqualTo(MatchStatus.POSTPONED)
         assertThat(fakeMatchDto(status = null).toDomain().status).isEqualTo(MatchStatus.NOT_STARTED)
     }
 }

@@ -21,9 +21,9 @@ An Android app built with Jetpack Compose, Clean Architecture, and MVVM. Enter y
 |:---:|:---:|:---:|
 | ![Splash](app_screens/Splash-Screen.png) | ![Home Loading](app_screens/Home_Loading.png) | ![Home](app_screens/Home.png) |
 
-| Match Details (Loading) | Match Details |
-|:---:|:---:|
-| ![Match Details Loading](app_screens/Match_Details_Loading.png) | ![Match Details](app_screens/Match_Details.png) |
+| Match Details (Loading) | Match Details | API Token Screen |
+|:---:|:---:|:---:|
+| ![Match Details Loading](app_screens/Match_Details_Loading.png) | ![Match Details](app_screens/Match_Details.png) | ![API Token Screen](app_screens/API_Token_Screen.png) |
 
 ---
 
@@ -70,13 +70,13 @@ CSTV follows **Clean Architecture** with **MVVM**, organized in a multi-module s
 | `:app` | Features, domain, data layers; DI wiring |
 | `:core:network` | Retrofit, OkHttp, AuthInterceptor, network utilities |
 | `:core:cachemanager` | Hawk-based session/token storage backed by EncryptedSharedPreferences |
-| `:design-system` | CstvTheme, reusable components (`FullScreenLoading`, `FullScreenError`, `NetworkImage`), typography, spacing |
+| `:design-system` | CstvTheme, reusable components (`FullScreenLoading`, `FullScreenError`, `NetworkImage`, `MainTopBar`, `LanguageSwitcher`), typography, spacing |
 
 ### Key Patterns
 
 - **Repository pattern** — data sources are abstracted behind interfaces
 - **Use cases** — each business operation is encapsulated in a single-responsibility class
-- **StateFlow + SharedFlow** — UI state is a `StateFlow`; one-shot navigation events use `SharedFlow`
+- **StateFlow + SharedFlow** — UI state is a `StateFlow`; one-shot navigation uses `SharedFlow` with sealed interfaces (`XNavigationEvent`)
 - **Sealed classes** — screen actions and navigation events are type-safe sealed hierarchies
 - **Single entry point** — all UI events go through `onAction(action: XScreenAction)` in the ViewModel
 - **IO dispatcher offloading** — all data persistence operations run on `Dispatchers.IO`
@@ -108,6 +108,7 @@ CSTV follows **Clean Architecture** with **MVVM**, organized in a multi-module s
 | MockK | 1.13.5 | Mocking |
 | Turbine | 1.2.1 | Flow testing |
 | Google Truth | 1.1.5 | Assertion library |
+| Detekt | 1.23.7 | Static code analysis |
 
 ---
 
@@ -186,7 +187,33 @@ Tests use **MockK** for mocking, **Turbine** for Flow assertions, **Google Truth
 | `AuthInterceptorTest` | Token injection & 401 handling |
 | `AppLoggingTest` | Logging setup |
 | `FontAssetTest` | Design system font assets |
+| `AppCompatLocaleManagerTest` | Locale manager logic |
+| `AppCompatThemeManagerTest` | Theme manager logic |
 | `MatchesFlowIntegrationTest` | End-to-end flow integration |
+
+---
+
+## Static Analysis
+
+The project uses [Detekt](https://detekt.dev/) for static code analysis.
+
+```bash
+# Run static analysis
+./gradlew detekt
+
+# Update the baseline (suppresses new pre-existing violations)
+./gradlew detektBaseline
+```
+
+**Config:** `config/detekt/detekt.yml`
+
+**Baseline:** `detekt-baseline.xml` — suppresses pre-existing issues (mainly Compose naming conventions and color constants) so CI only fails on newly introduced violations.
+
+**Notable enforced rules:**
+- Max line length: 160 characters
+- Max cyclomatic complexity: 15
+- Coroutine safety rules (GlobalScope, `runBlocking` in production code)
+- `print` / `println` forbidden (use `Timber` instead)
 
 ---
 
@@ -223,6 +250,7 @@ design-system/                # CstvTheme, components, typography
 │   ├── button/               # PrimaryButton
 │   ├── input/                # AppTextField
 │   ├── image/                # NetworkImage
+│   ├── languageswitcher/     # LanguageSwitcher, LanguageOption
 │   ├── maintopbar/           # MainTopBar
 │   └── state/                # FullScreenLoading, FullScreenError
 └── theme/                    # Colors, typography, spacing, shapes

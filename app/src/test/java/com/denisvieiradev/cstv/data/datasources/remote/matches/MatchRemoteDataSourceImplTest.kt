@@ -1,6 +1,8 @@
 package com.denisvieiradev.cstv.data.datasources.remote.matches
 
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatchDto
+import com.denisvieiradev.cstv.utils.fakeTeamDto
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -14,15 +16,20 @@ class MatchRemoteDataSourceImplTest {
 
     @Test
     fun `getRunningMatches should map API response to domain models`() = runTest {
-        val dto = fakeMatchDto(id = 1, status = "running", teamAName = "Natus Vincere", teamBName = "FaZe Clan")
+        val dto = fakeMatchDto(
+            id = 1,
+            status = "running",
+            teamA = fakeTeamDto(name = TestConstants.TEAM_NAME_NAVI),
+            teamB = fakeTeamDto(name = TestConstants.TEAM_NAME_FAZE)
+        )
         coEvery { mockApi.getRunningMatches() } returns listOf(dto)
 
         val result = dataSource.getRunningMatches()
 
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(1)
-        assertThat(result[0].teamA?.name).isEqualTo("Natus Vincere")
-        assertThat(result[0].teamB?.name).isEqualTo("FaZe Clan")
+        assertThat(result[0].teamA?.name).isEqualTo(TestConstants.TEAM_NAME_NAVI)
+        assertThat(result[0].teamB?.name).isEqualTo(TestConstants.TEAM_NAME_FAZE)
     }
 
     @Test
