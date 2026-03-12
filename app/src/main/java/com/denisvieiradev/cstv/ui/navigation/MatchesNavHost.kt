@@ -30,14 +30,12 @@ fun MatchesNavHost(
                 onRecreateActivity = onRecreateActivity
             )
         }
-        composable(Route.MATCH_DETAIL) { backStackEntry ->
+        composable(Route.MATCH_DETAIL) {
             val match = navController.previousBackStackEntry
                 ?.savedStateHandle
                 ?.get<com.denisvieiradev.cstv.domain.model.Match>(MatchDetailViewModel.EXTRA_MATCH)
-            if (match != null) {
-                backStackEntry.savedStateHandle[MatchDetailViewModel.EXTRA_MATCH] = match
-            }
             MatchDetailScreenRoot(
+                match = match,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToTokenScreen = onNavigateToTokenScreen
             )

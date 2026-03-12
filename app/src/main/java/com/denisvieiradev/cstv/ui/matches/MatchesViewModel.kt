@@ -11,7 +11,6 @@ import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
 import com.denisvieiradev.cstv.ui.core.LocaleManager
 import com.denisvieiradev.cstv.ui.core.ThemeManager
-import com.denisvieiradev.cstv.ui.core.stateInWhileSubscribed
 import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
@@ -22,6 +21,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,11 +37,13 @@ class MatchesViewModel(
     private val localeManager: LocaleManager
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(MatchesUiState())
-    val uiState: StateFlow<MatchesUiState> = _uiState.stateInWhileSubscribed(
-        viewModel = this,
-        initialValue = MatchesUiState()
+    private val _uiState = MutableStateFlow(
+        MatchesUiState(
+            isDarkTheme = sessionLocalDataSource.isDarkTheme(),
+            currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN
+        )
     )
+    val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
 
     private val _navigationEvents = Channel<MatchesNavigationEvent>()
     val navigationEvents: Flow<MatchesNavigationEvent> = _navigationEvents.receiveAsFlow()

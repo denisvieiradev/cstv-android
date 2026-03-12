@@ -17,5 +17,5 @@ val uiModule = module {
     viewModel { SplashScreenViewModel(get()) }
     viewModel { TokenViewModel(get(), get(), themeManager = get(), localeManager = get()) }
     viewModel { MatchesViewModel(get(), get(), get(), themeManager = get(), localeManager = get()) }
-    viewModel { MatchDetailViewModel(get(), get(), get()) }
+    viewModel { MatchDetailViewModel(get(), get()) }
 }

@@ -1,11 +1,9 @@
 package com.denisvieiradev.cstv.ui.matchdetail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.model.Match
-import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.usecase.GetMatchDetailUseCase
 import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailNavigationEvent
 import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailScreenAction
@@ -17,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import com.denisvieiradev.cstv.ui.core.stateInWhileSubscribed
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
@@ -25,7 +23,6 @@ import java.io.IOException
 import timber.log.Timber
 
 class MatchDetailViewModel(
-    savedStateHandle: SavedStateHandle,
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val getMatchDetailUseCase: GetMatchDetailUseCase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -36,10 +33,7 @@ class MatchDetailViewModel(
     }
 
     private val _uiState = MutableStateFlow(MatchDetailUiState())
-    val uiState: StateFlow<MatchDetailUiState> = _uiState.stateInWhileSubscribed(
-        viewModel = this,
-        initialValue = MatchDetailUiState()
-    )
+    val uiState: StateFlow<MatchDetailUiState> = _uiState.asStateFlow()
 
     private val _navigationEvents = MutableSharedFlow<MatchDetailNavigationEvent>()
     val navigationEvents: Flow<MatchDetailNavigationEvent> = _navigationEvents
@@ -47,21 +41,16 @@ class MatchDetailViewModel(
     private var currentMatchId: Int? = null
 
     init {
-        val match: Match? = savedStateHandle[EXTRA_MATCH]
-        if (match == null) {
-            Timber.d("No match in SavedStateHandle — no match to display")
-        }
+        _uiState.update { it.copy(darkTheme = sessionLocalDataSource.isDarkTheme()) }
+    }
+
+    fun setMatch(match: Match) {
+        if (currentMatchId != null) return
+        currentMatchId = match.id
         _uiState.update {
-            it.copy(
-                match = match,
-                darkTheme = sessionLocalDataSource.isDarkTheme(),
-                playersState = if (match == null) PlayersState.Idle else PlayersState.Loading
-            )
+            it.copy(match = match, playersState = PlayersState.Loading)
         }
-        if (match != null) {
-            currentMatchId = match.id
-            fetchPlayers(match.id)
-        }
+        fetchPlayers(match.id)
     }
 
     fun onAction(action: MatchDetailScreenAction) {

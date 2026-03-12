@@ -1,6 +1,5 @@
 package com.denisvieiradev.cstv.ui.matchdetail
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.domain.model.Match
@@ -30,7 +29,7 @@ import org.junit.runner.RunWith
 class MatchDetailViewModelTest {
 
     @RunWith(Enclosed::class)
-    class GivenMatchInSavedStateHandle {
+    class GivenMatchIsProvided {
 
         class WhenViewModelIsCreated : MatchDetailViewModelTestBase() {
 
@@ -159,7 +158,7 @@ class MatchDetailViewModelTest {
     }
 
     @RunWith(Enclosed::class)
-    class GivenNoMatchInSavedStateHandle {
+    class GivenNoMatchIsProvided {
 
         class WhenViewModelIsCreated : MatchDetailViewModelTestBase() {
 
@@ -256,12 +255,13 @@ abstract class MatchDetailViewModelTestBase {
     val mockSessionLocalDataSource: SessionLocalDataSource = mockk(relaxed = true)
     val mockGetMatchDetailUseCase: GetMatchDetailUseCase = mockk()
 
-    fun createViewModel(match: Match? = null) = MatchDetailViewModel(
-        savedStateHandle = SavedStateHandle(
-            if (match != null) mapOf(MatchDetailViewModel.EXTRA_MATCH to match) else emptyMap()
-        ),
-        sessionLocalDataSource = mockSessionLocalDataSource,
-        getMatchDetailUseCase = mockGetMatchDetailUseCase,
-        ioDispatcher = mainDispatcherRule.testDispatcher
-    )
+    fun createViewModel(match: Match? = null): MatchDetailViewModel {
+        val viewModel = MatchDetailViewModel(
+            sessionLocalDataSource = mockSessionLocalDataSource,
+            getMatchDetailUseCase = mockGetMatchDetailUseCase,
+            ioDispatcher = mainDispatcherRule.testDispatcher
+        )
+        match?.let { viewModel.setMatch(it) }
+        return viewModel
+    }
 }
