@@ -60,9 +60,9 @@ fun TokenTutorialDialog(
         stringResource(R.string.token_tutorial_step_3)
     )
     val stepTitles = listOf(
-        "Access PandaScore",
-        "Copy Token",
-        "Paste Token"
+        stringResource(R.string.token_tutorial_step_title_1),
+        stringResource(R.string.token_tutorial_step_title_2),
+        stringResource(R.string.token_tutorial_step_title_3)
     )
     val stepIcons: List<ImageVector> = listOf(
         Icons.Filled.Language,

@@ -122,7 +122,7 @@ internal fun TutorialNavigationRow(
                 onClick = onBack,
                 modifier = Modifier.weight(1f)
             ) {
-                Text(text = "← Back")
+                Text(text = stringResource(R.string.token_tutorial_back))
             }
         }
         if (isLastStep) {
@@ -137,7 +137,7 @@ internal fun TutorialNavigationRow(
                 onClick = onNext,
                 modifier = Modifier.weight(1f)
             ) {
-                Text(text = "Next →")
+                Text(text = stringResource(R.string.token_tutorial_next))
             }
         }
     }

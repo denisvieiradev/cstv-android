@@ -42,6 +42,11 @@
     <string name="token_tutorial_step_3">Copie o token gerado</string>
     <string name="token_tutorial_open_pandascore">Abrir PandaScore</string>
     <string name="token_tutorial_understood">Entendi</string>
+    <string name="token_tutorial_back">← Voltar</string>
+    <string name="token_tutorial_next">Próximo →</string>
+    <string name="token_tutorial_step_title_1">Acessar PandaScore</string>
+    <string name="token_tutorial_step_title_2">Copiar Token</string>
+    <string name="token_tutorial_step_title_3">Colar Token</string>
     <string name="token_tutorial_paste">Colar token</string>
     <string name="matches_demo_expired_title">Demo expirado</string>
     <string name="matches_demo_expired_body">Você usou todas as requisições do demo. Obtenha um token real para continuar vendo as partidas.</string>

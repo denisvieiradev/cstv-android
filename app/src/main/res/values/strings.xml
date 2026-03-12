@@ -42,6 +42,11 @@
     <string name="token_tutorial_step_3">Come back to the app and paste your token</string>
     <string name="token_tutorial_open_pandascore">Open PandaScore</string>
     <string name="token_tutorial_understood">Got it</string>
+    <string name="token_tutorial_back">← Back</string>
+    <string name="token_tutorial_next">Next →</string>
+    <string name="token_tutorial_step_title_1">Access PandaScore</string>
+    <string name="token_tutorial_step_title_2">Copy Token</string>
+    <string name="token_tutorial_step_title_3">Paste Token</string>
     <string name="token_tutorial_paste">Paste token</string>
     <string name="matches_demo_expired_title">Demo expired</string>
     <string name="matches_demo_expired_body">You have used all demo requests. Get a real API token to keep browsing matches.</string>
