@@ -13,6 +13,7 @@ import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.cstv.utils.fakePlayer
 import com.denisvieiradev.cstv.utils.fakeTeam
+import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -97,6 +98,34 @@ class MatchDetailViewModelTest {
                 viewModel.uiState.test {
                     awaitItem() // initial state (Loading)
                     assertThat(awaitItem().playersState).isEqualTo(PlayersState.Error)
+                    cancelAndConsumeRemainingEvents()
+                }
+            }
+        }
+
+        class WhenFetchPlayersFailsWithAuthError : MatchDetailViewModelTestBase() {
+
+            @Test
+            fun `then session is cleared`() = runTest {
+                val match = fakeMatch(id = TestConstants.MATCH_ID_DETAIL)
+                coEvery { mockGetMatchDetailUseCase(TestConstants.MATCH_ID_DETAIL) } throws AuthorizationException(401)
+                val viewModel = createViewModel(match)
+
+                viewModel.navigationEvents.test {
+                    awaitItem() // NavigateToTokenScreen
+                    cancelAndConsumeRemainingEvents()
+                }
+                coVerify { mockSessionLocalDataSource.clearSession() }
+            }
+
+            @Test
+            fun `then NavigateToTokenScreen is emitted`() = runTest {
+                val match = fakeMatch(id = TestConstants.MATCH_ID_DETAIL)
+                coEvery { mockGetMatchDetailUseCase(TestConstants.MATCH_ID_DETAIL) } throws AuthorizationException(401)
+                val viewModel = createViewModel(match)
+
+                viewModel.navigationEvents.test {
+                    assertThat(awaitItem()).isEqualTo(MatchDetailNavigationEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
             }

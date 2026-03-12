@@ -109,6 +109,9 @@ class MatchesViewModel(
                 _uiState.update { it.copy(isLoading = false, isAuthError = true, error = null) }
             } catch (e: IOException) {
                 _uiState.update { it.copy(isLoading = false, error = e, isAuthError = false) }
+            } catch (e: Exception) {
+                Timber.e(e, "Unexpected error loading matches")
+                _uiState.update { it.copy(isLoading = false, error = e, isAuthError = false) }
             }
         }
     }

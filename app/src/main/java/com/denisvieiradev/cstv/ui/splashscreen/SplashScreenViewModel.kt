@@ -5,14 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenAction
 import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenNavigationEvent
-import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,9 +16,6 @@ class SplashScreenViewModel(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-
-    private val _uiState = MutableStateFlow(SplashScreenUiState())
-    val uiState: StateFlow<SplashScreenUiState> = _uiState.asStateFlow()
 
     private val _navigationEvents = MutableSharedFlow<SplashScreenNavigationEvent>()
     val navigationEvents: Flow<SplashScreenNavigationEvent> = _navigationEvents

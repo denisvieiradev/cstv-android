@@ -20,8 +20,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
-import java.io.IOException
 
 class MatchDetailViewModel(
     savedStateHandle: SavedStateHandle,
@@ -81,7 +82,11 @@ class MatchDetailViewModel(
                 val teamAPlayers = match.teamA?.players ?: emptyList()
                 val teamBPlayers = match.teamB?.players ?: emptyList()
                 _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
-            } catch (e: IOException) {
+            } catch (e: AuthorizationException) {
+                Timber.d(e, "Authorization failed in match detail")
+                withContext(ioDispatcher) { sessionLocalDataSource.clearSession() }
+                _navigationEvents.emit(MatchDetailNavigationEvent.NavigateToTokenScreen)
+            } catch (e: Exception) {
                 Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
                 _uiState.update { it.copy(playersState = PlayersState.Error) }
             }

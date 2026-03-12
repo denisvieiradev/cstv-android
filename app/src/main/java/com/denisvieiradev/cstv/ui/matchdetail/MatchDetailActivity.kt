@@ -1,5 +1,6 @@
 package com.denisvieiradev.cstv.ui.matchdetail
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -8,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailNavigationEvent
+import com.denisvieiradev.cstv.ui.token.TokenActivity
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,6 +32,10 @@ class MatchDetailActivity : AppCompatActivity() {
                 viewModel.navigationEvents.collect { event ->
                     when (event) {
                         MatchDetailNavigationEvent.NavigateBack -> finish()
+                        MatchDetailNavigationEvent.NavigateToTokenScreen -> {
+                            startActivity(Intent(this@MatchDetailActivity, TokenActivity::class.java))
+                            finishAffinity()
+                        }
                     }
                 }
             }
