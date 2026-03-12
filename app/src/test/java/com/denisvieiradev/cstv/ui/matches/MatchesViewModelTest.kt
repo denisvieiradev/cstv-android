@@ -7,7 +7,7 @@ import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.ui.core.LocaleManager
 import com.denisvieiradev.cstv.ui.core.ThemeManager
-import com.denisvieiradev.cstv.ui.matches.model.MatchesUiEvent
+import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.TestConstants
@@ -284,7 +284,7 @@ class MatchesViewModelTest {
 
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.DismissDemoExpired)
-                    assertThat(awaitItem()).isEqualTo(MatchesUiEvent.NavigateToTokenScreen)
+                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
             }
@@ -318,7 +318,7 @@ class MatchesViewModelTest {
 
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.ConfirmLogout)
-                    assertThat(awaitItem()).isEqualTo(MatchesUiEvent.NavigateToTokenScreen)
+                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
             }
@@ -380,7 +380,7 @@ class MatchesViewModelTest {
 
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.ConfigureToken)
-                    assertThat(awaitItem()).isEqualTo(MatchesUiEvent.NavigateToTokenScreen)
+                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
                 verify { mockSession.clearSession() }
@@ -538,8 +538,8 @@ class MatchesViewModelTest {
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.OpenMatchDetail(match))
                     val event = awaitItem()
-                    assertThat(event).isInstanceOf(MatchesUiEvent.OpenMatchDetail::class.java)
-                    assertThat((event as MatchesUiEvent.OpenMatchDetail).match).isEqualTo(match)
+                    assertThat(event).isInstanceOf(MatchesNavigationEvent.OpenMatchDetail::class.java)
+                    assertThat((event as MatchesNavigationEvent.OpenMatchDetail).match).isEqualTo(match)
                     cancelAndConsumeRemainingEvents()
                 }
             }
@@ -556,6 +556,56 @@ class MatchesViewModelTest {
                     cancelAndConsumeRemainingEvents()
                 }
                 verify { mockDemo.tryConsume() }
+            }
+        }
+    }
+
+    @RunWith(Enclosed::class)
+    class GivenLocaleChangeRequiresRecreation {
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        class WhenToggleLanguageIsDispatched : MatchesViewModelTestBase() {
+
+            init {
+                every { mockLocaleManager.apply(any()) } returns true
+            }
+
+            @Test
+            fun `then RecreateActivity navigation event is emitted`() = runTest {
+                coEvery { mockUseCase() } returns emptyList()
+                val viewModel = createViewModel()
+
+                viewModel.navigationEvents.test {
+                    viewModel.onAction(MatchesScreenAction.ToggleLanguage)
+                    advanceUntilIdle()
+                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.RecreateActivity)
+                    cancelAndConsumeRemainingEvents()
+                }
+            }
+        }
+    }
+
+    @RunWith(Enclosed::class)
+    class GivenLocaleChangeDoesNotRequireRecreation {
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        class WhenToggleLanguageIsDispatched : MatchesViewModelTestBase() {
+
+            init {
+                every { mockLocaleManager.apply(any()) } returns false
+            }
+
+            @Test
+            fun `then RecreateActivity navigation event is NOT emitted`() = runTest {
+                coEvery { mockUseCase() } returns emptyList()
+                val viewModel = createViewModel()
+
+                viewModel.navigationEvents.test {
+                    viewModel.onAction(MatchesScreenAction.ToggleLanguage)
+                    advanceUntilIdle()
+                    expectNoEvents()
+                    cancelAndConsumeRemainingEvents()
+                }
             }
         }
     }

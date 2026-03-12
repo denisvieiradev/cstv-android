@@ -184,6 +184,49 @@ class MatchDetailViewModelTest {
                 coVerify(exactly = 0) { mockGetMatchDetailUseCase(any()) }
             }
         }
+
+        class WhenRetryLoadPlayersIsDispatched : MatchDetailViewModelTestBase() {
+
+            @Test
+            fun `then nothing happens and use case is not called`() = runTest {
+                val viewModel = createViewModel()
+
+                viewModel.onAction(MatchDetailScreenAction.RetryLoadPlayers)
+
+                coVerify(exactly = 0) { mockGetMatchDetailUseCase(any()) }
+            }
+        }
+    }
+
+    @RunWith(Enclosed::class)
+    class GivenFetchPlayersFailsWithNetworkError {
+
+        class WhenRetryIsDispatchedAfterNetworkError : MatchDetailViewModelTestBase() {
+
+            @Test
+            fun `then playersState transitions from Error to Loading to Success`() = runTest {
+                val match = fakeMatch(id = TestConstants.MATCH_ID_DETAIL)
+                val teamA = fakeTeam(id = TestConstants.TEAM_A_ID, players = listOf(fakePlayer()))
+                val teamB = fakeTeam(id = TestConstants.TEAM_B_ID, players = emptyList())
+                val detailMatch = fakeMatch(id = 10, teamA = teamA, teamB = teamB)
+                coEvery { mockGetMatchDetailUseCase(TestConstants.MATCH_ID_DETAIL) } throws
+                    java.io.IOException(TestConstants.ERROR_NETWORK) andThen detailMatch
+                val viewModel = createViewModel(match)
+
+                viewModel.uiState.test {
+                    awaitItem() // initial Loading
+                    assertThat(awaitItem().playersState).isEqualTo(PlayersState.Error)
+
+                    viewModel.onAction(MatchDetailScreenAction.RetryLoadPlayers)
+
+                    assertThat(awaitItem().playersState).isEqualTo(PlayersState.Loading)
+                    assertThat(awaitItem().playersState).isEqualTo(
+                        PlayersState.Success(teamA = teamA.players, teamB = teamB.players)
+                    )
+                    cancelAndConsumeRemainingEvents()
+                }
+            }
+        }
     }
 
     @RunWith(Enclosed::class)
