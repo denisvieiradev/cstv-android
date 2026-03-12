@@ -11,20 +11,18 @@ import java.security.GeneralSecurityException
 
 class SecureStorageImpl(context: Context) : SecureStorage {
 
-    private val prefs: SharedPreferences = try {
-        buildPrefs(context)
-    } catch (e: GeneralSecurityException) {
-        Log.e(TAG, "EncryptedSharedPreferences init failed, clearing prefs and retrying: ${e.message}")
+    private val prefs: SharedPreferences = run {
+        val initialResult = runCatching { buildPrefs(context) }
+        if (initialResult.isSuccess) return@run initialResult.getOrThrow()
+
+        Log.e(TAG, "EncryptedSharedPreferences init failed, clearing prefs and retrying: ${initialResult.exceptionOrNull()?.message}")
         context.deleteSharedPreferences(PREFS_NAME)
-        try {
-            buildPrefs(context)
-        } catch (e2: GeneralSecurityException) {
-            Log.e(TAG, "EncryptedSharedPreferences retry failed, falling back to plain SharedPreferences: ${e2.message}")
-            context.getSharedPreferences(PREFS_NAME_FALLBACK, Context.MODE_PRIVATE)
-        } catch (e2: IOException) {
-            Log.e(TAG, "EncryptedSharedPreferences retry failed, falling back to plain SharedPreferences: ${e2.message}")
-            context.getSharedPreferences(PREFS_NAME_FALLBACK, Context.MODE_PRIVATE)
-        }
+
+        val retryResult = runCatching { buildPrefs(context) }
+        if (retryResult.isSuccess) return@run retryResult.getOrThrow()
+
+        Log.e(TAG, "EncryptedSharedPreferences retry failed, falling back to plain SharedPreferences: ${retryResult.exceptionOrNull()?.message}")
+        context.getSharedPreferences(PREFS_NAME_FALLBACK, Context.MODE_PRIVATE)
     }
 
     override fun getString(key: String): String? = prefs.getString(key, null)
