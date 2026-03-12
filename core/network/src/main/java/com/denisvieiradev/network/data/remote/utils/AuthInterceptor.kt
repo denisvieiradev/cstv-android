@@ -8,7 +8,7 @@ class AuthInterceptor(private val tokenProvider: TokenProvider) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = tokenProvider.getToken()
         if (token == null) {
-            Timber.w("Request made without auth token: ${chain.request().url}")
+            Timber.w("Request made without auth token: ${chain.request().url.encodedPath}")
         }
         val request = chain.request().newBuilder()
             .apply { if (token != null) header("Authorization", "Bearer $token") }

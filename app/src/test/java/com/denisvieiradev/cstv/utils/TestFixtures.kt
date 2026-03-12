@@ -11,7 +11,7 @@ import com.denisvieiradev.cstv.domain.model.Player
 import com.denisvieiradev.cstv.domain.model.Team
 
 fun fakeMatch(
-    id: Int = TestConstants.TEAM_A_ID,
+    id: Int = TestConstants.MATCH_ID,
     status: MatchStatus = MatchStatus.NOT_STARTED,
     scheduledAt: String? = TestConstants.DEFAULT_SCHEDULED_AT,
     beginAt: String? = null,
@@ -40,7 +40,7 @@ fun fakeTeam(
 ) = Team(id = id, name = name, imageUrl = imageUrl, players = players)
 
 fun fakePlayer(
-    id: Int = TestConstants.TEAM_A_ID,
+    id: Int = TestConstants.DEFAULT_PLAYER_ID,
     name: String = TestConstants.DEFAULT_PLAYER_NAME,
     imageUrl: String? = TestConstants.URL_PLAYER_IMAGE,
     firstName: String? = null,
@@ -54,7 +54,7 @@ fun fakeTeamDto(
 ) = TeamDto(id = id, name = name, imageUrl = imageUrl)
 
 fun fakeMatchDto(
-    id: Int? = TestConstants.TEAM_A_ID,
+    id: Int? = TestConstants.MATCH_ID,
     status: String? = TestConstants.STATUS_NOT_STARTED,
     scheduledAt: String? = TestConstants.DEFAULT_SCHEDULED_AT,
     beginAt: String? = null,

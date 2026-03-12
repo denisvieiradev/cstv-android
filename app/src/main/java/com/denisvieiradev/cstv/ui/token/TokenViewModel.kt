@@ -90,8 +90,8 @@ class TokenViewModel(
     }
 
     private fun enterDemoMode() {
-        demoSessionManager.startDemo()
         viewModelScope.launch(ioDispatcher) {
+            demoSessionManager.startDemo()
             sessionLocalDataSource.saveToken(BuildConfig.PANDASCORE_DEMO_API_TOKEN)
             _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
         }

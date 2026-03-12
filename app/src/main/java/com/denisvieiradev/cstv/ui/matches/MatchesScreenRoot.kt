@@ -3,7 +3,6 @@ package com.denisvieiradev.cstv.ui.matches
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.denisvieiradev.cstv.ui.matches.model.MatchesUiState
 import com.denisvieiradev.design_system.ui.theme.CstvTheme
 import org.koin.androidx.compose.koinViewModel
 

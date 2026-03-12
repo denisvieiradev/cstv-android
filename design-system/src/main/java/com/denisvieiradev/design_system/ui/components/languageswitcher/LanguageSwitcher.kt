@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 
+private const val LANGUAGE_SEPARATOR = "|"
+
 @Composable
 fun LanguageSwitcher(
     options: List<LanguageOption>,
@@ -32,7 +34,7 @@ fun LanguageSwitcher(
         }
         if (index < options.lastIndex) {
             Text(
-                text = "|",
+                text = LANGUAGE_SEPARATOR,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

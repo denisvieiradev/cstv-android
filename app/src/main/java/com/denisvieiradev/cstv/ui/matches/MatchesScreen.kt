@@ -42,7 +42,7 @@ fun MatchesScreen(
                     currentLanguage = uiState.currentLanguage,
                     onThemeToggleClick = { onAction(MatchesScreenAction.ToggleTheme) },
                     onLanguageToggleClick = { onAction(MatchesScreenAction.ToggleLanguage) },
-                    onLogoutClick = { onAction(MatchesScreenAction.Logout) }
+                    onLogoutClick = { onAction(MatchesScreenAction.PressLogout) }
                 )
             }
         ) { innerPadding ->

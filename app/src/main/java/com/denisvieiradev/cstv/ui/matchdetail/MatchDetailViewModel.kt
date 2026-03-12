@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
+import java.io.IOException
 import timber.log.Timber
 
 class MatchDetailViewModel(
@@ -84,8 +84,11 @@ class MatchDetailViewModel(
                 _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
             } catch (e: AuthorizationException) {
                 Timber.d(e, "Authorization failed in match detail")
-                withContext(ioDispatcher) { sessionLocalDataSource.clearSession() }
+                sessionLocalDataSource.clearSession()
                 _navigationEvents.emit(MatchDetailNavigationEvent.NavigateToTokenScreen)
+            } catch (e: IOException) {
+                Timber.e(e, "Network error fetching match detail for matchId=$matchId")
+                _uiState.update { it.copy(playersState = PlayersState.Error) }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
                 _uiState.update { it.copy(playersState = PlayersState.Error) }

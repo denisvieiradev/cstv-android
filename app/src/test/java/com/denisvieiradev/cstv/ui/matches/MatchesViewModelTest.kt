@@ -7,7 +7,7 @@ import com.denisvieiradev.cstv.domain.Language
 import com.denisvieiradev.cstv.domain.usecase.GetCsMatchesUseCase
 import com.denisvieiradev.cstv.ui.core.LocaleManager
 import com.denisvieiradev.cstv.ui.core.ThemeManager
-import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
+import com.denisvieiradev.cstv.ui.matches.model.MatchesUiEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
 import com.denisvieiradev.cstv.utils.TestConstants
@@ -284,7 +284,7 @@ class MatchesViewModelTest {
 
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.DismissDemoExpired)
-                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
+                    assertThat(awaitItem()).isEqualTo(MatchesUiEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
             }
@@ -302,7 +302,7 @@ class MatchesViewModelTest {
                 coEvery { mockUseCase() } returns emptyList()
                 val viewModel = createViewModel()
 
-                viewModel.onAction(MatchesScreenAction.Logout)
+                viewModel.onAction(MatchesScreenAction.PressLogout)
 
                 assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
             }
@@ -318,7 +318,7 @@ class MatchesViewModelTest {
 
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.ConfirmLogout)
-                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
+                    assertThat(awaitItem()).isEqualTo(MatchesUiEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
             }
@@ -340,7 +340,7 @@ class MatchesViewModelTest {
             fun `then showLogoutDialog is false`() = runTest {
                 coEvery { mockUseCase() } returns emptyList()
                 val viewModel = createViewModel()
-                viewModel.onAction(MatchesScreenAction.Logout)
+                viewModel.onAction(MatchesScreenAction.PressLogout)
                 assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
 
                 viewModel.navigationEvents.test {
@@ -361,7 +361,7 @@ class MatchesViewModelTest {
             fun `then showLogoutDialog is false`() = runTest {
                 coEvery { mockUseCase() } returns emptyList()
                 val viewModel = createViewModel()
-                viewModel.onAction(MatchesScreenAction.Logout)
+                viewModel.onAction(MatchesScreenAction.PressLogout)
                 assertThat(viewModel.uiState.value.showLogoutDialog).isTrue()
 
                 viewModel.onAction(MatchesScreenAction.DismissLogout)
@@ -380,7 +380,7 @@ class MatchesViewModelTest {
 
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.ConfigureToken)
-                    assertThat(awaitItem()).isEqualTo(MatchesNavigationEvent.NavigateToTokenScreen)
+                    assertThat(awaitItem()).isEqualTo(MatchesUiEvent.NavigateToTokenScreen)
                     cancelAndConsumeRemainingEvents()
                 }
                 verify { mockSession.clearSession() }
@@ -538,8 +538,8 @@ class MatchesViewModelTest {
                 viewModel.navigationEvents.test {
                     viewModel.onAction(MatchesScreenAction.OpenMatchDetail(match))
                     val event = awaitItem()
-                    assertThat(event).isInstanceOf(MatchesNavigationEvent.OpenMatchDetail::class.java)
-                    assertThat((event as MatchesNavigationEvent.OpenMatchDetail).match).isEqualTo(match)
+                    assertThat(event).isInstanceOf(MatchesUiEvent.OpenMatchDetail::class.java)
+                    assertThat((event as MatchesUiEvent.OpenMatchDetail).match).isEqualTo(match)
                     cancelAndConsumeRemainingEvents()
                 }
             }

@@ -2,7 +2,6 @@ package com.denisvieiradev.cstv.data.session
 
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 
 class DemoSessionManager(
     private val sessionLocalDataSource: SessionLocalDataSource,
@@ -29,17 +28,11 @@ class DemoSessionManager(
 
     fun tryConsume(): Boolean {
         if (!_isActive.value) return true
-        var consumed = false
-        _remainingViews.update { current ->
-            if (current <= 0) {
-                consumed = false
-                current
-            } else {
-                consumed = true
-                current - 1
-            }
+        while (true) {
+            val current = _remainingViews.value
+            if (current <= 0) return false
+            if (_remainingViews.compareAndSet(current, current - 1)) return true
         }
-        return consumed
     }
 
     fun isDemoAlreadyUsed(): Boolean = sessionLocalDataSource.isDemoUsed()

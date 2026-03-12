@@ -38,6 +38,7 @@ object TestConstants {
     const val DEFAULT_SCHEDULED_AT = "2024-01-01T00:00:00Z"
     const val DEFAULT_LEAGUE_NAME = "ESL Pro League"
     const val DEFAULT_SERIE_NAME = "Season 20"
+    const val DEFAULT_PLAYER_ID = 100
     const val DEFAULT_PLAYER_NAME = "s1mple"
 
     const val URL_LEAGUE_IMAGE = "https://example.com/league.png"

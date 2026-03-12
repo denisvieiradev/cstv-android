@@ -5,7 +5,7 @@ import com.denisvieiradev.cstv.domain.model.Match
 sealed interface MatchesScreenAction {
     data object LoadMatches : MatchesScreenAction
     data object Retry : MatchesScreenAction
-    data object Logout : MatchesScreenAction
+    data object PressLogout : MatchesScreenAction
     data object ConfirmLogout : MatchesScreenAction
     data object DismissLogout : MatchesScreenAction
     data object ConfigureToken : MatchesScreenAction

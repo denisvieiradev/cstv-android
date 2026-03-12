@@ -17,11 +17,13 @@ import timber.log.Timber
 import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,16 +38,18 @@ class MatchesViewModel(
     private val localeManager: LocaleManager
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(
-        MatchesUiState(
+    private val _uiState = MutableStateFlow(MatchesUiState())
+    val uiState: StateFlow<MatchesUiState> = _uiState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+        initialValue = MatchesUiState(
             isDarkTheme = sessionLocalDataSource.isDarkTheme(),
             currentLanguage = sessionLocalDataSource.getLanguage() ?: Language.EN
         )
     )
-    val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
 
-    private val _navigationEvents = MutableSharedFlow<MatchesNavigationEvent>()
-    val navigationEvents: Flow<MatchesNavigationEvent> = _navigationEvents
+    private val _navigationEvents = Channel<MatchesNavigationEvent>()
+    val navigationEvents: Flow<MatchesNavigationEvent> = _navigationEvents.receiveAsFlow()
 
     init {
         loadMatches()
@@ -55,7 +59,7 @@ class MatchesViewModel(
         when (action) {
             is MatchesScreenAction.LoadMatches -> loadMatches()
             is MatchesScreenAction.Retry -> loadMatches()
-            is MatchesScreenAction.Logout -> _uiState.update { it.copy(showLogoutDialog = true) }
+            is MatchesScreenAction.PressLogout -> _uiState.update { it.copy(showLogoutDialog = true) }
             is MatchesScreenAction.ConfirmLogout -> clearSessionAndNavigate()
             is MatchesScreenAction.DismissLogout -> _uiState.update { it.copy(showLogoutDialog = false) }
             is MatchesScreenAction.ConfigureToken -> clearSessionAndNavigate()
@@ -84,7 +88,7 @@ class MatchesViewModel(
             return
         }
         viewModelScope.launch {
-            _navigationEvents.emit(MatchesNavigationEvent.OpenMatchDetail(match))
+            _navigationEvents.send(MatchesNavigationEvent.OpenMatchDetail(match))
         }
     }
 
@@ -94,7 +98,7 @@ class MatchesViewModel(
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
         val needsRecreate = localeManager.apply(next)
         if (needsRecreate) {
-            viewModelScope.launch { _navigationEvents.emit(MatchesNavigationEvent.RecreateActivity) }
+            viewModelScope.launch { _navigationEvents.send(MatchesNavigationEvent.RecreateActivity) }
         }
     }
 
@@ -121,7 +125,7 @@ class MatchesViewModel(
             withContext(ioDispatcher) { sessionLocalDataSource.clearSession() }
             Timber.d("Session cleared, navigating to TokenActivity")
             _uiState.update { it.copy(showLogoutDialog = false) }
-            _navigationEvents.emit(MatchesNavigationEvent.NavigateToTokenScreen)
+            _navigationEvents.send(MatchesNavigationEvent.NavigateToTokenScreen)
         }
     }
 }
