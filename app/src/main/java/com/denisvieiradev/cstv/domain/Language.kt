@@ -5,5 +5,4 @@ object Language {
     const val PT = "pt-BR"
     const val EN_LABEL = "EN"
     const val PT_LABEL = "PT"
-    const val SEPARATOR = "|"
 }

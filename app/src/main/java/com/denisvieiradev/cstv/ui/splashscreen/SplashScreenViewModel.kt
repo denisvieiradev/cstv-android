@@ -7,8 +7,9 @@ import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenAction
 import com.denisvieiradev.cstv.ui.splashscreen.model.SplashScreenNavigationEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -17,8 +18,8 @@ class SplashScreenViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _navigationEvents = MutableSharedFlow<SplashScreenNavigationEvent>()
-    val navigationEvents: Flow<SplashScreenNavigationEvent> = _navigationEvents
+    private val _navigationEvents = Channel<SplashScreenNavigationEvent>()
+    val navigationEvents: Flow<SplashScreenNavigationEvent> = _navigationEvents.receiveAsFlow()
 
     fun onAction(action: SplashScreenAction) {
         when (action) {
@@ -34,7 +35,7 @@ class SplashScreenViewModel(
             } else {
                 SplashScreenNavigationEvent.NavigateToToken
             }
-            _navigationEvents.emit(event)
+            _navigationEvents.send(event)
         }
     }
 }

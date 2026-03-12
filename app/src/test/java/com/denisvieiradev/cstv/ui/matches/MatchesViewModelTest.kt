@@ -124,7 +124,7 @@ class MatchesViewModelTest {
 
             @Test
             fun `then uiState contains the exception`() = runTest {
-                val exception = RuntimeException("Network error")
+                val exception = RuntimeException(TestConstants.ERROR_NETWORK)
                 coEvery { mockUseCase() } throws exception
                 val viewModel = createViewModel()
 
@@ -139,7 +139,7 @@ class MatchesViewModelTest {
 
             @Test
             fun `then isLoading is false`() = runTest {
-                coEvery { mockUseCase() } throws RuntimeException("Network error")
+                coEvery { mockUseCase() } throws RuntimeException(TestConstants.ERROR_NETWORK)
                 val viewModel = createViewModel()
 
                 viewModel.uiState.test {
@@ -151,7 +151,7 @@ class MatchesViewModelTest {
 
             @Test
             fun `then isAuthError is false`() = runTest {
-                coEvery { mockUseCase() } throws RuntimeException("Network error")
+                coEvery { mockUseCase() } throws RuntimeException(TestConstants.ERROR_NETWORK)
                 val viewModel = createViewModel()
 
                 viewModel.uiState.test {
@@ -450,6 +450,51 @@ class MatchesViewModelTest {
                 advanceUntilIdle()
 
                 verify { mockThemeManager.apply(false) }
+            }
+        }
+    }
+
+    @RunWith(Enclosed::class)
+    class GivenThemeIsLight {
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        class WhenToggleThemeIsDispatched : MatchesViewModelTestBase() {
+
+            init {
+                every { mockSession.isDarkTheme() } returns false
+            }
+
+            @Test
+            fun `then isDarkTheme flips to true`() = runTest {
+                coEvery { mockUseCase() } returns emptyList()
+                val viewModel = createViewModel()
+
+                viewModel.onAction(MatchesScreenAction.ToggleTheme)
+                advanceUntilIdle()
+
+                assertThat(viewModel.uiState.value.isDarkTheme).isTrue()
+            }
+
+            @Test
+            fun `then new value is persisted`() = runTest {
+                coEvery { mockUseCase() } returns emptyList()
+                val viewModel = createViewModel()
+
+                viewModel.onAction(MatchesScreenAction.ToggleTheme)
+                advanceUntilIdle()
+
+                verify { mockSession.saveDarkTheme(true) }
+            }
+
+            @Test
+            fun `then ThemeManager apply is called with true`() = runTest {
+                coEvery { mockUseCase() } returns emptyList()
+                val viewModel = createViewModel()
+
+                viewModel.onAction(MatchesScreenAction.ToggleTheme)
+                advanceUntilIdle()
+
+                verify { mockThemeManager.apply(true) }
             }
         }
     }

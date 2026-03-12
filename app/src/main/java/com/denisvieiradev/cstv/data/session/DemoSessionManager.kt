@@ -28,11 +28,10 @@ class DemoSessionManager(
 
     fun tryConsume(): Boolean {
         if (!_isActive.value) return true
-        while (true) {
-            val current = _remainingViews.value
-            if (current <= 0) return false
-            if (_remainingViews.compareAndSet(current, current - 1)) return true
-        }
+        val current = _remainingViews.value
+        if (current <= 0) return false
+        _remainingViews.value = current - 1
+        return true
     }
 
     fun isDemoAlreadyUsed(): Boolean = sessionLocalDataSource.isDemoUsed()

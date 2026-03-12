@@ -12,13 +12,15 @@ import com.denisvieiradev.cstv.ui.matchdetail.model.PlayersState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import java.io.IOException
 import timber.log.Timber
@@ -36,8 +38,8 @@ class MatchDetailViewModel(
     private val _uiState = MutableStateFlow(MatchDetailUiState())
     val uiState: StateFlow<MatchDetailUiState> = _uiState.asStateFlow()
 
-    private val _navigationEvents = MutableSharedFlow<MatchDetailNavigationEvent>()
-    val navigationEvents: Flow<MatchDetailNavigationEvent> = _navigationEvents
+    private val _navigationEvents = Channel<MatchDetailNavigationEvent>()
+    val navigationEvents: Flow<MatchDetailNavigationEvent> = _navigationEvents.receiveAsFlow()
 
     private var currentMatchId: Int? = null
 
@@ -45,9 +47,9 @@ class MatchDetailViewModel(
         when (throwable) {
             is AuthorizationException -> {
                 Timber.d(throwable, "Authorization failed in match detail")
-                sessionLocalDataSource.clearSession()
                 viewModelScope.launch {
-                    _navigationEvents.emit(MatchDetailNavigationEvent.NavigateToTokenScreen)
+                    withContext(ioDispatcher) { sessionLocalDataSource.clearSession() }
+                    _navigationEvents.send(MatchDetailNavigationEvent.NavigateToTokenScreen)
                 }
             }
             is IOException -> {
@@ -77,7 +79,7 @@ class MatchDetailViewModel(
     fun onAction(action: MatchDetailScreenAction) {
         when (action) {
             is MatchDetailScreenAction.NavigateBack -> viewModelScope.launch {
-                _navigationEvents.emit(MatchDetailNavigationEvent.NavigateBack)
+                _navigationEvents.send(MatchDetailNavigationEvent.NavigateBack)
             }
             is MatchDetailScreenAction.RetryLoadPlayers -> {
                 val matchId = currentMatchId ?: return

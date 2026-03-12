@@ -15,7 +15,12 @@ class SecureStorageImpl(context: Context) : SecureStorage {
     } catch (e: GeneralSecurityException) {
         Log.e(TAG, "EncryptedSharedPreferences init failed, clearing prefs and retrying: ${e.message}")
         context.deleteSharedPreferences(PREFS_NAME)
-        buildPrefs(context)
+        try {
+            buildPrefs(context)
+        } catch (e2: Exception) {
+            Log.e(TAG, "EncryptedSharedPreferences retry failed, falling back to plain SharedPreferences: ${e2.message}")
+            context.getSharedPreferences(PREFS_NAME_FALLBACK, Context.MODE_PRIVATE)
+        }
     }
 
     override fun getString(key: String): String? = prefs.getString(key, null)
@@ -25,6 +30,7 @@ class SecureStorageImpl(context: Context) : SecureStorage {
     companion object {
         private const val TAG = "SecureStorageImpl"
         private const val PREFS_NAME = "cstv_secure_prefs"
+        private const val PREFS_NAME_FALLBACK = "cstv_prefs_fallback"
 
         private fun buildPrefs(context: Context): SharedPreferences =
             EncryptedSharedPreferences.create(

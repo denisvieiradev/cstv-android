@@ -14,10 +14,11 @@ import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -39,8 +40,8 @@ class TokenViewModel(
     )
     val uiState: StateFlow<TokenUiState> = _uiState.asStateFlow()
 
-    private val _navigationEvents = MutableSharedFlow<TokenNavigationEvent>()
-    val navigationEvents: Flow<TokenNavigationEvent> = _navigationEvents
+    private val _navigationEvents = Channel<TokenNavigationEvent>()
+    val navigationEvents: Flow<TokenNavigationEvent> = _navigationEvents.receiveAsFlow()
 
     fun onAction(action: TokenScreenAction) {
         when (action) {
@@ -69,7 +70,7 @@ class TokenViewModel(
         if (token.isBlank()) return
         viewModelScope.launch(ioDispatcher + saveTokenExceptionHandler) {
             sessionLocalDataSource.saveToken(token)
-            _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
+            _navigationEvents.send(TokenNavigationEvent.NavigateToMatches)
         }
     }
 
@@ -86,7 +87,7 @@ class TokenViewModel(
         viewModelScope.launch(ioDispatcher) { sessionLocalDataSource.saveLanguage(next) }
         val needsRecreate = localeManager.apply(next)
         if (needsRecreate) {
-            viewModelScope.launch { _navigationEvents.emit(TokenNavigationEvent.RecreateActivity) }
+            viewModelScope.launch { _navigationEvents.send(TokenNavigationEvent.RecreateActivity) }
         }
     }
 
@@ -94,7 +95,7 @@ class TokenViewModel(
         viewModelScope.launch(ioDispatcher) {
             demoSessionManager.startDemo()
             sessionLocalDataSource.saveToken(BuildConfig.PANDASCORE_DEMO_API_TOKEN)
-            _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
+            _navigationEvents.send(TokenNavigationEvent.NavigateToMatches)
         }
     }
 
