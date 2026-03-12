@@ -12,6 +12,7 @@ import com.denisvieiradev.cstv.ui.token.model.TokenNavigationEvent
 import com.denisvieiradev.cstv.ui.token.model.TokenScreenAction
 import com.denisvieiradev.cstv.ui.token.model.TokenUiState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -59,16 +60,16 @@ class TokenViewModel(
         }
     }
 
+    private val saveTokenExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _uiState.update { it.copy(error = throwable) }
+    }
+
     private fun saveToken() {
         val token = _uiState.value.token
         if (token.isBlank()) return
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                sessionLocalDataSource.saveToken(token)
-                _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
-            } catch (e: Exception) {
-                _uiState.update { it.copy(error = e) }
-            }
+        viewModelScope.launch(ioDispatcher + saveTokenExceptionHandler) {
+            sessionLocalDataSource.saveToken(token)
+            _navigationEvents.emit(TokenNavigationEvent.NavigateToMatches)
         }
     }
 

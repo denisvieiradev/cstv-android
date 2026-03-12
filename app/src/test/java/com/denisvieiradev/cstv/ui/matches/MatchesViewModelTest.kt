@@ -14,6 +14,7 @@ import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import com.google.common.truth.Truth.assertThat
+import java.io.IOException
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -156,6 +157,26 @@ class MatchesViewModelTest {
                 viewModel.uiState.test {
                     awaitItem() // loading
                     assertThat(awaitItem().isAuthError).isFalse()
+                    cancelAndConsumeRemainingEvents()
+                }
+            }
+        }
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        class WhenLoadMatchesFailsWithIOException : MatchesViewModelTestBase() {
+
+            @Test
+            fun `then uiState contains the IOException`() = runTest {
+                val exception = IOException(TestConstants.ERROR_NETWORK)
+                coEvery { mockUseCase() } throws exception
+                val viewModel = createViewModel()
+
+                viewModel.uiState.test {
+                    awaitItem() // loading
+                    val errorState = awaitItem()
+                    assertThat(errorState.error).isInstanceOf(IOException::class.java)
+                    assertThat(errorState.isAuthError).isFalse()
+                    assertThat(errorState.isLoading).isFalse()
                     cancelAndConsumeRemainingEvents()
                 }
             }

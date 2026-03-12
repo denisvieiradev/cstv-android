@@ -10,6 +10,7 @@ import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailScreenAction
 import com.denisvieiradev.cstv.ui.matchdetail.model.MatchDetailUiState
 import com.denisvieiradev.cstv.ui.matchdetail.model.PlayersState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -40,6 +41,26 @@ class MatchDetailViewModel(
 
     private var currentMatchId: Int? = null
 
+    private val fetchPlayersExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        when (throwable) {
+            is AuthorizationException -> {
+                Timber.d(throwable, "Authorization failed in match detail")
+                sessionLocalDataSource.clearSession()
+                viewModelScope.launch {
+                    _navigationEvents.emit(MatchDetailNavigationEvent.NavigateToTokenScreen)
+                }
+            }
+            is IOException -> {
+                Timber.e(throwable, "Network error fetching match detail for matchId=$currentMatchId")
+                _uiState.update { it.copy(playersState = PlayersState.Error) }
+            }
+            else -> {
+                Timber.e(throwable, "Failed to fetch match detail for matchId=$currentMatchId")
+                _uiState.update { it.copy(playersState = PlayersState.Error) }
+            }
+        }
+    }
+
     init {
         _uiState.update { it.copy(darkTheme = sessionLocalDataSource.isDarkTheme()) }
     }
@@ -68,23 +89,11 @@ class MatchDetailViewModel(
     private fun fetchPlayers(matchId: Int) {
         _uiState.update { it.copy(playersState = PlayersState.Loading) }
         Timber.d("Fetching match detail for matchId=$matchId")
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                val match = getMatchDetailUseCase(matchId)
-                val teamAPlayers = match.teamA?.players ?: emptyList()
-                val teamBPlayers = match.teamB?.players ?: emptyList()
-                _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
-            } catch (e: AuthorizationException) {
-                Timber.d(e, "Authorization failed in match detail")
-                sessionLocalDataSource.clearSession()
-                _navigationEvents.emit(MatchDetailNavigationEvent.NavigateToTokenScreen)
-            } catch (e: IOException) {
-                Timber.e(e, "Network error fetching match detail for matchId=$matchId")
-                _uiState.update { it.copy(playersState = PlayersState.Error) }
-            } catch (e: Exception) {
-                Timber.e(e, "Failed to fetch match detail for matchId=$matchId")
-                _uiState.update { it.copy(playersState = PlayersState.Error) }
-            }
+        viewModelScope.launch(ioDispatcher + fetchPlayersExceptionHandler) {
+            val match = getMatchDetailUseCase(matchId)
+            val teamAPlayers = match.teamA?.players ?: emptyList()
+            val teamBPlayers = match.teamB?.players ?: emptyList()
+            _uiState.update { it.copy(playersState = PlayersState.Success(teamAPlayers, teamBPlayers)) }
         }
     }
 }

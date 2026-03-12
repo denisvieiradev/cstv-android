@@ -16,6 +16,7 @@ import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import timber.log.Timber
 import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -47,6 +48,22 @@ class MatchesViewModel(
 
     private val _navigationEvents = Channel<MatchesNavigationEvent>()
     val navigationEvents: Flow<MatchesNavigationEvent> = _navigationEvents.receiveAsFlow()
+
+    private val loadMatchesExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        when (throwable) {
+            is AuthorizationException -> {
+                Timber.d(throwable, "Authorization failed")
+                _uiState.update { it.copy(isLoading = false, isAuthError = true, error = null) }
+            }
+            is IOException -> {
+                _uiState.update { it.copy(isLoading = false, error = throwable, isAuthError = false) }
+            }
+            else -> {
+                Timber.e(throwable, "Unexpected error loading matches")
+                _uiState.update { it.copy(isLoading = false, error = throwable, isAuthError = false) }
+            }
+        }
+    }
 
     init {
         loadMatches()
@@ -101,19 +118,9 @@ class MatchesViewModel(
 
     private fun loadMatches() {
         _uiState.update { it.copy(isLoading = true, error = null, isAuthError = false) }
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                val matches = getCsMatchesUseCase()
-                _uiState.update { it.copy(isLoading = false, matches = matches) }
-            } catch (e: AuthorizationException) {
-                Timber.d(e, "Authorization failed")
-                _uiState.update { it.copy(isLoading = false, isAuthError = true, error = null) }
-            } catch (e: IOException) {
-                _uiState.update { it.copy(isLoading = false, error = e, isAuthError = false) }
-            } catch (e: Exception) {
-                Timber.e(e, "Unexpected error loading matches")
-                _uiState.update { it.copy(isLoading = false, error = e, isAuthError = false) }
-            }
+        viewModelScope.launch(ioDispatcher + loadMatchesExceptionHandler) {
+            val matches = getCsMatchesUseCase()
+            _uiState.update { it.copy(isLoading = false, matches = matches) }
         }
     }
 
