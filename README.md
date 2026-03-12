@@ -15,6 +15,14 @@ An Android app built with Jetpack Compose, Clean Architecture, and MVVM. Enter y
 
 ---
 
+## Download
+
+[![Download APK](https://img.shields.io/badge/Download-APK%20v1.0.0-green?style=for-the-badge&logo=android)](https://github.com/denisvieiradev/cstv-android/releases/download/v1.0.0/cstv-app-1.0.0-10000-debug.apk)
+
+> See the full [v1.0.0 release notes](https://github.com/denisvieiradev/cstv-android/releases/tag/v1.0.0) on GitHub.
+
+---
+
 ## Screenshots
 
 | Splash Screen | Home (Loading) | Home |
