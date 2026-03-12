@@ -21,9 +21,9 @@ An Android app built with Jetpack Compose, Clean Architecture, and MVVM. Enter y
 |:---:|:---:|:---:|
 | ![Splash](app_screens/Splash-Screen.png) | ![Home Loading](app_screens/Home_Loading.png) | ![Home](app_screens/Home.png) |
 
-| Match Details (Loading) | Match Details |
-|:---:|:---:|
-| ![Match Details Loading](app_screens/Match_Details_Loading.png) | ![Match Details](app_screens/Match_Details.png) |
+| Match Details (Loading) | Match Details | API Token Screen |
+|:---:|:---:|:---:|
+| ![Match Details Loading](app_screens/Match_Details_Loading.png) | ![Match Details](app_screens/Match_Details.png) | ![API Token Screen](app_screens/API_Token_Screen.png) |
 
 ---
 
