@@ -16,31 +16,31 @@ class MatchMapperTest {
     @Test
     fun `should map all fields correctly when dto is complete`() {
         val dto = fakeMatchDto(
-            id = 42,
-            status = "running",
+            id = TestConstants.MATCH_ID,
+            status = TestConstants.STATUS_RUNNING,
             scheduledAt = "2024-06-01T18:00:00Z",
             beginAt = "2024-06-01T18:05:00Z",
-            leagueName = "ESL Pro League",
-            leagueImageUrl = "https://example.com/league.png",
-            serieFullName = "Season 20",
-            teamA = fakeTeamDto(id = 10, name = "Natus Vincere", imageUrl = "https://example.com/navi.png"),
-            teamB = fakeTeamDto(id = 20, name = "FaZe Clan", imageUrl = "https://example.com/faze.png")
+            leagueName = TestConstants.DEFAULT_LEAGUE_NAME,
+            leagueImageUrl = TestConstants.URL_LEAGUE_IMAGE,
+            serieFullName = TestConstants.DEFAULT_SERIE_NAME,
+            teamA = fakeTeamDto(id = 10, name = TestConstants.TEAM_NAME_NAVI, imageUrl = "https://example.com/navi.png"),
+            teamB = fakeTeamDto(id = 20, name = TestConstants.TEAM_NAME_FAZE, imageUrl = "https://example.com/faze.png")
         )
 
         val domain = dto.toDomain()
 
-        assertThat(domain.id).isEqualTo(42)
+        assertThat(domain.id).isEqualTo(TestConstants.MATCH_ID)
         assertThat(domain.status).isEqualTo(MatchStatus.RUNNING)
         assertThat(domain.scheduledAt).isEqualTo("2024-06-01T18:00:00Z")
         assertThat(domain.beginAt).isEqualTo("2024-06-01T18:05:00Z")
-        assertThat(domain.leagueName).isEqualTo("ESL Pro League")
-        assertThat(domain.leagueImageUrl).isEqualTo("https://example.com/league.png")
-        assertThat(domain.serieFullName).isEqualTo("Season 20")
+        assertThat(domain.leagueName).isEqualTo(TestConstants.DEFAULT_LEAGUE_NAME)
+        assertThat(domain.leagueImageUrl).isEqualTo(TestConstants.URL_LEAGUE_IMAGE)
+        assertThat(domain.serieFullName).isEqualTo(TestConstants.DEFAULT_SERIE_NAME)
         assertThat(domain.teamA?.id).isEqualTo(10)
-        assertThat(domain.teamA?.name).isEqualTo("Natus Vincere")
+        assertThat(domain.teamA?.name).isEqualTo(TestConstants.TEAM_NAME_NAVI)
         assertThat(domain.teamA?.imageUrl).isEqualTo("https://example.com/navi.png")
         assertThat(domain.teamB?.id).isEqualTo(20)
-        assertThat(domain.teamB?.name).isEqualTo("FaZe Clan")
+        assertThat(domain.teamB?.name).isEqualTo(TestConstants.TEAM_NAME_FAZE)
         assertThat(domain.teamB?.imageUrl).isEqualTo("https://example.com/faze.png")
     }
 

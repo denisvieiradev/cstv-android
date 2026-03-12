@@ -1,5 +1,6 @@
 package com.denisvieiradev.cstv.data.datasources.remote.matches
 
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatchDto
 import com.denisvieiradev.cstv.utils.fakeTeamDto
 import com.google.common.truth.Truth.assertThat
@@ -18,8 +19,8 @@ class MatchRemoteDataSourceImplTest {
         val dto = fakeMatchDto(
             id = 1,
             status = "running",
-            teamA = fakeTeamDto(name = "Natus Vincere"),
-            teamB = fakeTeamDto(name = "FaZe Clan")
+            teamA = fakeTeamDto(name = TestConstants.TEAM_NAME_NAVI),
+            teamB = fakeTeamDto(name = TestConstants.TEAM_NAME_FAZE)
         )
         coEvery { mockApi.getRunningMatches() } returns listOf(dto)
 
@@ -27,8 +28,8 @@ class MatchRemoteDataSourceImplTest {
 
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(1)
-        assertThat(result[0].teamA?.name).isEqualTo("Natus Vincere")
-        assertThat(result[0].teamB?.name).isEqualTo("FaZe Clan")
+        assertThat(result[0].teamA?.name).isEqualTo(TestConstants.TEAM_NAME_NAVI)
+        assertThat(result[0].teamB?.name).isEqualTo(TestConstants.TEAM_NAME_FAZE)
     }
 
     @Test

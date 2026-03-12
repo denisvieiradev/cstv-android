@@ -1,6 +1,7 @@
 package com.denisvieiradev.cstv.data.session
 
 import com.denisvieiradev.cstv.data.datasources.local.SessionLocalDataSource
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
@@ -13,7 +14,7 @@ class DemoSessionManagerTest {
         every { isDemoUsed() } returns false
         every { getToken() } returns null
     }
-    private val demoToken = "demo-token-123"
+    private val demoToken = TestConstants.DEMO_TOKEN
 
     private fun createManager() = DemoSessionManager(mockSession, demoToken)
 
@@ -100,7 +101,7 @@ class DemoSessionManagerTest {
     @Test
     fun `on init, does not restore when isDemoUsed but token differs`() {
         every { mockSession.isDemoUsed() } returns true
-        every { mockSession.getToken() } returns "other-token"
+        every { mockSession.getToken() } returns TestConstants.TOKEN
         val manager = createManager()
 
         assertThat(manager.isActive).isFalse()

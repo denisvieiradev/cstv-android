@@ -11,7 +11,7 @@ import java.util.Locale
 
 class MatchDetailDateFormatterTest {
 
-    private val ptBr = Locale("pt", "BR")
+    private val ptBr = Locale.forLanguageTag("pt-BR")
     private val utcZone = ZoneOffset.UTC
     private val today = LocalDate.of(2025, 6, 10)
 

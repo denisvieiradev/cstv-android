@@ -10,6 +10,7 @@ import com.denisvieiradev.cstv.ui.core.ThemeManager
 import com.denisvieiradev.cstv.ui.matches.model.MatchesNavigationEvent
 import com.denisvieiradev.cstv.ui.matches.model.MatchesScreenAction
 import com.denisvieiradev.cstv.utils.MainDispatcherRule
+import com.denisvieiradev.cstv.utils.TestConstants
 import com.denisvieiradev.cstv.utils.fakeMatch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
 import com.google.common.truth.Truth.assertThat
@@ -165,7 +166,7 @@ class MatchesViewModelTest {
 
             @Test
             fun `then isAuthError is true`() = runTest {
-                coEvery { mockUseCase() } throws AuthorizationException(401)
+                coEvery { mockUseCase() } throws AuthorizationException(TestConstants.HTTP_UNAUTHORIZED)
                 val viewModel = createViewModel()
 
                 viewModel.uiState.test {
@@ -177,7 +178,7 @@ class MatchesViewModelTest {
 
             @Test
             fun `then error is null`() = runTest {
-                coEvery { mockUseCase() } throws AuthorizationException(401)
+                coEvery { mockUseCase() } throws AuthorizationException(TestConstants.HTTP_UNAUTHORIZED)
                 val viewModel = createViewModel()
 
                 viewModel.uiState.test {
@@ -189,7 +190,7 @@ class MatchesViewModelTest {
 
             @Test
             fun `then isLoading is false`() = runTest {
-                coEvery { mockUseCase() } throws AuthorizationException(401)
+                coEvery { mockUseCase() } throws AuthorizationException(TestConstants.HTTP_UNAUTHORIZED)
                 val viewModel = createViewModel()
 
                 viewModel.uiState.test {

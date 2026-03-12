@@ -97,7 +97,7 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it propagates exception from the data source`() {
-                val exception = RuntimeException("Not found")
+                val exception = RuntimeException(TestConstants.ERROR_NOT_FOUND)
                 coEvery { mockDataSource.getMatchDetail(any()) } throws exception
 
                 val caught = assertThrows(RuntimeException::class.java) {
@@ -115,7 +115,7 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it returns the team from the data source`() = runTest {
-                val team = fakeTeam(id = TestConstants.TEAM_NAVI_ID, name = "Natus Vincere")
+                val team = fakeTeam(id = TestConstants.TEAM_NAVI_ID, name = TestConstants.TEAM_NAME_NAVI)
                 coEvery { mockDataSource.getTeamWithPlayers(TestConstants.TEAM_NAVI_ID) } returns team
 
                 val result = repository.getTeamWithPlayers(TestConstants.TEAM_NAVI_ID)
@@ -126,7 +126,7 @@ class MatchRepositoryImplTest {
 
             @Test
             fun `then it propagates exception from the data source`() {
-                val exception = RuntimeException("Team not found")
+                val exception = RuntimeException(TestConstants.ERROR_TEAM_NOT_FOUND)
                 coEvery { mockDataSource.getTeamWithPlayers(any()) } throws exception
 
                 val caught = assertThrows(RuntimeException::class.java) {
