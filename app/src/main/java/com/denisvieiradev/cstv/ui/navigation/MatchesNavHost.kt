@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.denisvieiradev.cstv.domain.model.Match
 import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailScreenRoot
 import com.denisvieiradev.cstv.ui.matchdetail.MatchDetailViewModel
 import com.denisvieiradev.cstv.ui.matches.MatchesScreenRoot
@@ -33,7 +34,7 @@ fun MatchesNavHost(
         composable(Route.MATCH_DETAIL) {
             val match = navController.previousBackStackEntry
                 ?.savedStateHandle
-                ?.get<com.denisvieiradev.cstv.domain.model.Match>(MatchDetailViewModel.EXTRA_MATCH)
+                ?.get<Match>(MatchDetailViewModel.EXTRA_MATCH)
             MatchDetailScreenRoot(
                 match = match,
                 onNavigateBack = { navController.popBackStack() },
