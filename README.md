@@ -70,13 +70,13 @@ CSTV follows **Clean Architecture** with **MVVM**, organized in a multi-module s
 | `:app` | Features, domain, data layers; DI wiring |
 | `:core:network` | Retrofit, OkHttp, AuthInterceptor, network utilities |
 | `:core:cachemanager` | Hawk-based session/token storage backed by EncryptedSharedPreferences |
-| `:design-system` | CstvTheme, reusable components (`FullScreenLoading`, `FullScreenError`, `NetworkImage`), typography, spacing |
+| `:design-system` | CstvTheme, reusable components (`FullScreenLoading`, `FullScreenError`, `NetworkImage`, `MainTopBar`, `LanguageSwitcher`), typography, spacing |
 
 ### Key Patterns
 
 - **Repository pattern** — data sources are abstracted behind interfaces
 - **Use cases** — each business operation is encapsulated in a single-responsibility class
-- **StateFlow + SharedFlow** — UI state is a `StateFlow`; one-shot navigation events use `SharedFlow`
+- **StateFlow + SharedFlow** — UI state is a `StateFlow`; one-shot navigation uses `SharedFlow` with sealed interfaces (`XNavigationEvent`)
 - **Sealed classes** — screen actions and navigation events are type-safe sealed hierarchies
 - **Single entry point** — all UI events go through `onAction(action: XScreenAction)` in the ViewModel
 - **IO dispatcher offloading** — all data persistence operations run on `Dispatchers.IO`
@@ -187,6 +187,8 @@ Tests use **MockK** for mocking, **Turbine** for Flow assertions, **Google Truth
 | `AuthInterceptorTest` | Token injection & 401 handling |
 | `AppLoggingTest` | Logging setup |
 | `FontAssetTest` | Design system font assets |
+| `AppCompatLocaleManagerTest` | Locale manager logic |
+| `AppCompatThemeManagerTest` | Theme manager logic |
 | `MatchesFlowIntegrationTest` | End-to-end flow integration |
 
 ---
@@ -248,6 +250,7 @@ design-system/                # CstvTheme, components, typography
 │   ├── button/               # PrimaryButton
 │   ├── input/                # AppTextField
 │   ├── image/                # NetworkImage
+│   ├── languageswitcher/     # LanguageSwitcher, LanguageOption
 │   ├── maintopbar/           # MainTopBar
 │   └── state/                # FullScreenLoading, FullScreenError
 └── theme/                    # Colors, typography, spacing, shapes
