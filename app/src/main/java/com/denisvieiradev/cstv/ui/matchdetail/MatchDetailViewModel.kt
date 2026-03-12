@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.denisvieiradev.cstv.ui.core.stateInWhileSubscribed
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.denisvieiradev.network.data.remote.utils.AuthorizationException
@@ -36,7 +36,10 @@ class MatchDetailViewModel(
     }
 
     private val _uiState = MutableStateFlow(MatchDetailUiState())
-    val uiState: StateFlow<MatchDetailUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<MatchDetailUiState> = _uiState.stateInWhileSubscribed(
+        viewModel = this,
+        initialValue = MatchDetailUiState()
+    )
 
     private val _navigationEvents = MutableSharedFlow<MatchDetailNavigationEvent>()
     val navigationEvents: Flow<MatchDetailNavigationEvent> = _navigationEvents

@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.denisvieiradev.cstv.ui.core.stateInWhileSubscribed
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -36,7 +36,10 @@ class TokenViewModel(
             isDemoAvailable = !demoSessionManager.isDemoAlreadyUsed()
         )
     )
-    val uiState: StateFlow<TokenUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<TokenUiState> = _uiState.stateInWhileSubscribed(
+        viewModel = this,
+        initialValue = TokenUiState()
+    )
 
     private val _navigationEvents = MutableSharedFlow<TokenNavigationEvent>()
     val navigationEvents: Flow<TokenNavigationEvent> = _navigationEvents
